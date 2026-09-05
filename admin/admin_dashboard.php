@@ -60,7 +60,7 @@ if (!$userInfo) {
         <!-- left content -->
         <div>
             <ul>
-                <li><a href="student_Dashboard.php">Dashboard</a></li>
+                <li><a href="admin_Dashboard.php">Dashboard</a></li>
                 <li><a href="About.php">About</a></li>
                 <li><a href="faq.html">FAQ</a></li>
             </ul>
@@ -110,20 +110,14 @@ if (!$userInfo) {
                         <?php
                         $requestQuery = "
                         SELECT
-                        r.ar_request_id,
-                        r.ar_title,
-                        r.ar_label,
-                        r.ar_priority,
-                        r.ar_description,
-                        r.ar_request_file,
-                        r.ar_stats,
-                        r.ar_submission_date,
+                        r.*,
                         h.staff_id AS requester_id,
                         u.name AS requester_name,
                         c.category_name AS category_name
+
                         FROM admin_request r
-                        INNER JOIN users u ON r.user_id = u.user_id
-                        INNER JOIN head_of_programme h ON r.user_id = h.user_id
+                        INNER JOIN head_of_programme h ON r.staff_id = h.staff_id
+                        INNER JOIN users u ON h.user_id = u.user_id
                         INNER JOIN category c ON r.category_id = c.category_id
                         ORDER BY r.ar_submission_date DESC
                         LIMIT 5
