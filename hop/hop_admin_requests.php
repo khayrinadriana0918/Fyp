@@ -67,8 +67,7 @@ if (!isset($_SESSION['user_id'])) {
         <div class="file-box">
             <label for="request_file">File (optional):</label><br>
             <small>.jpg,.jpeg,.png,.pdf only</small><br>
-            <!-- accept multiple files -->
-            <input type="file" name="request_file[]" id="request_file" accept=".jpg,.jpeg,.png,.pdf">
+            <input type="file" name="request_file" id="request_file" accept=".jpg,.jpeg,.png,.pdf">
         </div>
         <br>
 
