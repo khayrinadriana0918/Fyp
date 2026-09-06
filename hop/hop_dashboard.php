@@ -83,7 +83,7 @@ if (!$userInfo) {
                         echo htmlspecialchars($userInfo['staff_id']);
                         ?>
                     </dd>
-                    <dt>Administrator Name:</dt>
+                    <dt>Full Name:</dt>
                     <dd>
                         <?php
                         echo htmlspecialchars($userInfo['name']);

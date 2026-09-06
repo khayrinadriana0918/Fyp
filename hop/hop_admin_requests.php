@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 ?>
 
-<form methd="POST"
+<form method="POST"
     action="../includes/submit-admin-request.php"
     enctype="multipart/form-data">
     <fieldset>
@@ -17,53 +17,102 @@ if (!isset($_SESSION['user_id'])) {
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" placeholder="Enter Title Here." required><br>
 
-        <label for="label" id="label_container">Label:</label><br>
-        <input type="text" id="label" name="label" placeholder="separates each label tags with #" required><br>
+        <label for="label" id="label_container">Labels:</label><br>
+        <small>separates each label tags with space or enter</small><br>
 
-        <label for="category">Category:</label>
-        <select id="category" name="category_id" required>
-        <?php
-        $stmt = $pdo->query("SELECT category_id,category_name FROM category");
+        <div id=label-box>
+            <div id="label-list"></div>
+            <input type="text" id="label" name="label" required>
+        </div>
+        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
 
-        while ($category = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            '<option value="' . htmlspecialchars($category['category_id']) . '">' .
-                htmlspecialchars($category['category_name']) . '</option>';
-        }
-        ?>
-        </select>
         <br>
-        <select name="category_id" required>
-            <?php
-            $stmt = $pdo->query("SELECT category_id,category_name FROM category");
+        <span><label for="category_id">Category:</label>
+            <select name="category_id" required>
+                <?php
+                $stmt = $pdo->query("SELECT category_id,category_name FROM category");
 
-            while ($category = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                '<option value="' . htmlspecialchars($category['category_id']) . '">' .
-                    htmlspecialchars($category['category_name']) . '</option>';
-            }
-            ?>
-        </select>
-        <br>
+                while ($category = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    echo '<option value="' . htmlspecialchars($category['category_id']) . '">' .
+                        htmlspecialchars($category['category_name']) . '</option>';
+                }
+                ?>
+            </select>
+            <br>
 
-        <label for="priority">Priority:</label>
-        <select name="priority">
-            <option value="low">low</option>
-            <option value="Medium">Medium</option>
-            <option value="Urgent">Urgent</option>
-        </select>
-        <br>
+            <label for="priority">Priority:</label>
+            <select name="priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="Urgent">High</option>
+                <option value="Urgent">Urgent</option>
+            </select>
+            <br>
 
-        <label for="description">Describe your request/issue regarding the system:</label><br>
-        <textarea id="description" name="description" rows="10" cols="100" placeholder="Enter your request/issue here." required></textarea>
-        <br>
+            <label for="description">Describe your request/issue regarding the system:</label><br>
+            <textarea id="description" name="description" rows="10" cols="100" placeholder="Enter your request/issue here." required></textarea>
+            <br>
 
-        <label for="request_file">File (optional):</label>
-        <input type="file" name="request_file" id="request_file" accept=".jpg,.jpeg,.png,.pdf" placeholder="we accept .jpg,.jpeg,.png,.pdf only">
-        <br><br>
+            <label for="request_file">File (optional):</label><br>
+            <small>.jpg,.jpeg,.png,.pdf only</small><br>
+            <input type="file" name="request_file" id="request_file" accept=".jpg,.jpeg,.png,.pdf">
+            <br><br>
 
-        <button type="submit">Submit Request</button>
+            <button type="submit">Submit Request</button>
 
     </fieldset>
 </form>
 <script>
-    
+    $(document).ready(function() {
+        let labelInput = [];
+
+        function updateHiddenInput() {
+            $('#label-hidden').val(labelInput.join(''));
+        }
+
+        function addLabel(value) {
+            value = $.trim(value);
+
+            if (value === '') {
+                return;
+
+            }
+
+            labelInput.push(value);
+
+            let tag = $('<span>').addClass('label-tag').attr('data-label', value);
+
+            let text = S('<span>').text(calue);
+
+            let removeBtn = $('<button>').attr('type', 'button').addClass('label-remove').text('x');
+
+            tag.append(text, removeBtn);
+            $('#label-list').append(tag);
+            $('label').val('');
+
+            updateHiddenInput();
+        }
+
+        $('#label').on('keydown', function(event) {
+            if (event.key === 'enter' || event.key === '') {
+
+                event.preventDefault();
+                addLabel($(this).val());
+            }
+        });
+
+        $('label-list').on('click', '.label-remove', function() {
+
+            let tag = $(this).closest('.label-tag');
+            let labelToRemove = tag.attr('data-label');
+
+            labelInput = labelInput.filter(function(label) {
+                return label !== labelToRemove;
+            });
+
+            tag.remove();
+
+            updateHiddenInput();
+        });
+    });
 </script>
