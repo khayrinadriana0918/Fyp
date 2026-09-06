@@ -24,7 +24,7 @@ if (!isset($_SESSION['user_id'])) {
 
             <div id="label-list"></div>
 
-            <input type="text" id="label" placeholder="Type Label Here">
+            <input type="text" id="labelInput" placeholder="Type Label Here">
         </div>
         <input type="hidden" id="label-hidden" name="label">
 
@@ -68,10 +68,10 @@ if (!isset($_SESSION['user_id'])) {
 </form>
 <script>
     $(document).ready(function() {
-        let labelInput = [];
+        let labels = [];
 
         function updateHiddenInput() {
-            $('#label-hidden').val(labelInput.join(' '));
+            $('#label-hidden').val(labels.join(' '));
         }
 
         function addLabel(value) {
@@ -82,7 +82,7 @@ if (!isset($_SESSION['user_id'])) {
 
             }
 
-            labelInput.push(value);
+            labels.push(value);
 
             let tag = $('<span>').addClass('label-tag').attr('data-label', value);
 
