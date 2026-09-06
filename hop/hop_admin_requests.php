@@ -18,12 +18,16 @@ if (!isset($_SESSION['user_id'])) {
         <input type="text" id="title" name="title" placeholder="Enter Title Here." required><br>
 
         <label for="label" id="label_container">Labels:</label><br>
-        <small>separates each label tags with space or enter</small><br>
+        <small>separates each label tags with space</small><br>
 
         <div id=label-box>
+
             <div id="label-list"></div>
-            <input type="text" id="label" name="label" required>
+
+            <input type="text" id="label" placeholder="Type Label Here">
         </div>
+        <input type="hidden" id="label-hidden" name="label">
+
         <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
 
         <br>
@@ -44,7 +48,7 @@ if (!isset($_SESSION['user_id'])) {
             <select name="priority">
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
-                <option value="Urgent">High</option>
+                <option value="High">High</option>
                 <option value="Urgent">Urgent</option>
             </select>
             <br>
@@ -67,7 +71,7 @@ if (!isset($_SESSION['user_id'])) {
         let labelInput = [];
 
         function updateHiddenInput() {
-            $('#label-hidden').val(labelInput.join(''));
+            $('#label-hidden').val(labelInput.join(' '));
         }
 
         function addLabel(value) {
@@ -82,31 +86,31 @@ if (!isset($_SESSION['user_id'])) {
 
             let tag = $('<span>').addClass('label-tag').attr('data-label', value);
 
-            let text = S('<span>').text(calue);
+            let text = $('<span>').text(value);
 
             let removeBtn = $('<button>').attr('type', 'button').addClass('label-remove').text('x');
 
             tag.append(text, removeBtn);
             $('#label-list').append(tag);
-            $('label').val('');
+            $('#labelInput').val('');
 
             updateHiddenInput();
         }
 
-        $('#label').on('keydown', function(event) {
-            if (event.key === 'enter' || event.key === '') {
+        $('#labelInput').on('keydown', function(event) {
+            if (event.key ===' ') {
 
                 event.preventDefault();
                 addLabel($(this).val());
             }
         });
 
-        $('label-list').on('click', '.label-remove', function() {
+        $('#label-list').on('click', '.label-remove', function() {
 
             let tag = $(this).closest('.label-tag');
             let labelToRemove = tag.attr('data-label');
 
-            labelInput = labelInput.filter(function(label) {
+            labels = labels.filter(function(label) {
                 return label !== labelToRemove;
             });
 
