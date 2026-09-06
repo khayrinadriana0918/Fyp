@@ -98,7 +98,7 @@ if (!$userInfo) {
                 </dl>
             </div>
             <div class="button-content">
-                <button onclick="document.location='manage_user.php'">Submit Request to Admin</button>
+                <button onclick="document.location='hop_admin_requests.php'">Submit Request to Admin</button>
                 <button onclick="document.location='student_requests.php'">See Student Requests</button>
                 <button onclick="document.location='hop_requests.php'">See My Requests</button>
             </div>
