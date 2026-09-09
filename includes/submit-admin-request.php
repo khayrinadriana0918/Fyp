@@ -24,9 +24,9 @@ $user = $_SESSION['user_id'];
 
 $title = trim($_POST['title'] ?? '');
 $label = trim($_POST['label'] ?? '');
-$c_Id = trim($_POST['category_id'] ?? '');
+$c_Id = trim($_POST['c_id'] ?? '');
 $priority = trim($_POST['priority'] ?? 'Low');
-$desc = trim($_POST['description'] ?? '');
+$desc = trim($_POST['desc'] ?? '');
 
 if (
     $title === '' ||
@@ -63,7 +63,10 @@ $staff_id = $hop['staff_id'];
 
 $req_file = null;
 
-if (!isset($_FILES['request_file']) && $_FILES['request_file']['error'] !== UPLOAD_ERR_NO_FILE) {
+if (
+    isset($_FILES['request_file']) &&
+    $_FILES['request_file']['error'] !== UPLOAD_ERR_NO_FILE
+) {
     if ($_FILES['request_file']['error'] !== UPLOAD_ERR_OK) {
         echo json_encode([
             'success' => false,
@@ -111,18 +114,42 @@ if (!isset($_FILES['request_file']) && $_FILES['request_file']['error'] !== UPLO
         exit();
     }
 
-    $req_file= $nfn;
+    $req_file = $nfn;
 }
-$stmt=$pdo->prepare("
+$stmt = $pdo->prepare("
 INSERT INTO admin_request(
 staff_id,
 category_id,
 ar_title,
 ar_label,
+ar_priority,
 ar_description,
-ar_request_file,
-ar_priority 
+ar_request_file
 )VALUES
 (
+:staff_id,
+:c_id,
+:title,
+:label,
+:priority
+:desc,
+:request_file,
 
-);")
+);");
+
+//named parameters
+$stmt->bindParam(":staff_id", $staff_id);
+$stmt->bindParam(":category_id", $category_id);
+$stmt->bindParam(":title", $ar_title);
+$stmt->bindParam(":label", $ar_label);
+$stmt->bindParam(":description", $ar_description);
+$stmt->bindParam(":request_file", $ar_request_file);
+$stmt->bindParam(":priority", $ar_priority);
+
+$stmt->execute();
+
+echo json_encode([
+    'success' => false,
+    'message' => 'Unable to save uploaded file'
+]);
+exit();

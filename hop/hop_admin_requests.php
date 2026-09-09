@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id'])) {
 
         <div class=label-box>
             <label for="label" id="label_container">Labels:</label><br>
-            <small>separates each label tags with space or comma</small><br>
+            <small>separates each label tags with space</small><br>
             <!-- the tag labels separate and in a sphere each-->
             <input type="text" id="label" name="label" placeholder="e.g: time-strict, bug_report">
 
@@ -28,8 +28,8 @@ if (!isset($_SESSION['user_id'])) {
         <br>
 
         <div class="category-box">
-            <label for="category_id">Category:</label>
-            <select name="category_id" required>
+            <label for="c_id">Category:</label>
+            <select name="c_id" required>
                 <!-- keep 'other' the last while alphabetical -->
                 <?php
                 $stmt = $pdo->query("SELECT * FROM category ORDER BY CASE
@@ -59,8 +59,8 @@ if (!isset($_SESSION['user_id'])) {
         <br>
 
         <div class="desc-box">
-            <label for="description">Describe your request/issue regarding the system:</label><br>
-            <textarea id="description" name="description" rows="10" cols="100" placeholder="Enter your request/issue here." required></textarea>
+            <label for="desc">Describe your request/issue regarding the system:</label><br>
+            <textarea id="desc" name="desc" rows="10" cols="100" placeholder="Enter your request/issue here." required></textarea>
         </div>
         <br>
 
