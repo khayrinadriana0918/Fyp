@@ -1,178 +1,866 @@
 <?php
-require_once '../includes/config.php';
 
+require_once '../includes/config.php';
 require_once __DIR__ . '/../includes/database.php';
 
-//only allow access to logged-in users
+/* =========================================================
+   CHECK LOGIN
+========================================================= */
 if (!isset($_SESSION['user_id'])) {
-    header("Location:../index.php");
+    header("Location: ../index.php");
     exit();
 }
 $user = $_SESSION['user_id'];
 
-$query = "SELECT users.user_id,users.name,users.created_at,head_of_programme.staff_id
-FROM users
-INNER JOIN head_of_programme ON users.user_id = head_of_programme.user_id
-WHERE users.user_id = :user_id;";
+/* =========================================================
+   GET LOGGED-IN HOP INFORMATION
+========================================================= */
+$query = "
+    SELECT
+        users.user_id,
+        users.name,
+        users.created_at,
+        head_of_programme.staff_id
+    FROM users
+    INNER JOIN head_of_programme
+        ON users.user_id = head_of_programme.user_id
+    WHERE users.user_id = :user_id
+";
 
 $stmt = $pdo->prepare($query);
 
 $stmt->execute([
     ':user_id' => $user
 ]);
+
 $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
 if (!$userInfo) {
     die("User information not found.");
 }
+
+
+/* =========================================================
+   GET RECENT STUDENT REQUESTS
+========================================================= */
+$requestQuery = "
+    SELECT
+        r.request_id,
+        r.title,
+        r.stats,
+        r.priority,
+        r.submission_date,
+
+        s.student_id AS requester_id,
+
+        u.name AS requester_name,
+
+        c.category_name
+
+    FROM request r
+
+    INNER JOIN student s
+        ON r.student_id = s.student_id
+
+    INNER JOIN users u
+        ON s.user_id = u.user_id
+
+    INNER JOIN category c
+        ON r.category_id = c.category_id
+
+    ORDER BY r.submission_date DESC
+
+    LIMIT 5
+";
+
+
+$requestStmt = $pdo->prepare($requestQuery);
+$requestStmt->execute();
+$recentRequests =
+    $requestStmt->fetchAll(PDO::FETCH_ASSOC);
+
+/* =========================================================
+   GET DASHBOARD REQUEST COUNTS
+========================================================= */
+$countQuery = "
+    SELECT
+
+        COUNT(*) AS total,
+        SUM(
+            CASE
+                WHEN stats = 'Pending'
+                THEN 1
+                ELSE 0
+            END
+        ) AS pending,
+
+        SUM(
+            CASE
+                WHEN stats = 'In Progress'
+                THEN 1
+                ELSE 0
+            END
+        ) AS in_progress,
+
+        SUM(
+            CASE
+                WHEN stats = 'Completed'
+                THEN 1
+                ELSE 0
+            END
+        ) AS completed
+
+    FROM request
+";
+
+$countStmt = $pdo->prepare($countQuery);
+$countStmt->execute();
+$requestCounts =
+    $countStmt->fetch(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
+
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>System</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>HoP Dashboard | SIMSAP</title>
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css"
+    >
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+    </script>
+
 </head>
+
 
 <body>
 
-    <div class="layout">
-        <header>
-            <!-- =============================================== -->
-            <!-- HEADER -->
-            <!-- =============================================== -->
-            <div class="header-content">
-                <h1>SIMSAP-Student Issue Management System for Academic Programme</h1>
-                <img src="" alt="bell-icon">
-            </div>
-        </header>
-        <div>
-            <h2>Hi,
-                <?php
-                echo htmlspecialchars($userInfo['name']);
-                ?>
-            </h2>
+
+<div class="layout">
+
+
+    <!-- =====================================================
+         LEFT SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-title">
+
+            <h2>SIMSAP</h2>
+
+            <p>Head of Programme</p>
+
         </div>
-        <!-- left content -->
-        <div>
+
+
+
+        <nav>
+
             <ul>
-                <li><a href="hop_Dashboard.php">Dashboard</a></li>
-                <li><a href="About.php">About</a></li>
-                <li><a href="faq.html">FAQ</a></li>
+
+
+                <li>
+
+                    <a
+                        href="hop_Dashboard.php"
+                        class="active"
+                    >
+                        Dashboard
+                    </a>
+
+                </li>
+
+
+
+                <li>
+
+                    <a href="student_requests.php">
+                        Student Requests
+                    </a>
+
+                </li>
+
+
+
+                <li>
+
+                    <a href="hop_admin_requests.php">
+                        Submit Request to Admin
+                    </a>
+
+                </li>
+
+
+
+                <li>
+
+                    <a href="hop_requests.php">
+                        My Requests
+                    </a>
+
+                </li>
+
+
+
+                <li>
+
+                    <a href="faq.html">
+                        FAQ
+                    </a>
+
+                </li>
+
+
             </ul>
+
+        </nav>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header>
+
+
+        <div class="header-content">
+
+
+            <div class="system-name">
+
+                <h1>
+                    SIMSAP - Student Issue Management System
+                    for Academic Programme
+                </h1>
+
+            </div>
+
+
+
+            <div class="header-user">
+
+
+                <span class="header-name">
+
+                    <?= htmlspecialchars(
+                        $userInfo['name']
+                    ); ?>
+
+                </span>
+
+
+                <button
+                    type="button"
+                    class="notification-button"
+                    title="Notifications"
+                >
+                    🔔
+                </button>
+
+
+            </div>
+
+
         </div>
-        <!-- left content -->
-        <!-- middle content start -->
-        <div class="middle-content">
-            <div class="user-info">
-                <!-- users Information -->
-                <dl>
-                    <dt>User ID:</dt>
-                    <dd>
-                        <?php
-                        echo htmlspecialchars($userInfo['user_id']);
-                        ?>
-                    </dd>
-                    <dt class="info">Staff ID:</dt>
-                    <dd>
-                        <?php
-                        echo htmlspecialchars($userInfo['staff_id']);
-                        ?>
-                    </dd>
-                    <dt>Full Name:</dt>
-                    <dd>
-                        <?php
-                        echo htmlspecialchars($userInfo['name']);
-                        ?>
-                    </dd>
-                    <dt>Account Created:</dt>
-                    <dd>
-                        <?php
-                        echo htmlspecialchars($userInfo['created_at']);
-                        ?>
-                    </dd>
-                </dl>
+
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MIDDLE CONTENT
+    ====================================================== -->
+
+    <main class="middle-content">
+
+
+        <!-- =================================================
+             WELCOME
+        ================================================== -->
+
+        <section class="dashboard-heading">
+
+
+            <div>
+
+                <h2>
+
+                    Hi,
+                    <?= htmlspecialchars(
+                        $userInfo['name']
+                    ); ?>
+
+                </h2>
+
+
+                <p>
+                    Manage and monitor student administrative
+                    requests.
+                </p>
+
             </div>
-            <div class="button-content">
-                <button onclick="document.location='hop_admin_requests.php'">Submit Request to Admin</button>
-                <button onclick="document.location='student_requests.php'">See Student Requests</button>
-                <button onclick="document.location='hop_requests.php'">See My Requests</button>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             DASHBOARD STATISTICS
+        ================================================== -->
+
+        <section class="dashboard-cards">
+
+
+            <!-- TOTAL -->
+
+            <div class="stat-card">
+
+                <p>Total Requests</p>
+
+                <h2>
+
+                    <?= htmlspecialchars(
+                        $requestCounts['total'] ?? 0
+                    ); ?>
+
+                </h2>
+
             </div>
-            <div class="Submitted-Req">
+
+
+
+            <!-- PENDING -->
+
+            <div class="stat-card">
+
+                <p>Pending</p>
+
+                <h2>
+
+                    <?= htmlspecialchars(
+                        $requestCounts['pending'] ?? 0
+                    ); ?>
+
+                </h2>
+
+            </div>
+
+
+
+            <!-- IN PROGRESS -->
+
+            <div class="stat-card">
+
+                <p>In Progress</p>
+
+                <h2>
+
+                    <?= htmlspecialchars(
+                        $requestCounts['in_progress'] ?? 0
+                    ); ?>
+
+                </h2>
+
+            </div>
+
+
+
+            <!-- COMPLETED -->
+
+            <div class="stat-card">
+
+                <p>Completed</p>
+
+                <h2>
+
+                    <?= htmlspecialchars(
+                        $requestCounts['completed'] ?? 0
+                    ); ?>
+
+                </h2>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             QUICK ACTIONS
+        ================================================== -->
+
+        <section class="quick-actions">
+
+
+            <button
+                type="button"
+                onclick="document.location='hop_admin_requests.php'"
+            >
+                Submit Request to Admin
+            </button>
+
+
+            <button
+                type="button"
+                onclick="document.location='student_requests.php'"
+            >
+                See Student Requests
+            </button>
+
+
+            <button
+                type="button"
+                onclick="document.location='hop_requests.php'"
+            >
+                See My Requests
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             RECENT STUDENT REQUESTS
+        ================================================== -->
+
+        <section class="request-section">
+
+
+            <!-- Request heading -->
+
+            <div class="section-header">
+
+
                 <div>
-                    <h2>Recent Students Requests</h2>
-                    <div>
-                        <!-- show recent submitted request-->
-                        <?php
-                        $requestQuery = "
-                        SELECT
-                        r.*,	
-                        s.student_id AS requester_id,
-                        u.name AS requester_name,
-                        c.category_name AS category_name
-                        FROM request r
-                        INNER JOIN student s ON r.student_id = s.student_id
-                        INNER JOIN users u ON s.user_id = u.user_id
-                        INNER JOIN category c ON r.category_id = c.category_id
-                        ORDER BY r.submission_date DESC
-                        LIMIT 5
-                        ;";
 
-                        $requestStmt = $pdo->prepare($requestQuery);
-                        $requestStmt->execute();
-
-                        $recentRequests = $requestStmt->fetchAll(PDO::FETCH_ASSOC);
-                        ?>
-                        <?php if (empty($recentRequests)): ?>
-                            <p>No requests have been submitted.</p>
-                        <?php else: ?>
-                            <?php foreach ($recentRequests as $request): ?>
-                                <div class="request-card">
-                                    <div class="top-card">
-                                        <p><?= htmlspecialchars($request['request_id']); ?></p><br>
-                                        <h2><?= htmlspecialchars($request['requester_name']); ?></h2>
-                                        <h2>(<?= htmlspecialchars($request['requester_id']); ?>)</h2>
-                                        <h6><?= htmlspecialchars($request['priority']); ?></h6>
+                    <h2>
+                        Recent Student Requests
+                    </h2>
 
 
-                                        <h1><a href="req_details.php?id=<?= urlencode($request['request_id']); ?>">
-                                                <?= htmlspecialchars($request['title']); ?></a>
-                                        </h1><br>
+                    <p>
+                        Latest administrative requests
+                        submitted by students.
+                    </p>
 
-                                        <h3><?= htmlspecialchars($request['category_name']); ?></h3>
-                                        <h6><?= htmlspecialchars($request['label']); ?></h6>
-
-                                        <h6><?= htmlspecialchars($request['stats']); ?></h6>
-                                        <h6><?= htmlspecialchars($request['submission_date']); ?></h6>
-
-                                    </div>
-                                    <div class="bottom-card">
-                                        <h3>Description</h3>
-                                        <p><?= htmlspecialchars($request['description']); ?></p>
-
-                                        <h4>Attachments</h4>
-                                        <?= htmlspecialchars($request['request_file']); ?>
-
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
                 </div>
+
+
+
+                <a
+                    href="student_requests.php"
+                    class="view-all"
+                >
+                    View All
+                </a>
+
+
             </div>
-        </div>
-        <!-- middle content end -->
-        <!-- filter content(rightmost) -->
-        <?php include __DIR__. '/../inc_reuse/filter.php'; ?>
-    </div>
 
-    <!-- javascript -->
 
-    <!-- javascript end -->
+
+            <!-- =================================================
+                 NO REQUESTS
+            ================================================== -->
+
+            <?php if (empty($recentRequests)): ?>
+
+
+                <div class="empty-message">
+
+                    <p>
+                        No student requests have been
+                        submitted.
+                    </p>
+
+                </div>
+
+
+            <?php else: ?>
+
+
+                <!-- =================================================
+                     REQUEST TABLE
+                ================================================== -->
+
+                <div class="table-container">
+
+
+                    <table class="request-table">
+
+
+                        <thead>
+
+
+                            <tr>
+
+                                <th>
+                                    Request ID
+                                </th>
+
+                                <th>
+                                    Name
+                                </th>
+
+                                <th>
+                                    Student ID
+                                </th>
+
+                                <th>
+                                    Title
+                                </th>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Last Updated
+                                </th>
+
+                            </tr>
+
+
+                        </thead>
+
+
+
+                        <tbody>
+
+
+                        <?php foreach ($recentRequests as $request): ?>
+
+
+                            <?php
+
+                            /*
+                             * Convert status into CSS class.
+                             *
+                             * Example:
+                             * "In Progress"
+                             *
+                             * becomes:
+                             * "in-progress"
+                             */
+
+                            $statusClass =
+                                strtolower(
+                                    str_replace(
+                                        ' ',
+                                        '-',
+                                        $request['stats']
+                                    )
+                                );
+
+                            ?>
+
+
+                            <tr
+                                class="request-row"
+
+                                onclick="
+                                    window.location.href =
+                                    'req_details.php?id=<?= urlencode(
+                                        $request['request_id']
+                                    ); ?>';
+                                "
+                            >
+
+
+                                <!-- REQUEST ID -->
+
+                                <td class="request-id">
+
+                                    <?= htmlspecialchars(
+                                        $request['request_id']
+                                    ); ?>
+
+                                </td>
+
+
+
+                                <!-- STUDENT NAME -->
+
+                                <td>
+
+                                    <?= htmlspecialchars(
+                                        $request['requester_name']
+                                    ); ?>
+
+                                </td>
+
+
+
+                                <!-- STUDENT ID -->
+
+                                <td>
+
+                                    <?= htmlspecialchars(
+                                        $request['requester_id']
+                                    ); ?>
+
+                                </td>
+
+
+
+                                <!-- TITLE -->
+
+                                <td class="request-title">
+
+                                    <?= htmlspecialchars(
+                                        $request['title']
+                                    ); ?>
+
+                                </td>
+
+
+
+                                <!-- CATEGORY -->
+
+                                <td>
+
+                                    <?= htmlspecialchars(
+                                        $request['category_name']
+                                    ); ?>
+
+                                </td>
+
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+
+                                    <span
+                                        class="
+                                            status
+                                            status-<?= htmlspecialchars(
+                                                $statusClass
+                                            ); ?>
+                                        "
+                                    >
+
+                                        <?= htmlspecialchars(
+                                            $request['stats']
+                                        ); ?>
+
+                                    </span>
+
+
+                                </td>
+
+
+
+                                <!-- LAST UPDATED -->
+
+                                <td>
+
+                                    <?php
+
+                                    echo htmlspecialchars(
+                                        date(
+                                            'd M Y',
+                                            strtotime(
+                                                $request[
+                                                    'submission_date'
+                                                ]
+                                            )
+                                        )
+                                    );
+
+                                    ?>
+
+                                </td>
+
+
+                            </tr>
+
+
+                        <?php endforeach; ?>
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+
+            <?php endif; ?>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             USER INFORMATION
+        ================================================== -->
+
+        <section class="account-section">
+
+
+            <h2>
+                Account Information
+            </h2>
+
+
+
+            <div class="account-info">
+
+
+                <!-- USER ID -->
+
+                <div>
+
+                    <span>
+                        User ID
+                    </span>
+
+
+                    <strong>
+
+                        <?= htmlspecialchars(
+                            $userInfo['user_id']
+                        ); ?>
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- STAFF ID -->
+
+                <div>
+
+                    <span>
+                        Staff ID
+                    </span>
+
+
+                    <strong>
+
+                        <?= htmlspecialchars(
+                            $userInfo['staff_id']
+                        ); ?>
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- FULL NAME -->
+
+                <div>
+
+                    <span>
+                        Full Name
+                    </span>
+
+
+                    <strong>
+
+                        <?= htmlspecialchars(
+                            $userInfo['name']
+                        ); ?>
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- ACCOUNT CREATED -->
+
+                <div>
+
+                    <span>
+                        Account Created
+                    </span>
+
+
+                    <strong>
+
+                        <?php
+
+                        echo htmlspecialchars(
+                            date(
+                                'd M Y',
+                                strtotime(
+                                    $userInfo['created_at']
+                                )
+                            )
+                        );
+
+                        ?>
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         RIGHT FILTER
+    ====================================================== -->
+
+    <aside class="filter-sidebar">
+
+
+        <?php
+
+        include __DIR__ .
+            '/../inc_reuse/filter.php';
+
+        ?>
+
+
+    </aside>
+
+
+</div>
+
+
 </body>
+
 
 </html>

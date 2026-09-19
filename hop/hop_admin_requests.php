@@ -71,14 +71,16 @@ if (!isset($_SESSION['user_id'])) {
         </div>
         <br>
 
-        <button type="submit">Submit Request</button>
+        <!-- <button type="button" id="preview_btn">Preview Request</button> -->
+        <button type="submit" id="submit_btn">Confirm Submit</button>
 
         <p id="req_msg"></p>
 
     </fieldset>
 </form>
+<!-- preview form -->
 <script>
-    $('#ar_form').on('submit', function(event){
+    $('#ar_form').on('submit', function(event) {
         event.preventDefault();
 
         let formData = new FormData(this);
@@ -88,26 +90,25 @@ if (!isset($_SESSION['user_id'])) {
             type: 'POST',
             data: formData,
 
-            processData:false,
-            contentType:false,
+            processData: false,
+            contentType: false,
 
-            dataType:'json',
-            success:function(response){
-                if(response.success){
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
                     $('#req_msg').text(response.message);
                     $('#ar_form')[0].reset();
 
-                }else{
+                } else {
                     $('#req_msg').text(response.message);
                 }
             },
 
-            error: function(){
+            error: function() {
                 $('#req_msg').text(
                     'Request fail to send'
                 );
             }
         });
     });
-
 </script>

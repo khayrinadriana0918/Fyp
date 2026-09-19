@@ -1,0 +1,48 @@
+.layout {
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-columns:
+        220px
+        minmax(0, 1fr)
+        260px;
+
+    grid-template-rows:
+        80px
+        1fr;
+
+    grid-template-areas:
+        "sidebar header filter"
+        "sidebar main   filter";
+}
+
+.sidebar {
+    grid-area: sidebar;
+}
+
+header {
+    grid-area: header;
+}
+
+.middle-content {
+    grid-area: main;
+
+    padding: 30px;
+
+    background: #fafafa;
+
+    min-width: 0;
+}
+
+.filter-sidebar {
+    grid-area: filter;
+
+    padding: 25px 20px;
+
+    background: #ffffff;
+
+    border-left: 1px solid #e0e0e0;
+
+    min-width: 0;
+}

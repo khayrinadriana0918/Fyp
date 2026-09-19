@@ -33,7 +33,7 @@ if (!$userInfo) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>System</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
@@ -50,8 +50,8 @@ if (!$userInfo) {
                 <img src="" alt="bell-icon">
             </div>
         </header>
-        <div>
-            <h2>Hi,
+        <div class="user-name">
+            <h2>Welcome,
                 <?php
                 echo htmlspecialchars($userInfo['name']);
                 ?>
@@ -128,37 +128,38 @@ if (!$userInfo) {
 
                         $recentRequests = $requestStmt->fetchAll(PDO::FETCH_ASSOC);
                         ?>
+                        <table>
+                            <tr>
+                                <th>Status</th>
+                                <th>Req. ID</th>
+                                <th>Name</th>
+                                <th>User ID</th>
+                                <th>Issue Category</th>
+                                <th>Files</th>
+                                <th>Description</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </table>
                         <?php if (empty($recentRequests)): ?>
                             <p>No requests have been submitted.</p>
                         <?php else: ?>
+                            <!-- change into table that display request id, staff id, name, and submitted date(resolved date if stats is complete) -->
                             <?php foreach ($recentRequests as $request): ?>
-                                <div class="request-card">
-                                    <div class="top-card">
-                                        <p><?= htmlspecialchars($request['ar_request_id']); ?></p><br>
-                                        <h2><?= htmlspecialchars($request['requester_name']); ?></h2>
-                                        <h2>(<?= htmlspecialchars($request['requester_id']); ?>)</h2>
-                                        <h6><?= htmlspecialchars($request['ar_priority']); ?></h6>
+                                <div class="request-row">
+                                    <table>
+                                        <tr>
+                                            <!-- grab from databases hop req that sent to admin -->
+                                            <td><!--if pending put 🔴, incomplete put 🟡, complete put 🟢, image or emoji itself--></td>
+                                            <td><!--Request ID from user--></td>
+                                            <td><!--name--></td>
+                                            <td><!--User ID--></td>
+                                            <td><!--Issue Category--></td>
+                                            <td><!--Files if there--></td>
+                                            <td><!--First max 50 words from description--></td>
 
-
-                                        <h1><a href="req_details.php?id=<?= urlencode($request['ar_request_id']); ?>">
-                                                <?= htmlspecialchars($request['ar_title']); ?></a>
-                                        </h1><br>
-
-                                        <h3><?= htmlspecialchars($request['category_name']); ?></h3>
-                                        <h6><?= htmlspecialchars($request['ar_label']); ?></h6>
-
-                                        <h6><?= htmlspecialchars($request['ar_stats']); ?></h6>
-                                        <h6><?= htmlspecialchars($request['ar_submission_date']); ?></h6>
-
-                                    </div>
-                                    <div class="bottom-card">
-                                        <h3>Description</h3>
-                                        <p><?= htmlspecialchars($request['ar_description']); ?></p>
-
-                                        <h4>Attachments</h4>
-                                        <?= htmlspecialchars($request['ar_request_file']); ?>
-
-                                    </div>
+                                        </tr>
+                                    </table>
+                                    <!-- request id|student id|name|desc(max 50 words)|recent date(if finished, resolved date with '(resolved)') -->
                                 </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -168,7 +169,7 @@ if (!$userInfo) {
         </div>
         <!-- middle content end -->
         <!-- filter content(rightmost) -->
-        <?php include __DIR__. '/../inc_reuse/filter.php'; ?>
+        <?php include __DIR__ . '/../inc_reuse/filter.php'; ?>
     </div>
 
     <!-- javascript -->

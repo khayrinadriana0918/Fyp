@@ -4,14 +4,14 @@ require_once 'config.php';
 require_once __DIR__ . '/database.php';
 
 header('Content-type:application/json');
-
+//avoid someone directy visits this php
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
         'success' => false,
         'message' => 'Invalid request method'
     ]);
     exit();
-}
+} //log in user only
 if (!isset($_SESSION['user_id'])) {
     echo json_encode([
         'success' => false,
@@ -22,16 +22,17 @@ if (!isset($_SESSION['user_id'])) {
 
 $user = $_SESSION['user_id'];
 
-$title = trim($_POST['title'] ?? '');
-$label = trim($_POST['label'] ?? '');
-$c_Id = trim($_POST['c_id'] ?? '');
-$priority = trim($_POST['priority'] ?? 'Low');
-$desc = trim($_POST['desc'] ?? '');
+//connect to name attributes
+$ar_title = trim($_POST['title'] ?? '');
+$ar_label = trim($_POST['label'] ?? '');
+$category_id = trim($_POST['c_id'] ?? '');
+$ar_priority = trim($_POST['priority'] ?? 'Low');
+$ar_description = trim($_POST['desc'] ?? '');
 
 if (
-    $title === '' ||
-    $c_Id === '' ||
-    $desc === ''
+    $ar_title === '' ||
+    $category_id === '' ||
+    $ar_description === ''
 ) {
     echo json_encode([
         'success' => false,
@@ -61,8 +62,9 @@ if (!$hop) {
 }
 $staff_id = $hop['staff_id'];
 
-$req_file = null;
+$ar_request_file = null;
 
+//file field exists AND user select a file, check if PHP receive the upload
 if (
     isset($_FILES['request_file']) &&
     $_FILES['request_file']['error'] !== UPLOAD_ERR_NO_FILE
@@ -94,7 +96,7 @@ if (
     $nfn = uniqid('request_', true) . '.' . $extension;
 
     // $uploaddirectory
-    $ud = __DIR__ . '/../uploads/admin_requests/';
+    $ud = __DIR__ . '/../uploads/admin_hop/';
 
     if (!is_dir($ud)) {
         mkdir($ud, 0755, true);
@@ -114,7 +116,7 @@ if (
         exit();
     }
 
-    $req_file = $nfn;
+    $ar_request_file = $nfn;
 }
 $stmt = $pdo->prepare("
 INSERT INTO admin_request(
@@ -128,28 +130,28 @@ ar_request_file
 )VALUES
 (
 :staff_id,
-:c_id,
-:title,
-:label,
-:priority
-:desc,
-:request_file,
-
+:category_id,
+:ar_title,
+:ar_label,
+:ar_priority,
+:ar_description,
+:ar_request_file
 );");
 
 //named parameters
 $stmt->bindParam(":staff_id", $staff_id);
 $stmt->bindParam(":category_id", $category_id);
-$stmt->bindParam(":title", $ar_title);
-$stmt->bindParam(":label", $ar_label);
-$stmt->bindParam(":description", $ar_description);
-$stmt->bindParam(":request_file", $ar_request_file);
-$stmt->bindParam(":priority", $ar_priority);
+$stmt->bindParam(":ar_title", $ar_title);
+$stmt->bindParam(":ar_label", $ar_label);
+$stmt->bindParam(":ar_priority", $ar_priority);
+$stmt->bindParam(":ar_description", $ar_description);
+$stmt->bindParam(":ar_request_file", $ar_request_file);
+
 
 $stmt->execute();
 
 echo json_encode([
-    'success' => false,
-    'message' => 'Unable to save uploaded file'
+    'success' => true,
+    'message' => 'Request submitted successfully.'
 ]);
 exit();
