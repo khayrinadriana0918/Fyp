@@ -191,12 +191,48 @@ if (!$userInfo) {
                     <br>
 
                     <!-- <button type="button" id="preview_btn">Preview Request</button> -->
-                    <button type="submit" id="submit_btn">Confirm Submit</button>
+                    <button type="submit" id="preview_btn">Preview Request</button>
 
                     <p id="req_msg"></p>
 
                 </fieldset>
             </form>
+            <div id="request_preview" style="display: none;">
+                <h2>Preview Request</h2>
+
+                <p>
+                    <strong>Title:</strong>
+                    <span id="preview_title"></span>
+                </p>
+                <p>
+                    <strong>Labels:</strong>
+                    <span id="preview_label"></span>
+                </p>
+                <p>
+                    <strong>Category:</strong>
+                    <span id="preview_category"></span>
+                </p>
+                <p>
+                    <strong>Priority:</strong>
+                    <span id="preview_priority"></span>
+                </p>
+                <p>
+                    <strong>Description:</strong>
+                </p>
+                <p id="preview_description"></p>
+                <p>
+                    <strong>File:</strong>
+                    <span id="preview_file"></span>
+                </p>
+
+                <button type="button" id="edit_btn">
+                    Edit Request
+                </button>
+                <button type="button" id="confirm_btn">
+                    Confirm Submit
+                </button>
+
+            </div>
         </main>
     </div>
 </body>
@@ -204,35 +240,104 @@ if (!$userInfo) {
 </html>
 <!-- preview form -->
 <script>
-    $('#ar_form').on('submit', function(event) {
-        event.preventDefault();
 
-        let formData = new FormData(this);
+    // PREVIEW REQUEST
+    $('#preview_btn').on('click', function () {
+        // Check required fields first
+        const form = document.getElementById('ar_form');
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        // Get information from form
+        const title = $('#title').val();
+        const label = $('#label').val();
+        const category =
+            $('select[name="c_id"] option:selected').text();
+
+        const priority =
+            $('select[name="priority"]').val();
+
+        const description = $('#desc').val();
+
+        const fileInput =
+            document.getElementById('request_file');
+
+        // Put information into preview
+        $('#preview_title').text(title);
+        $('#preview_label').text(
+            label || 'No labels'
+        );
+        $('#preview_category').text(category);
+        $('#preview_priority').text(priority);
+        $('#preview_description').text(description);
+
+        // File name
+        if (fileInput.files.length > 0) {
+            $('#preview_file').text(
+                fileInput.files[0].name
+            );
+        } else {
+            $('#preview_file').text(
+                'No file attached'
+            );
+        }
+
+        // Hide form
+        $('#ar_form').hide();
+
+        // Show preview
+        $('#request_preview').show();
+    });
+    // GO BACK AND EDIT
+
+    $('#edit_btn').on('click', function () {
+        $('#request_preview').hide();
+        $('#ar_form').show();
+
+    });
+
+    // CONFIRM AND SEND TO DATABASE
+
+    $('#confirm_btn').on('click', function () {
+        let form =
+            document.getElementById('ar_form');
+
+        let formData =
+            new FormData(form);
 
         $.ajax({
             url: '../includes/submit-admin-request.php',
+
             type: 'POST',
             data: formData,
-
             processData: false,
             contentType: false,
-
             dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    $('#req_msg').text(response.message);
-                    $('#ar_form')[0].reset();
 
+            success: function (response) {
+                if (response.success) {
+                    $('#request_preview').hide();
+                    $('#ar_form')[0].reset();
+                    $('#ar_form').show();
+                    $('#req_msg').text(
+                        response.message
+                    );
                 } else {
-                    $('#req_msg').text(response.message);
+                    $('#req_msg').text(
+                        response.message
+                    );
                 }
             },
 
-            error: function() {
+            error: function () {
                 $('#req_msg').text(
-                    'Request fail to send'
+                    'Request failed to send.'
                 );
             }
         });
     });
+
 </script>

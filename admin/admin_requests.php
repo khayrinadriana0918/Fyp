@@ -16,7 +16,10 @@ c.category_name
 FROM admin_request ar
 
 INNER JOIN head_of_programme h
-ON h.user_id= u.user_id
+ON ar.staff_id = h.staff_id
+
+INNER JOIN users u
+ON h.user_id = u.user_id
 
 INNER JOIN category c
 ON ar.category_id= c.category_id
@@ -29,3 +32,66 @@ $stmt->execute();
 
 $reqs= $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+<table>
+
+    <thead>
+        <tr>
+            <th>Request ID</th>
+            <th>HoP Name</th>
+            <th>Staff ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Submitted</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <?php foreach ($reqs as $request): ?>
+
+            <tr
+                class="request-row"
+                onclick="window.location.href=
+                'req_details.php?id=<?= urlencode($request['ar_request_id']); ?>'">
+
+                <td>
+                    <?= htmlspecialchars($request['ar_request_id']); ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($request['requester_name']); ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($request['requester_id']); ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($request['ar_title']); ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($request['category_name']); ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($request['ar_priority']); ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($request['ar_stats']); ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($request['ar_submission_date']); ?>
+                </td>
+
+            </tr>
+
+        <?php endforeach; ?>
+
+    </tbody>
+
+</table>
