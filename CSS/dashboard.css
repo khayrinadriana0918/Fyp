@@ -4,12 +4,14 @@
 * {
     box-sizing: border-box;
 }
+
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     background: #ffffff;
     color: #212121;
 }
+
 a {
     color: inherit;
     text-decoration: none;
@@ -21,20 +23,13 @@ HEADER
 */
 .layout {
     min-height: 100vh;
-
     display: grid;
-
     grid-template-columns:
-        180px
-        minmax(0, 1fr)
-        220px;
-
+        180px minmax(0, 1fr) 220px;
     grid-template-rows:
-        105px
-        1fr;
-
+        105px 1fr;
     grid-template-areas:
-        "sidebar header filter"
+        "header header header"
         "sidebar main filter";
 }
 
@@ -45,49 +40,64 @@ HEADER
 
 header {
     grid-area: header;
-
     background: #ffffff;
-
     border-bottom: 1px solid #dddddd;
-
     padding: 20px 25px;
 }
 
-.header-content {
-    height: 100%;
-
+.header-top {
+    height: 55px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
+    padding: 0 20px;
+    background: #ffffff;
 }
 
 .system-name h1 {
-    margin: 0;
-
-    font-size: 16px;
-    font-weight: normal;
+    font-size: 25px;
+    font-weight: 500;
 }
 
+/*hi, [name]+ notif + log out*/
 .header-user {
     display: flex;
     align-items: center;
+    gap: 50px;
 
-    gap: 15px;
+    font-size: 13px;
 }
-
-.header-name {
-    font-size: 14px;
+.logout{
+    text-decoration: none;
 }
-
+.logout:hover{
+    text-decoration: underline;
+}
 .notification-button {
     border: none;
     background: transparent;
-
     font-size: 18px;
-
     cursor: pointer;
 }
 
+/* =========================================
+   BLACK NAVBAR
+========================================= */
+.top-nav{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    background: #212121;
+}
+.top-nav a{
+    color: #f5f5f5;
+    font-size: 13px;
+    text-decoration: none;
+}
+.top-nav a:hover{
+    text-decoration: underline;
+}
 
 /* =========================================
    LEFT SIDEBAR
@@ -95,12 +105,9 @@ header {
 
 .sidebar {
     grid-area: sidebar;
-
     background: #ffffff;
-
-    border-right: 1px solid #dddddd;
-
-    padding: 20px 15px;
+    border-right: 1px dashed #dddddd;
+    padding: 130px 15px 20px;
 }
 
 .sidebar-title {
@@ -109,16 +116,13 @@ header {
 
 .sidebar-title h2 {
     margin: 0;
-
     font-size: 32px;
     font-weight: 500;
 }
 
 .sidebar-title p {
     margin-top: 5px;
-
     font-size: 12px;
-
     color: #777777;
 }
 
@@ -127,7 +131,6 @@ header {
 
 .sidebar nav ul {
     list-style: none;
-
     padding: 0;
     margin: 0;
 }
@@ -138,11 +141,8 @@ header {
 
 .sidebar nav a {
     display: block;
-
     padding: 10px 12px;
-
     font-size: 15px;
-
     border-radius: 3px;
 }
 
@@ -154,12 +154,9 @@ header {
 /* Dashboard button like sketch */
 
 .sidebar nav a.active {
-    border: 1px solid #aaaaaa;
-
+    border: 1px dashed #aaaaaa;
     background: #ffffff;
-
     text-align: center;
-
     font-weight: 600;
 }
 
@@ -213,37 +210,27 @@ header {
 
 .dashboard-cards {
     display: flex;
-
     gap: 25px;
-
     margin-bottom: 20px;
-
     padding-bottom: 15px;
-
     border-bottom: 1px solid #dddddd;
 }
 
 .stat-card {
     flex: 1;
-
     padding: 10px 0;
-
     background: transparent;
-
     border: none;
 }
 
 .stat-card p {
     margin: 0 0 5px;
-
     color: #777777;
-
     font-size: 12px;
 }
 
 .stat-card h2 {
     margin: 0;
-
     font-size: 22px;
 }
 
@@ -255,30 +242,23 @@ header {
 .quick-actions {
     display: flex;
     justify-content: flex-end;
-
     gap: 8px;
-
     margin-bottom: 20px;
 }
 
 .quick-actions button {
     padding: 7px 13px;
-
     border: none;
-
     border-radius: 3px;
-
     background: #212121;
-
-    color: #ffffff;
-
+    color: #f5f5f5;
     font-size: 12px;
-
     cursor: pointer;
 }
 
 .quick-actions button:hover {
     background: #444444;
+
 }
 
 
@@ -288,9 +268,7 @@ header {
 
 .request-section {
     width: 100%;
-
     border: 1px solid #cccccc;
-
     background: #ffffff;
 }
 
@@ -299,19 +277,15 @@ header {
 
 .section-header {
     min-height: 55px;
-
     padding: 12px 15px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     border-bottom: 1px solid #cccccc;
 }
 
 .section-header h2 {
     margin: 0;
-
     font-size: 24px;
     font-weight: 500;
 }
@@ -322,11 +296,8 @@ header {
 
 .view-all {
     padding: 7px 12px;
-
     border: 1px solid #333333;
-
     border-radius: 3px;
-
     font-size: 12px;
 }
 
@@ -342,40 +313,30 @@ header {
 
 .table-container {
     width: 100%;
-
     overflow-x: auto;
 }
 
 .request-table {
     width: 100%;
-
     border-collapse: collapse;
-
     table-layout: auto;
 }
 
 .request-table th {
     padding: 10px 8px;
-
     background: #ffffff;
-
     border-right: 1px solid #cccccc;
     border-bottom: 1px solid #cccccc;
-
     text-align: left;
-
     font-size: 12px;
     font-weight: 600;
-
     white-space: nowrap;
 }
 
 .request-table td {
     padding: 13px 8px;
-
     border-right: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
-
     font-size: 12px;
 }
 
@@ -410,15 +371,10 @@ header {
 
 .status {
     display: inline-block;
-
     padding: 4px 7px;
-
     border: 1px solid #aaaaaa;
-
     border-radius: 3px;
-
     background: #ffffff;
-
     font-size: 11px;
 }
 
@@ -445,9 +401,7 @@ header {
 
 .empty-message {
     padding: 35px 20px;
-
     text-align: center;
-
     color: #777777;
 }
 
@@ -458,13 +412,9 @@ header {
 
 .filter-sidebar {
     grid-area: filter;
-
     background: #ffffff;
-
     border-left: 1px solid #cccccc;
-
     padding: 150px 15px 20px;
-
     overflow-y: auto;
 }
 
@@ -474,18 +424,14 @@ header {
 .filters fieldset {
     margin: 0;
     padding: 0;
-
     border: none;
 }
 
 .filters legend {
     width: 100%;
-
     padding-bottom: 10px;
     margin-bottom: 15px;
-
     border-bottom: 2px solid #212121;
-
     font-size: 24px;
     font-weight: 500;
 }
@@ -500,21 +446,15 @@ header {
 
 .filters .sort label {
     display: block;
-
     margin-bottom: 5px;
-
     font-size: 12px;
 }
 
 .filters select {
     width: 100%;
-
     padding: 7px;
-
     margin-bottom: 15px;
-
     background: #ffffff;
-
     border: 1px solid #aaaaaa;
 }
 
@@ -523,18 +463,12 @@ header {
 
 .filters button {
     width: 100%;
-
     padding: 10px 5px;
-
     background: #ffffff;
-
     border: none;
     border-bottom: 1px solid #dddddd;
-
     text-align: left;
-
     font-weight: 600;
-
     cursor: pointer;
 }
 
@@ -544,9 +478,7 @@ header {
 
 .filters ul {
     list-style: none;
-
     margin: 0;
-
     padding: 10px 5px;
 }
 
@@ -565,22 +497,18 @@ header {
 
 .account-section {
     margin-top: 25px;
-
     padding-top: 20px;
-
     border-top: 1px solid #cccccc;
 }
 
 .account-section h2 {
     margin: 0 0 15px;
-
     font-size: 18px;
     font-weight: 500;
 }
 
 .account-info {
     display: grid;
-
     grid-template-columns:
         repeat(4, 1fr);
 
@@ -589,15 +517,12 @@ header {
 
 .account-info div {
     display: flex;
-
     flex-direction: column;
-
     gap: 5px;
 }
 
 .account-info span {
     color: #777777;
-
     font-size: 11px;
 }
 
@@ -614,13 +539,10 @@ header {
 
     .layout {
         grid-template-columns:
-            160px
-            minmax(0, 1fr);
+            160px minmax(0, 1fr);
 
         grid-template-rows:
-            auto
-            auto
-            1fr;
+            auto auto 1fr;
 
         grid-template-areas:
             "sidebar header"

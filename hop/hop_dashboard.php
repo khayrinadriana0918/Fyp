@@ -11,7 +11,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 $user = $_SESSION['user_id'];
-
 /* =========================================================
    GET LOGGED-IN HOP INFORMATION
 ========================================================= */
@@ -132,425 +131,208 @@ $requestCounts =
 
 </head>
 
-
 <body>
-
-
     <div class="layout">
-
-
-        <!-- =====================================================
-         LEFT SIDEBAR
-    ====================================================== -->
-
-        <aside class="sidebar">
-
-
-            <div class="sidebar-title">
-
-                <h2>SIMSAP</h2>
-
-                <p>Head of Programme</p>
-
-            </div>
-
-
-
-            <nav>
-
-                <ul>
-
-
-                    <li>
-
-                        <a
-                            href="hop_Dashboard.php"
-                            class="active">
-                            Dashboard
-                        </a>
-
-                    </li>
-
-
-
-                    <li>
-
-                        <a href="student_requests.php">
-                            Student Requests
-                        </a>
-
-                    </li>
-
-
-
-                    <li>
-
-                        <a href="hop_admin_requests.php">
-                            Submit Request to Admin
-                        </a>
-
-                    </li>
-
-
-
-                    <li>
-
-                        <a href="hop_requests.php">
-                            My Requests
-                        </a>
-
-                    </li>
-
-
-
-                    <li>
-
-                        <a href="faq.html">
-                            FAQ
-                        </a>
-
-                    </li>
-
-
-                </ul>
-
-            </nav>
-
-
-        </aside>
-
-
-
         <!-- =====================================================
          HEADER
     ====================================================== -->
-
         <header>
-
-
-            <div class="header-content">
-
-
+            <div class="header-top">
                 <div class="system-name">
-
                     <h1>
                         SIMSAP - Student Issue Management System
                         for Academic Programme
                     </h1>
-
                 </div>
-
-
-
                 <div class="header-user">
-
-
                     <span class="header-name">
-
-                        <?= htmlspecialchars(
-                            $userInfo['name']
-                        ); ?>
-
+                        Hi, <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
-
-
                     <button
                         type="button"
                         class="notification-button"
                         title="Notifications">
                         🔔
                     </button>
-
-
+                    <a href="../includes/logout.php" class="logout">
+                        Log out
+                    </a>
                 </div>
-
-
             </div>
 
-
+            <div class="top-nav">
+                <a href="about.php">About</a>
+            </div>
         </header>
 
-
+        <!-- =====================================================
+         LEFT SIDEBAR
+    ====================================================== -->
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="hop_Dashboard.php" class="active">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="hop_admin_requests.php">
+                            Submit Request to Admin
+                        </a>
+                    </li>
+                    <li>
+                        <a href="hop_requests.php">
+                            My Requests
+                        </a>
+                    </li>
+                    <li>
+                        <a href="userManual.html">
+                            User Manual
+                        </a>
+                    </li>
+                    <li>
+                        <a href="faq.html">
+                            FAQ
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
         <!-- =====================================================
          MIDDLE CONTENT
     ====================================================== -->
 
         <main class="middle-content">
-
-
             <!-- =================================================
              WELCOME
         ================================================== -->
-
             <section class="dashboard-heading">
-
-
                 <div>
-
                     <h2>
-
                         Hi,
                         <?= htmlspecialchars(
                             $userInfo['name']
                         ); ?>
-
                     </h2>
-
-
                     <p>
                         Manage and monitor student administrative
                         requests.
                     </p>
-
                 </div>
-
-
             </section>
 
+            <!-- =================================================
+             USER INFORMATION
+        ================================================== -->
 
+            <?php include __DIR__ . '/../inc_reuse/account_info.php'; ?><br>
 
             <!-- =================================================
              DASHBOARD STATISTICS
         ================================================== -->
-
             <section class="dashboard-cards">
-
-
                 <!-- TOTAL -->
-
                 <div class="stat-card">
-
                     <p>Total Requests</p>
-
                     <h2>
-
                         <?= htmlspecialchars(
                             $requestCounts['total'] ?? 0
                         ); ?>
-
                     </h2>
-
                 </div>
-
-
 
                 <!-- PENDING -->
-
                 <div class="stat-card">
-
                     <p>Pending</p>
-
                     <h2>
-
-                        <?= htmlspecialchars(
-                            $requestCounts['pending'] ?? 0
-                        ); ?>
-
+                        <?= htmlspecialchars($requestCounts['pending'] ?? 0); ?>
                     </h2>
-
                 </div>
-
-
 
                 <!-- IN PROGRESS -->
-
                 <div class="stat-card">
-
                     <p>In Progress</p>
-
                     <h2>
-
-                        <?= htmlspecialchars(
-                            $requestCounts['in_progress'] ?? 0
-                        ); ?>
-
+                        <?= htmlspecialchars($requestCounts['in_progress'] ?? 0); ?>
                     </h2>
-
                 </div>
-
-
 
                 <!-- COMPLETED -->
-
                 <div class="stat-card">
-
                     <p>Completed</p>
-
                     <h2>
-
-                        <?= htmlspecialchars(
-                            $requestCounts['completed'] ?? 0
-                        ); ?>
-
+                        <?= htmlspecialchars($requestCounts['completed'] ?? 0); ?>
                     </h2>
-
                 </div>
-
-
             </section>
-
-
 
             <!-- =================================================
              QUICK ACTIONS
         ================================================== -->
-
             <section class="quick-actions">
-
-
                 <button
                     type="button"
                     onclick="document.location='hop_admin_requests.php'">
                     Submit Request to Admin
                 </button>
-
-
-                <button
-                    type="button"
-                    onclick="document.location='student_requests.php'">
-                    See Student Requests
-                </button>
-
-
                 <button
                     type="button"
                     onclick="document.location='hop_requests.php'">
                     See My Requests
                 </button>
 
-
             </section>
-
-
 
             <!-- =================================================
              RECENT STUDENT REQUESTS
         ================================================== -->
-
             <section class="request-section">
-
-
                 <!-- Request heading -->
-
                 <div class="section-header">
 
-
                     <div>
-
-                        <h2>
-                            Recent Student Requests
-                        </h2>
-
-
-                        <p>
-                            Latest administrative requests
-                            submitted by students.
-                        </p>
-
+                        <h2>Recent Student Requests</h2>
+                        <p>Latest administrative requests submitted by students.</p>
                     </div>
 
-
-
-                    <a
-                        href="student_requests.php"
-                        class="view-all">
-                        View All
-                    </a>
-
+                    <a href="student_admin_requests.php" class="view-all">View All</a>
 
                 </div>
-
-
 
                 <!-- =================================================
                  NO REQUESTS
             ================================================== -->
-
                 <?php if (empty($recentRequests)): ?>
-
-
                     <div class="empty-message">
-
-                        <p>
-                            No student requests have been
-                            submitted.
-                        </p>
-
+                        <p>No student requests have been submitted.</p>
                     </div>
 
-
                 <?php else: ?>
-
-
                     <!-- =================================================
                      REQUEST TABLE
                 ================================================== -->
-
                     <div class="table-container">
-
-
                         <table class="request-table">
-
-
                             <thead>
-
-
                                 <tr>
-
-                                    <th>
-                                        Request ID
-                                    </th>
-
-                                    <th>
-                                        Name
-                                    </th>
-
-                                    <th>
-                                        Student ID
-                                    </th>
-
-                                    <th>
-                                        Title
-                                    </th>
-
-                                    <th>
-                                        Category
-                                    </th>
-
-                                    <th>
-                                        Status
-                                    </th>
-
-                                    <th>
-                                        Last Updated
-                                    </th>
-
+                                    <th>Request</th>
+                                    <th>Name</th>
+                                    <th>Student ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Last Updated</th>
                                 </tr>
-
-
                             </thead>
 
-
-
                             <tbody>
-
-
                                 <?php foreach ($recentRequests as $request): ?>
-
-
                                     <?php
-
                                     /*
                              * Convert status into CSS class.
-                             *
-                             * Example:
-                             * "In Progress"
-                             *
-                             * becomes:
-                             * "in-progress"
                              */
-
                                     $statusClass =
                                         strtolower(
                                             str_replace(
@@ -559,111 +341,49 @@ $requestCounts =
                                                 $request['stats']
                                             )
                                         );
-
                                     ?>
-
-
-                                    <tr
-                                        class="request-row"
-
-                                        onclick="
-                                    window.location.href =
-                                    'req_details.php?id=<?= urlencode(
-                                                            $request['request_id']
-                                                        ); ?>';
-                                ">
-
+                                    <tr class="request-row"
+                                        onclick="window.location.href ='req_details.php?id=<?= urlencode($request['request_id']); ?>';">
 
                                         <!-- REQUEST ID -->
-
                                         <td class="request-id">
-
                                             <?= htmlspecialchars(
                                                 $request['request_id']
                                             ); ?>
-
                                         </td>
 
-
-
                                         <!-- STUDENT NAME -->
-
                                         <td>
-
                                             <?= htmlspecialchars(
                                                 $request['requester_name']
                                             ); ?>
-
                                         </td>
-
-
 
                                         <!-- STUDENT ID -->
-
                                         <td>
-
-                                            <?= htmlspecialchars(
-                                                $request['requester_id']
-                                            ); ?>
-
+                                            <?= htmlspecialchars($request['requester_id']); ?>
                                         </td>
-
-
 
                                         <!-- TITLE -->
-
                                         <td class="request-title">
-
-                                            <?= htmlspecialchars(
-                                                $request['title']
-                                            ); ?>
-
+                                            <?= htmlspecialchars($request['title']); ?>
                                         </td>
-
-
 
                                         <!-- CATEGORY -->
-
                                         <td>
-
-                                            <?= htmlspecialchars(
-                                                $request['category_name']
-                                            ); ?>
-
+                                            <?= htmlspecialchars($request['category_name']); ?>
                                         </td>
-
-
 
                                         <!-- STATUS -->
-
                                         <td>
-
-
-                                            <span
-                                                class="
-                                            status
-                                            status-<?= htmlspecialchars(
-                                                        $statusClass
-                                                    ); ?>
-                                        ">
-
-                                                <?= htmlspecialchars(
-                                                    $request['stats']
-                                                ); ?>
-
+                                            <span class="status status-<?= htmlspecialchars($statusClass); ?>">
+                                                <?= htmlspecialchars($request['stats']); ?>
                                             </span>
-
-
                                         </td>
 
-
-
                                         <!-- LAST UPDATED -->
-
                                         <td>
-
                                             <?php
-
                                             echo htmlspecialchars(
                                                 date(
                                                     'd M Y',
@@ -672,41 +392,16 @@ $requestCounts =
                                                     )
                                                 )
                                             );
-
                                             ?>
-
                                         </td>
-
-
                                     </tr>
-
-
                                 <?php endforeach; ?>
-
-
                             </tbody>
-
-
                         </table>
-
-
                     </div>
-
-
                 <?php endif; ?>
-
-
             </section>
-
-
-
-            <!-- =================================================
-             USER INFORMATION
-        ================================================== -->
-
-        <?php include __DIR__.'/../inc_reuse/account_info.php';?>
         </main>
-
         <!-- =====================================================
          RIGHT FILTER
     ====================================================== -->
@@ -718,4 +413,5 @@ $requestCounts =
         </aside>
     </div>
 </body>
+
 </html>
