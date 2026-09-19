@@ -42,7 +42,7 @@ header {
     grid-area: header;
     background: #ffffff;
     border-bottom: 1px solid #dddddd;
-    padding: 20px 25px;
+    padding: 0;
 }
 
 .header-top {
@@ -566,6 +566,10 @@ header {
         display: block;
     }
 
+    .system-name h1{
+        font-size: 14px;
+        font-weight: 1000;
+    }
     .sidebar,
     header,
     .middle-content,
@@ -588,7 +592,6 @@ header {
 
     .dashboard-cards {
         display: grid;
-
         grid-template-columns:
             repeat(2, 1fr);
     }
