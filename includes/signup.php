@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_id'] = $user;
 
 
-        header("Location: ../err.html");
+        header("Location: ../index.php");
 
         exit();
     } catch (PDOException $e) {

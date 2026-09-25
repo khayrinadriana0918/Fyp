@@ -191,7 +191,7 @@ if (!$userInfo) {
                     <br>
 
                     <!-- <button type="button" id="preview_btn">Preview Request</button> -->
-                    <button type="submit" id="preview_btn">Preview Request</button>
+                    <button type="button" id="preview_btn">Preview Request</button>
 
                     <p id="req_msg"></p>
 
@@ -223,6 +223,10 @@ if (!$userInfo) {
                 <p>
                     <strong>File:</strong>
                     <span id="preview_file"></span>
+
+                    <button type="button" id="remove_file_btn" style="display: none;">
+                        x
+                    </button>
                 </p>
 
                 <button type="button" id="edit_btn">
@@ -279,12 +283,26 @@ if (!$userInfo) {
             $('#preview_file').text(
                 fileInput.files[0].name
             );
+            $('#remove_file_btn').show();
         } else {
             $('#preview_file').text(
                 'No file attached'
             );
+            $('#remove_file_btn').hide();
         }
+        //Remove file
+        $('#remove_file_btn').on('click', function(){
 
+        //clear file input
+        $('#request_file').val('');
+
+        //change preview
+        $('#preview_file').text('No file attached');
+
+        //hide remove btn
+        $('#remove_file_btn').hide();
+        });
+        
         // Hide form
         $('#ar_form').hide();
 
