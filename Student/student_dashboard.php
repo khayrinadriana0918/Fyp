@@ -19,10 +19,13 @@ $query = "
         users.user_id,
         users.name,
         users.created_at,
-        student.student_id AS role_id
+        s.student_id,
+        s.programme_id,
+        s.student_id AS role_id
     FROM users
-    INNER JOIN student
-        ON users.user_id = student.user_id
+
+    INNER JOIN student s
+        ON users.user_id = s.user_id
     WHERE users.user_id = :user_id
 ";
 
@@ -60,13 +63,16 @@ $requestQuery = "
         ON s.user_id = u.user_id
     INNER JOIN category c
         ON r.category_id = c.category_id
+    WHERE s.user_id= :user_id
     ORDER BY r.submission_date DESC
     LIMIT 5
 ";
 
 
 $requestStmt = $pdo->prepare($requestQuery);
-$requestStmt->execute();
+$requestStmt->execute([
+    ':user_id' => $user
+]);
 $recentRequests =
     $requestStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -101,11 +107,16 @@ $countQuery = "
             END
         ) AS completed
 
-    FROM request
+    FROM request r
+
+    INNER JOIN student s
+    ON r.student_id= s.student_id 
+
+    WHERE s.user_id= :user_id
 ";
 
 $countStmt = $pdo->prepare($countQuery);
-$countStmt->execute();
+$countStmt->execute([':user_id' => $user]);
 $requestCounts =
     $countStmt->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -179,12 +190,12 @@ $requestCounts =
                         <a href="userProfile.php">User Profile</a>
                     </li>
                     <li>
-                        <a href="hop_admin_requests.php">
-                            Submit Request to Admin
+                        <a href="student_hop_requests.php" class="programme-required">
+                            Submit Request to Head of Programme
                         </a>
                     </li>
                     <li>
-                        <a href="hop_requests.php">
+                        <a href="student_requests.php" class="programme-required">
                             My Requests
                         </a>
                     </li>
@@ -270,12 +281,14 @@ $requestCounts =
             <section class="quick-actions">
                 <button
                     type="button"
-                    onclick="document.location='hop_admin_requests.php'">
-                    Submit Request to Admin
+                    class="programme-required"
+                    data-url="student_hop_requests.php">
+                    Submit Request to Head of Programme
                 </button>
                 <button
                     type="button"
-                    onclick="document.location='hop_requests.php'">
+                    class="programme-required"
+                    data-url="student_requests.php">
                     See My Requests
                 </button>
 
@@ -289,11 +302,11 @@ $requestCounts =
                 <div class="section-header">
 
                     <div>
-                        <h2>Recent Student Requests</h2>
-                        <p>Latest administrative requests submitted by students.</p>
+                        <h2>Recent Requests</h2>
+                        <p>Your latest submitted requests.</p>
                     </div>
 
-                    <a href="student_admin_requests.php" class="view-all">View All</a>
+                    <a href="student_requests.php" class="programme-required">View All</a>
 
                 </div>
 
@@ -399,6 +412,10 @@ $requestCounts =
             </section>
         </main>
         <!-- =====================================================
+         programme
+    ====================================================== -->
+        <?php include __DIR__ . '/../inc_reuse/programme.php'; ?><br>
+        <!-- =====================================================
          RIGHT FILTER
     ====================================================== -->
         <aside class="filter-sidebar">
@@ -408,6 +425,27 @@ $requestCounts =
             ?>
         </aside>
     </div>
+    <script>
+        $(document).ready(function() {
+
+            const programmeSelected =
+                <?= !empty($userInfo['programme_id'])
+                    ? 'true' : 'false'; ?>;
+
+            $('.programme-required').on('click', function(event) {
+                const destination=$(this).data('url');
+                // lock function
+                if (!programmeSelected) {
+                    
+                    event.preventDefault();
+
+                    openForm();
+                }else{
+                    window.location.href= destination
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

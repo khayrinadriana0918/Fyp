@@ -1,4 +1,16 @@
+<?php
+$programmeQuery= "
+SELECT 
+programme_id,
+programme_name
+FROM programme
+ORDER BY programme_id ASC";
 
+$programmeStmt= $pdo->prepare($programmeQuery);
+$programmeStmt->execute();
+
+$programmes= $programmeStmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <style>
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
@@ -88,12 +100,16 @@
 
 <!-- The form -->
 <div class="form-popup" id="myForm">
-  <form action="/action_page.php" class="form-container">
+  <form action="../includes/set-programme.php" method="POST" class="form-container">
     <fieldset>
         <legend>Choose Code Programme</legend>
         <label for="programme">What is your code programme?</label>
-        <select id="programme" name="programme">
-            <option value="programme1">Programme 1</option>
+        <select id="programme" name="programme_id" required>
+            <?php foreach($programmes as $programme):?>
+              <option value="<?= htmlspecialchars($programme['programme_id']); ?>">
+                <?= htmlspecialchars($programme['programme_id']); ?>- <?= htmlspecialchars($programme['programme_name']); ?>
+              </option>
+              <?php endforeach;?>
         </select>
     </fieldset>
     <button type="submit" class="btn">Submit</button>
