@@ -174,7 +174,7 @@ $requestCounts =
             <nav>
                 <ul>
                     <li>
-                        <a href="student_dashboard.php" class="active">
+                        <a href="admin_dashboard.php" class="active">
                             Dashboard
                         </a>
                     </li>
@@ -185,13 +185,13 @@ $requestCounts =
                         <a href="../userProfile.php">User Profile</a>
                     </li>
                     <li>
-                        <a href="student_hop_requests.php">
-                            Submit Request to Head of Programme
+                        <a href="database_management.php">
+                            Database Management
                         </a>
                     </li>
                     <li>
                         <a href="student_requests.php">
-                            My Requests
+                            Request
                         </a>
                     </li>
                     <li>

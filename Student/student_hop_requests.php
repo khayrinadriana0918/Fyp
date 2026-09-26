@@ -45,7 +45,7 @@ if (!$userInfo) {
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0">
-    <title>HoP Dashboard | SIMSAP</title>
+    <title>Submit Request | SIMSAP</title>
     <link rel="stylesheet"href="../CSS/request.css"><script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     </script>
@@ -93,17 +93,17 @@ if (!$userInfo) {
             <nav>
                 <ul>
                     <li>
-                        <a href="hop_Dashboard.php">
+                        <a href="student_dashboard.php">
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="hop_admin_requests.php" class="active">
-                            Submit Request to Admin
+                        <a href="student_hop_requests.php" class="active">
+                            Submit Request to Head of Programme
                         </a>
                     </li>
                     <li>
-                        <a href="hop_requests.php">
+                        <a href="student_requests.php">
                             My Requests
                         </a>
                     </li>
@@ -125,7 +125,7 @@ if (!$userInfo) {
     ====================================================== -->
         <main class="middle-content">
             <form id="ar_form" method="POST"
-                action="../includes/submit-admin-request.php"
+                action="../includes/submit-student-request.php"
                 enctype="multipart/form-data">
                 <fieldset>
                     <legend>Request Form</legend>
