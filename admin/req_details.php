@@ -177,7 +177,7 @@ if (!$request) {
                 </select>
 
             </div>
-
+            <!--change status-->
             <div id="status_form" class="status-form">
                 <form method="POST" action="../includes/update-request-status.php">
                     <input type="hidden" name="request_id" value="<?= htmlspecialchars($request['ar_request_id']); ?>">
@@ -193,48 +193,82 @@ if (!$request) {
                             Pending
                         </option>
 
-                        <select name="status" id="new_status" required>
-                            <option value="In Progress"
-                                <?= $request['ar_stats'] === 'In Progress'
-                                    ? 'selected' : ''; ?>>
-                                In Progress
-                            </option>
+                        <option value="In Progress"
+                            <?= $request['ar_stats'] === 'In Progress'
+                                ? 'selected' : ''; ?>>
+                            In Progress
+                        </option>
 
-                            <select name="status" id="new_status" required>
-                                <option value="Completed"
-                                    <?= $request['ar_stats'] === 'Completed'
-                                        ? 'selected' : ''; ?>>
-                                    Completed
-                                </option>
+                        <option value="Completed"
+                            <?= $request['ar_stats'] === 'Completed'
+                                ? 'selected' : ''; ?>>
+                            Completed
+                        </option>
 
-                                <select name="status" id="new_status" required>
-                                    <option value="Rejected"
-                                        <?= $request['ar_stats'] === 'Rejected'
-                                            ? 'selected' : ''; ?>>
-                                        Rejected
-                                    </option>
+                        <option value="Rejected"
+                            <?= $request['ar_stats'] === 'Rejected'
+                                ? 'selected' : ''; ?>>
+                            Rejected
+                        </option>
 
-                                </select>
-
-                                <button type="submit">Save</button>
+                    </select>
                 </form>
             </div>
+            <!--change priority-->
+            <div id="status_form" class="status-form">
+                <form method="POST" action="../includes/update-request-status.php">
+                    <input type="hidden" name="request_id" value="<?= htmlspecialchars($request['ar_request_id']); ?>">
+
+                    <label for="new_status">
+                        Status:
+                    </label>
+
+                    <select name="status" id="new_status" required>
+                        <option value="Pending"
+                            <?= $request['ar_stats'] === 'Pending'
+                                ? 'selected' : ''; ?>>
+                            Pending
+                        </option>
+
+                        <option value="In Progress"
+                            <?= $request['ar_stats'] === 'In Progress'
+                                ? 'selected' : ''; ?>>
+                            In Progress
+                        </option>
+
+                        <option value="Completed"
+                            <?= $request['ar_stats'] === 'Completed'
+                                ? 'selected' : ''; ?>>
+                            Completed
+                        </option>
+
+                        <option value="Rejected"
+                            <?= $request['ar_stats'] === 'Rejected'
+                                ? 'selected' : ''; ?>>
+                            Rejected
+                        </option>
+
+                    </select>
+                </form>
+            </div>
+            <button type="submit">Save</button>
         </div>
 
         <a href="admin_requests.php">Back to Requests</a>
     </main>
+    <script>
+        const actionSelect =
+            document.getElementById('request_action');
+
+        const statusForm =
+            document.getElementById('status_form');
+
+        actionSelect.addEventListener('change', function() {
+            if (this.value === 'status') {
+                statusForm.style.display = 'block';
+            }
+        });
+    </script>
 </body>
-<script>
-    const actionSelect=
-    document.getElementById('request_action');
 
-    const statusForm=
-    document.getElementById('status-form');
-
-    actionSelect.addEventListener('change',function(){
-        if(this.value==='status'){
-            statusForm.style.display='block';
-        }
-    });
-</script>
 </html>
