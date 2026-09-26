@@ -146,7 +146,7 @@ $requestCounts =
                 </div>
                 <div class="header-user">
                     <span class="header-name">
-                        Hi, <?= htmlspecialchars($userInfo['name']); ?>
+                        <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
                     <button
                         type="button"
@@ -228,7 +228,7 @@ $requestCounts =
         ================================================== -->
 
             <?php include __DIR__ . '/../inc_reuse/account_info.php'; ?><br>
-<!-- other profile.php -->
+            <!-- other profile.php -->
             <!-- =================================================
              DASHBOARD STATISTICS
         ================================================== -->

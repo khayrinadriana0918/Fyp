@@ -43,9 +43,6 @@ if (!$userInfo) {
 }
 
 $roleIdLabel = 'Student ID';
-/* =========================================================
-   GET THEIR REQUESTS
-========================================================= */
 $requestQuery = "
     SELECT
         r.request_id,
@@ -187,7 +184,7 @@ $requestCounts =
                         <a href="about.php">About</a>
                     </li>
                     <li>
-                        <a href="userProfile.php">User Profile</a>
+                        <a href="../userProfile.php">User Profile</a>
                     </li>
                     <li>
                         <a href="student_hop_requests.php" class="programme-required">
@@ -223,12 +220,7 @@ $requestCounts =
         ================================================== -->
             <section class="dashboard-heading">
                 <div>
-                    <h2>
-                        Hi,
-                        <?= htmlspecialchars(
-                            $userInfo['name']
-                        ); ?>
-                    </h2>
+
                     <p>
                         Manage and monitor student administrative
                         requests.
