@@ -180,6 +180,7 @@ if (!$request) {
             <!--change status-->
             <div id="status_form" class="status-form">
                 <form method="POST" action="../includes/update-request-status.php">
+                    <input type="hidden" name="request_type" value="administrator">
                     <input type="hidden" name="request_id" value="<?= htmlspecialchars($request['ar_request_id']); ?>">
 
                     <label for="new_status">
@@ -212,46 +213,11 @@ if (!$request) {
                         </option>
 
                     </select>
+                    <button type="submit">Save</button>
                 </form>
             </div>
             <!--change priority-->
-            <div id="status_form" class="status-form">
-                <form method="POST" action="../includes/update-request-status.php">
-                    <input type="hidden" name="request_id" value="<?= htmlspecialchars($request['ar_request_id']); ?>">
-
-                    <label for="new_status">
-                        Status:
-                    </label>
-
-                    <select name="status" id="new_status" required>
-                        <option value="Pending"
-                            <?= $request['ar_stats'] === 'Pending'
-                                ? 'selected' : ''; ?>>
-                            Pending
-                        </option>
-
-                        <option value="In Progress"
-                            <?= $request['ar_stats'] === 'In Progress'
-                                ? 'selected' : ''; ?>>
-                            In Progress
-                        </option>
-
-                        <option value="Completed"
-                            <?= $request['ar_stats'] === 'Completed'
-                                ? 'selected' : ''; ?>>
-                            Completed
-                        </option>
-
-                        <option value="Rejected"
-                            <?= $request['ar_stats'] === 'Rejected'
-                                ? 'selected' : ''; ?>>
-                            Rejected
-                        </option>
-
-                    </select>
-                </form>
-            </div>
-            <button type="submit">Save</button>
+  
         </div>
 
         <a href="admin_requests.php">Back to Requests</a>

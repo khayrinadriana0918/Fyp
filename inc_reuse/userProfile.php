@@ -1,0 +1,1 @@
+<?php include __DIR__ . 'account_info.php'; ?>

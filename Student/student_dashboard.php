@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 $user = $_SESSION['user_id'];
 /* =========================================================
-   GET LOGGED-IN HOP INFORMATION
+   GET LOGGED-IN STUDENT INFORMATION
 ========================================================= */
 $query = "
     SELECT
@@ -21,7 +21,7 @@ $query = "
         users.created_at,
         student.student_id AS role_id
     FROM users
-    INNER JOIN head_of_programme
+    INNER JOIN student
         ON users.user_id = student.user_id
     WHERE users.user_id = :user_id
 ";
@@ -41,7 +41,7 @@ if (!$userInfo) {
 
 $roleIdLabel = 'Student ID';
 /* =========================================================
-   GET RECENT STUDENT REQUESTS
+   GET THEIR REQUESTS
 ========================================================= */
 $requestQuery = "
     SELECT
@@ -120,7 +120,7 @@ $requestCounts =
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0">
-    <title>HoP Dashboard | SIMSAP</title>
+    <title>Student Dashboard | SIMSAP</title>
     <link
         rel="stylesheet"
         href="../CSS/dashboard.css">
@@ -146,7 +146,7 @@ $requestCounts =
                 </div>
                 <div class="header-user">
                     <span class="header-name">
-                        Hi, <?= htmlspecialchars($userInfo['name']); ?>
+                        <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
                     <button
                         type="button"
@@ -159,10 +159,6 @@ $requestCounts =
                     </a>
                 </div>
             </div>
-
-            <div class="top-nav">
-                <a href="about.php">About</a>
-            </div>
         </header>
 
         <!-- =====================================================
@@ -172,9 +168,15 @@ $requestCounts =
             <nav>
                 <ul>
                     <li>
-                        <a href="hop_Dashboard.php" class="active">
+                        <a href="student_dashboard.php" class="active">
                             Dashboard
                         </a>
+                    </li>
+                    <li>
+                        <a href="about.php">About</a>
+                    </li>
+                    <li>
+                        <a href="userProfile.php">User Profile</a>
                     </li>
                     <li>
                         <a href="hop_admin_requests.php">
@@ -222,12 +224,6 @@ $requestCounts =
                     </p>
                 </div>
             </section>
-
-            <!-- =================================================
-             USER INFORMATION
-        ================================================== -->
-
-            <?php include __DIR__ . '/../inc_reuse/account_info.php'; ?><br>
 
             <!-- =================================================
              DASHBOARD STATISTICS
