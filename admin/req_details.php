@@ -7,7 +7,6 @@ require_once __DIR__ . '/../includes/database.php';
 if (!isset($_SESSION['user_id'])) {
     header("Location:../index.php");
     exit();
-
 }
 
 if (!isset($_GET['id'])) {
@@ -32,11 +31,11 @@ $query = "
     WHERE ar.ar_request_id = :request_id
 ";
 
-$stmt= $pdo->prepare($query);
+$stmt = $pdo->prepare($query);
 
-$stmt->execute([':request_id'=> $requestId]);
+$stmt->execute([':request_id' => $requestId]);
 
-$request =$stmt->fetch(PDO::FETCH_ASSOC);
+$request = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$request) {
     die("Request not found");
@@ -44,122 +43,198 @@ if (!$request) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Details | SIMSAP</title>
+
+    <link rel="stylesheet" href="../CSS/req_details.css">
 </head>
+
 <body>
-    <h1>Request Details</h1>
+    <main>
+        <div class="request-top">
+            <div class="requester">
+                <h2>
+                    <?= htmlspecialchars($request['requester_name']); ?>
 
-    <p>
-        <strong>Request ID:</strong>
+                    <span>(<?= htmlspecialchars($request['requester_id']); ?>)</span>
+                </h2>
+            </div>
+            <div class="priority">
+                <span class="help-icon">?</span>
 
-        <?= htmlspecialchars(
-            $request['ar_request_id']
-        ); ?>
-    </p>
+                <span>Priority:</span>
 
+                <span class="priority-value">
+                    <?= htmlspecialchars($request['ar_priority']); ?>
+                </span>
+            </div>
+        </div>
+        <!------------            
+        -----top
+        -------------->
 
-    <p>
-        <strong>Submitted By:</strong>
-
-        <?= htmlspecialchars(
-            $request['requester_name']
-        ); ?>
-    </p>
-
-
-    <p>
-        <strong>Staff ID:</strong>
-
-        <?= htmlspecialchars(
-            $request['requester_id']
-        ); ?>
-    </p>
-
-
-    <p>
-        <strong>Title:</strong>
-
-        <?= htmlspecialchars(
-            $request['ar_title']
-        ); ?>
-    </p>
-
-
-    <p>
-        <strong>Category:</strong>
-
-        <?= htmlspecialchars(
-            $request['category_name']
-        ); ?>
-    </p>
-
-
-    <p>
-        <strong>Priority:</strong>
-
-        <?= htmlspecialchars(
-            $request['ar_priority']
-        ); ?>
-    </p>
-
-
-    <p>
-        <strong>Status:</strong>
-
-        <?= htmlspecialchars(
-            $request['ar_stats']
-        ); ?>
-    </p>
-
-
-    <p>
-        <strong>Labels:</strong>
-
-        <?= htmlspecialchars(
-            $request['ar_label']
-        ); ?>
-    </p>
-
-
-    <div>
-        <strong>Description:</strong>
-        <p>
-            <?= nl2br(
-                htmlspecialchars(
-                    $request['ar_description']
-                )
-            ); ?>
+        <p class="request_id">
+            Request ID:
+            <?= htmlspecialchars($request['ar_request_id']); ?>
         </p>
-    </div>
+        <!------------            
+        -----Middle
+        -------------->
+        <h1 class="request_title">
+            <?= htmlspecialchars($request['ar_title']); ?>
+        </h1>
 
+        <div class="category">
+            <h2>Issue Category:</h2>
+            <span><?= htmlspecialchars($request['category_name']); ?></span>
+        </div>
 
-    <?php if (!empty($request['ar_request_file'])): ?>
+        <div class="label-status">
+            <div class="labels">
+                <strong>Tags: </strong>
 
-        <p>
-            <strong>Attachment:</strong>
+                <?= !empty($request['ar_label'])
+                    ? htmlspecialchars($request['ar_label'])
+                    : 'No tags'; ?>
+            </div>
 
-            <a href="../uploads/admin_hop/<?= rawurlencode(
-                    $request['ar_request_file']); ?>"target="_blank">
-                View Attachment
-            </a>
-        </p>
+            <div class="status">
+                <strong>Status: </strong>
 
-    <?php else: ?>
+                <?= htmlspecialchars($request['ar_stats']) ?>
+            </div>
 
-        <p>
-            <strong>Attachment:</strong>
-            No attachment
-        </p>
-    <?php endif; ?>
+            <div class="updated-date">
+                Submission Date:
+                <?= htmlspecialchars(
+                    date(
+                        'd/m/y',
+                        strtotime($request['ar_submission_date'])
+                    )
+                ); ?>
+            </div>
+        </div>
+        <!------------            
+        -----bottom
+        -------------->
+        <div class="req-bottom">
+            <section class="description">
+                <h2>Description</h2>
 
-    <p>
-        <strong>Submitted:</strong>
-        <?= htmlspecialchars($request['ar_submission_date']); ?>
-    </p>
-    <a href="admin_requests.php">Back to Requests</a>
+                <p>
+                    <?= nl2br(
+                        htmlspecialchars($request['ar_description'])
+                    ); ?>
+                </p>
+            </section>
 
+            <div class="attachment">
+                <h3>Attachment</h3>
+
+                <?php if (!empty($request['ar_request_file'])): ?>
+
+                    <a
+                        href="../uploads/admin_hop/<?= rawurlencode($request['ar_request_file']); ?>"
+                        target="_blank"
+                        class="file-button">
+
+                        <?= htmlspecialchars(
+                            $request['ar_request_file']
+                        ); ?>
+
+                    </a>
+
+                <?php else: ?>
+
+                    <p>No attachment</p>
+
+                <?php endif; ?>
+            </div>
+
+            <!------------            
+        -----ADMIN ACTIONS
+        -------------->
+            <div class="admin-actions">
+                <select id="request_action">
+                    <option value="" selected disabled>
+                        Actions...
+                    </option>
+
+                    <option value="status">
+                        Change status
+                    </option>
+
+                    <option value="priority">
+                        Change priority
+                    </option>
+
+                    <option value="history">
+                        See change history
+                    </option>
+                </select>
+
+            </div>
+
+            <div id="status_form" class="status-form">
+                <form method="POST" action="../includes/update-request-status.php">
+                    <input type="hidden" name="request_id" value="<?= htmlspecialchars($request['ar_request_id']); ?>">
+
+                    <label for="new_status">
+                        Status:
+                    </label>
+
+                    <select name="status" id="new_status" required>
+                        <option value="Pending"
+                            <?= $request['ar_stats'] === 'Pending'
+                                ? 'selected' : ''; ?>>
+                            Pending
+                        </option>
+
+                        <select name="status" id="new_status" required>
+                            <option value="In Progress"
+                                <?= $request['ar_stats'] === 'In Progress'
+                                    ? 'selected' : ''; ?>>
+                                In Progress
+                            </option>
+
+                            <select name="status" id="new_status" required>
+                                <option value="Completed"
+                                    <?= $request['ar_stats'] === 'Completed'
+                                        ? 'selected' : ''; ?>>
+                                    Completed
+                                </option>
+
+                                <select name="status" id="new_status" required>
+                                    <option value="Rejected"
+                                        <?= $request['ar_stats'] === 'Rejected'
+                                            ? 'selected' : ''; ?>>
+                                        Rejected
+                                    </option>
+
+                                </select>
+
+                                <button type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <a href="admin_requests.php">Back to Requests</a>
+    </main>
 </body>
+<script>
+    const actionSelect=
+    document.getElementById('request_action');
+
+    const statusForm=
+    document.getElementById('status-form');
+
+    actionSelect.addEventListener('change',function(){
+        if(this.value==='status'){
+            statusForm.style.display='block';
+        }
+    });
+</script>
 </html>
