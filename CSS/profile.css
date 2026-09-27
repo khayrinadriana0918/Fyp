@@ -1,0 +1,263 @@
+/* =========================================================
+   USER PROFILE PAGE
+========================================================= */
+
+.layout {
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    grid-template-rows:
+        55px
+        auto
+        1fr;
+
+    grid-template-areas:
+        "header"
+        "back"
+        "main";
+
+    background: #f5f6f8;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+header {
+    grid-area: header;
+    background: #ffffff;
+    border-bottom: 1px solid #dddddd;
+}
+
+.header-top {
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background: #ffffff;
+}
+
+.system-name h1 {
+    font-size: 25px;
+    font-weight: 500;
+}
+
+/*hi, [name]+ notif + log out*/
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+
+    font-size: 13px;
+}
+.logout{
+    text-decoration: none;
+}
+.logout:hover{
+    text-decoration: underline;
+}
+.notification-button {
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    cursor: pointer;
+}
+/* =========================================================
+   BACK TO DASHBOARD
+========================================================= */
+
+.layout .back-dashboard {
+    grid-area: back;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: fit-content;
+
+    margin: 25px 0 0 40px;
+
+    color: #333333;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.2s;
+}
+
+
+.layout .back-dashboard:hover {
+    color: #000000;
+    transform: translateX(-3px);
+}
+
+
+.layout .back-arrow {
+    font-size: 20px;
+    line-height: 1;
+}
+
+
+/* =========================================================
+   PROFILE MAIN CONTENT
+========================================================= */
+
+.layout .profile-content {
+    grid-area: main;
+
+    width: 100%;
+    max-width: 950px;
+
+    margin: 0 auto;
+
+    padding: 35px 40px 60px;
+}
+
+
+/* =========================================================
+   ACCOUNT CARD
+========================================================= */
+
+.layout .account-section {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   ACCOUNT TITLE
+========================================================= */
+
+.layout .account-title {
+    padding-bottom: 20px;
+    margin-bottom: 5px;
+
+    border-bottom: 1px solid #e5e5e5;
+}
+
+
+.layout .account-title h2 {
+    margin: 0 0 6px;
+
+    font-size: 24px;
+    font-weight: 600;
+
+    color: #222222;
+}
+
+
+.layout .account-title p {
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #666666;
+}
+
+
+/* =========================================================
+   ACCOUNT INFORMATION
+========================================================= */
+
+.layout .account-info {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    column-gap: 50px;
+
+    margin-top: 10px;
+}
+
+
+.layout .account-info > div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    padding: 20px 0;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+.layout .account-info span {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #777777;
+}
+
+
+.layout .account-info strong {
+    font-size: 15px;
+    font-weight: 600;
+
+    color: #222222;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .layout {
+        grid-template-rows:
+            auto
+            auto
+            1fr;
+    }
+
+
+    .layout .back-dashboard {
+        margin:
+            20px
+            20px
+            0;
+    }
+
+
+    .layout .profile-content {
+        padding:
+            25px
+            20px
+            40px;
+    }
+
+
+    .layout .account-section {
+        padding: 22px;
+    }
+
+
+    .layout .account-info {
+        grid-template-columns: 1fr;
+    }
+
+
+    .layout .account-title h2 {
+        font-size: 21px;
+    }
+}

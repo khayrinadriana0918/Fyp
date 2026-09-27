@@ -58,16 +58,13 @@ $requestQuery = "
         ON h.user_id = u.user_id
     INNER JOIN category c
         ON r.category_id = c.category_id
-    WHERE h.user_id= :user_id
-    ORDER BY r.submission_date DESC
+    ORDER BY r.ar_submission_date DESC
     LIMIT 5
 ";
 
 
 $requestStmt = $pdo->prepare($requestQuery);
-$requestStmt->execute([
-    ':user_id' => $user
-]);
+$requestStmt->execute();
 $recentRequests =
     $requestStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -80,7 +77,7 @@ $countQuery = "
         COUNT(*) AS total,
         SUM(
             CASE
-                WHEN stats = 'Pending'
+                WHEN ar_stats = 'Pending'
                 THEN 1
                 ELSE 0
             END
@@ -88,7 +85,7 @@ $countQuery = "
 
         SUM(
             CASE
-                WHEN stats = 'In Progress'
+                WHEN ar_stats = 'In Progress'
                 THEN 1
                 ELSE 0
             END
@@ -96,22 +93,17 @@ $countQuery = "
 
         SUM(
             CASE
-                WHEN stats = 'Completed'
+                WHEN ar_stats = 'Completed'
                 THEN 1
                 ELSE 0
             END
         ) AS completed
 
     FROM admin_request r
-
-    INNER JOIN head_of_programme h
-    ON r.staff_id= h.staff_id 
-
-    WHERE h.user_id= :user_id
 ";
 
 $countStmt = $pdo->prepare($countQuery);
-$countStmt->execute([':user_id' => $user]);
+$countStmt->execute();
 $requestCounts =
     $countStmt->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -190,7 +182,7 @@ $requestCounts =
                         </a>
                     </li>
                     <li>
-                        <a href="student_requests.php">
+                        <a href="admin_requests.php">
                             Request
                         </a>
                     </li>
@@ -297,7 +289,7 @@ $requestCounts =
                                 <tr>
                                     <th>Request</th>
                                     <th>Name</th>
-                                    <th>Student ID</th>
+                                    <th>Staff ID</th>
                                     <th>Title</th>
                                     <th>Category</th>
                                     <th>Status</th>
@@ -316,35 +308,35 @@ $requestCounts =
                                             str_replace(
                                                 ' ',
                                                 '-',
-                                                $request['stats']
+                                                $request['ar_stats']
                                             )
                                         );
                                     ?>
                                     <tr class="request-row"
-                                        onclick="window.location.href ='req_details.php?id=<?= urlencode($request['request_id']); ?>';">
+                                        onclick="window.location.href ='req_details.php?id=<?= urlencode($request['ar_request_id']); ?>';">
 
                                         <!-- REQUEST ID -->
                                         <td class="request-id">
                                             <?= htmlspecialchars(
-                                                $request['request_id']
+                                                $request['ar_request_id']
                                             ); ?>
                                         </td>
 
-                                        <!-- STUDENT NAME -->
+                                        <!-- HOP NAME -->
                                         <td>
                                             <?= htmlspecialchars(
                                                 $request['requester_name']
                                             ); ?>
                                         </td>
 
-                                        <!-- STUDENT ID -->
+                                        <!-- STAFF ID -->
                                         <td>
                                             <?= htmlspecialchars($request['requester_id']); ?>
                                         </td>
 
                                         <!-- TITLE -->
                                         <td class="request-title">
-                                            <?= htmlspecialchars($request['title']); ?>
+                                            <?= htmlspecialchars($request['ar_title']); ?>
                                         </td>
 
                                         <!-- CATEGORY -->
@@ -355,7 +347,7 @@ $requestCounts =
                                         <!-- STATUS -->
                                         <td>
                                             <span class="status status-<?= htmlspecialchars($statusClass); ?>">
-                                                <?= htmlspecialchars($request['stats']); ?>
+                                                <?= htmlspecialchars($request['ar_stats']); ?>
                                             </span>
                                         </td>
 
@@ -366,7 +358,7 @@ $requestCounts =
                                                 date(
                                                     'd M Y',
                                                     strtotime(
-                                                        $request['submission_date']
+                                                        $request['ar_submission_date']
                                                     )
                                                 )
                                             );

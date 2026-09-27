@@ -13,7 +13,7 @@ SELECT
 u.user_id,
 u.name,
 a.admin_code
-FROM user u
+FROM users u
 INNER JOIN administrator a
 ON u.user_id=a.user_id
 WHERE u.user_id=:user_id
@@ -62,6 +62,10 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Management | SIMSAP</title>
     <link rel="stylesheet" href="../CSS/dashboard.css">
+
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+    </script>
 </head>
 
 <body>
@@ -187,9 +191,108 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                         </tbody>
                     </table>
                 </div>
+                <div id="category_form" style="display: none;">
+                    <form
+                        method="POST"
+                        action="../includes/add-category.php">
+
+                        <label for="category_name">
+                            Category Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="category_name"
+                            name="category_name"
+                            placeholder="Enter category name"
+                            required>
+
+                        <button type="submit">
+                            Add
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancel_category">
+                            Cancel
+                        </button>
+
+                    </form>
+                </div>
+            </section>
+            <section class="management-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>User Account Management</h2>
+
+                        <p>
+                            View and Manage registered SIMSAP accounts.
+                        </p>
+                    </div>
+
+                </div>
+                <div class="table wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Account created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <?php if (empty($users)): ?>
+                                <tr>
+                                    <td colspan="6">No user accounts found.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($users as $account): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($account['user_id']); ?></td>
+                                        <td><?= htmlspecialchars($account['name']); ?></td>
+                                        <td><?= htmlspecialchars($account['email']); ?></td>
+                                        <td><?= htmlspecialchars($account['role']); ?></td>
+                                        <td><?= htmlspecialchars(date(
+                                                'd M Y',
+                                                strtotime($account['created_at'])
+                                            )); ?></td>
+
+                                        <td>
+                                            <?php if ($account['user_id'] == $userId): ?>
+                                                <span>Current Account</span>
+                                            <?php else: ?>
+                                                <button type="button" class="delete-button">Delete</button>
+                                            <?php endif; ?>
+                                        </td>
+
+                                    </tr>
+
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+
             </section>
         </main>
     </div>
 </body>
+<script>
+    $(document).ready(function(){
+        $('#category_btn').on('click', function(){
+            $('#category_form').slideDown();
+            $('#category_name').focus();
+        });
+
+        $('#cancel_category').on('click',function(){
+            $('#category_form').slideUp();
+            $('#category_name').val('');
+        });
+    });
+</script>
 
 </html>

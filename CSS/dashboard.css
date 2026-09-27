@@ -183,12 +183,6 @@ header {
 /* =========================================
    DASHBOARD STATISTICS
 ========================================= */
-
-/*
-   Your sketch doesn't show the four statistic
-   cards, so make them much simpler.
-*/
-
 .dashboard-cards {
     display: flex;
     gap: 25px;

@@ -47,10 +47,10 @@ if ($userInfo['role'] === 'student') {
     WHERE user_id=:user_id";
 
     $roleIdLabel = "Staff ID";
-} elseif ($userInfo['role'] === 'administrator') {
+} elseif ($userInfo['role'] === 'system_admin') {
     $roleQuery = "
     SELECT
-    admin_code AS role_id,
+    admin_code AS role_id
     FROM administrator
     WHERE user_id=:user_id";
 
@@ -85,7 +85,7 @@ if ($userInfo['role'] === 'student') {
 } elseif ($userInfo['role'] === 'hop') {
 
     $dashboardLink = "hop/hop_Dashboard.php";
-} elseif ($userInfo['role'] === 'administrator') {
+} elseif ($userInfo['role'] === 'system_admin') {
 
     $dashboardLink = "admin/admin_Dashboard.php";
 }
@@ -104,7 +104,7 @@ if ($userInfo['role'] === 'student') {
     <title>Student Profile | SIMSAP</title>
     <link
         rel="stylesheet"
-        href="CSS/dashboard.css">
+        href="CSS/profile.css">
 
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
@@ -135,54 +135,14 @@ if ($userInfo['role'] === 'student') {
                         title="Notifications">
                         🔔
                     </button>
-                    <a href="../includes/logout.php" class="logout">
+                    <a href="includes/logout.php" class="logout">
                         Log out
                     </a>
                 </div>
             </div>
         </header>
 
-        <!-- =====================================================
-         LEFT SIDEBAR
-    ====================================================== -->
-        <aside class="sidebar">
-            <nav>
-                <ul>
-                    <li>
-                        <a href="./Student/student_dashboard.php">
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="about.php">About</a>
-                    </li>
-                    <li>
-                        <a href="userProfile.php" class="active">User Profile</a>
-                    </li>
-                    <li>
-                        <a href="student_hop_requests.php" class="programme-required">
-                            Submit Request to Head of Programme
-                        </a>
-                    </li>
-                    <li>
-                        <a href="student_requests.php" class="programme-required">
-                            My Requests
-                        </a>
-                    </li>
-                    <li>
-                        <a href="userManual.html">
-                            User Manual
-                        </a>
-                    </li>
-                    <li>
-                        <a href="faq.html">
-                            FAQ
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
+                    <a href="<?= htmlspecialchars($dashboardLink); ?>" class="back-dashboard"><- Back to Dashboard</a>
         <!-- =====================================================
          MIDDLE CONTENT
     ====================================================== -->
