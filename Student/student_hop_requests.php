@@ -16,6 +16,7 @@ $query = "
         users.name,
         users.created_at,
         student.student_id AS role_id
+        student.programme_id
     FROM users
     INNER JOIN student
         ON users.user_id = student.user_id
@@ -33,6 +34,10 @@ $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$userInfo) {
     die("User information not found.");
+}
+if (empty($userInfo['programme_id'])) {
+    header("Location: student_dashboard.php");
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -323,7 +328,7 @@ if (!$userInfo) {
             new FormData(form);
 
         $.ajax({
-            url: '../includes/submit-admin-request.php',
+            url: '../includes/submit-student-request.php',
 
             type: 'POST',
             data: formData,
