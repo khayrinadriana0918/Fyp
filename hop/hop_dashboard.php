@@ -19,7 +19,8 @@ $query = "
         users.user_id,
         users.name,
         users.created_at,
-        head_of_programme.staff_id AS role_id
+        head_of_programme.staff_id AS role_id,
+        head_of_programme.programme_id
     FROM users
     INNER JOIN head_of_programme
         ON users.user_id = head_of_programme.user_id
@@ -60,13 +61,17 @@ $requestQuery = "
         ON s.user_id = u.user_id
     INNER JOIN category c
         ON r.category_id = c.category_id
+    WHERE s.programme_id = :programme_id
+
     ORDER BY r.submission_date DESC
     LIMIT 5
 ";
 
 
 $requestStmt = $pdo->prepare($requestQuery);
-$requestStmt->execute();
+$requestStmt->execute([
+    ':programme_id'=> $userInfo['programme_id']
+]);
 $recentRequests =
     $requestStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -79,7 +84,7 @@ $countQuery = "
         COUNT(*) AS total,
         SUM(
             CASE
-                WHEN stats = 'Pending'
+                WHEN r.stats = 'Pending'
                 THEN 1
                 ELSE 0
             END
@@ -87,7 +92,7 @@ $countQuery = "
 
         SUM(
             CASE
-                WHEN stats = 'In Progress'
+                WHEN r.stats = 'In Progress'
                 THEN 1
                 ELSE 0
             END
@@ -95,17 +100,23 @@ $countQuery = "
 
         SUM(
             CASE
-                WHEN stats = 'Completed'
+                WHEN r.stats = 'Completed'
                 THEN 1
                 ELSE 0
             END
         ) AS completed
 
-    FROM request
+    FROM request r
+
+    INNER JOIN student s
+    ON r.student_id= s.student_id
+
+    WHERE s.programme_id= :programme_id
 ";
 
 $countStmt = $pdo->prepare($countQuery);
-$countStmt->execute();
+$countStmt->execute([':programme_id' => $userInfo['programme_id']]);
+
 $requestCounts =
     $countStmt->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -297,7 +308,7 @@ $requestCounts =
                         <p>Latest administrative requests submitted by students.</p>
                     </div>
 
-                    <a href="student_admin_requests.php" class="view-all">View All</a>
+                    <a href="student_requests.php" class="view-all">View All</a>
 
                 </div>
 

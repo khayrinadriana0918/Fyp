@@ -15,7 +15,7 @@ $query = "
         users.user_id,
         users.name,
         users.created_at,
-        student.student_id AS role_id
+        student.student_id AS role_id,
         student.programme_id
     FROM users
     INNER JOIN student
