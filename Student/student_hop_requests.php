@@ -206,6 +206,11 @@ if (empty($userInfo['programme_id'])) {
             </form>
             <div id="request_preview" style="display: none;">
                 <h2>Preview Request</h2>
+                
+                <p>
+                    <strong>Semester:</strong>
+                    <span id="preview_semester"></span>
+                </p>
 
                 <p>
                     <strong>Title:</strong>
@@ -271,6 +276,7 @@ if (empty($userInfo['programme_id'])) {
         }
 
         // Get information from form
+        const semester= $('#semRange').val();
         const title = $('#title').val();
         const label = $('#label').val();
         const category =
@@ -285,6 +291,7 @@ if (empty($userInfo['programme_id'])) {
             document.getElementById('request_file');
 
         // Put information into preview
+        $('#preview_semester').text('Semester '+ semester);
         $('#preview_title').text(title);
         $('#preview_label').text(
             label || 'No labels'
