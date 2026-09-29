@@ -51,7 +51,8 @@ if (empty($userInfo['programme_id'])) {
         name="viewport"
         content="width=device-width, initial-scale=1.0">
     <title>Submit Request | SIMSAP</title>
-    <link rel="stylesheet"href="../CSS/request.css"><script
+    <link rel="stylesheet" href="../CSS/request.css">
+    <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     </script>
 
@@ -129,11 +130,16 @@ if (empty($userInfo['programme_id'])) {
          FORM CONTENT
     ====================================================== -->
         <main class="middle-content">
-            <form id="ar_form" method="POST"
+            <form id="form" class="form" method="POST"
                 action="../includes/submit-student-request.php"
                 enctype="multipart/form-data">
                 <fieldset>
                     <legend>Request Form</legend>
+                    <div class="semester-box">
+                        <label for="semester" id="semester_container">Current Semester:<span id="current_sem"></span></label><br>
+                        <input type="range" min="1" max="20" value="1" class="slider" id="semRange" name="semester" required>
+
+                    </div>
                     <label for="title">Title:</label>
                     <input type="text" id="title" name="title" placeholder="Enter Title Here." required>
                     <br><br>
@@ -243,13 +249,21 @@ if (empty($userInfo['programme_id'])) {
 </body>
 
 </html>
-<!-- preview form -->
+<!-- semester slider -->
 <script>
+    const $slider = $('#semRange');
+    const $output = $('#current_sem');
+
+    $output.text($slider.val());
+
+    $slider.on("input", function() {
+        $output.text($(this).val());
+    });
 
     // PREVIEW REQUEST
-    $('#preview_btn').on('click', function () {
+    $('#preview_btn').on('click', function() {
         // Check required fields first
-        const form = document.getElementById('ar_form');
+        const form = document.getElementById('form');
 
         if (!form.checkValidity()) {
             form.reportValidity();
@@ -292,37 +306,37 @@ if (empty($userInfo['programme_id'])) {
             $('#remove_file_btn').hide();
         }
         //Remove file
-        $('#remove_file_btn').on('click', function(){
+        $('#remove_file_btn').on('click', function() {
 
-        //clear file input
-        $('#request_file').val('');
+            //clear file input
+            $('#request_file').val('');
 
-        //change preview
-        $('#preview_file').text('No file attached');
+            //change preview
+            $('#preview_file').text('No file attached');
 
-        //hide remove btn
-        $('#remove_file_btn').hide();
+            //hide remove btn
+            $('#remove_file_btn').hide();
         });
-        
+
         // Hide form
-        $('#ar_form').hide();
+        $('#form').hide();
 
         // Show preview
         $('#request_preview').show();
     });
     // GO BACK AND EDIT
 
-    $('#edit_btn').on('click', function () {
+    $('#edit_btn').on('click', function() {
         $('#request_preview').hide();
-        $('#ar_form').show();
+        $('#form').show();
 
     });
 
     // CONFIRM AND SEND TO DATABASE
 
-    $('#confirm_btn').on('click', function () {
+    $('#confirm_btn').on('click', function() {
         let form =
-            document.getElementById('ar_form');
+            document.getElementById('form');
 
         let formData =
             new FormData(form);
@@ -336,11 +350,11 @@ if (empty($userInfo['programme_id'])) {
             contentType: false,
             dataType: 'json',
 
-            success: function (response) {
+            success: function(response) {
                 if (response.success) {
                     $('#request_preview').hide();
-                    $('#ar_form')[0].reset();
-                    $('#ar_form').show();
+                    $('#form')[0].reset();
+                    $('#form').show();
                     $('#req_msg').text(
                         response.message
                     );
@@ -351,12 +365,11 @@ if (empty($userInfo['programme_id'])) {
                 }
             },
 
-            error: function () {
+            error: function() {
                 $('#req_msg').text(
                     'Request failed to send.'
                 );
             }
         });
     });
-
 </script>

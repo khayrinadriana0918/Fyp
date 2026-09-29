@@ -23,16 +23,30 @@ if (!isset($_SESSION['user_id'])) {
 $user = $_SESSION['user_id'];
 
 //connect to name attributes
+$semester = trim($_POST['semester'] ?? '');
 $title = trim($_POST['title'] ?? '');
 $label = trim($_POST['label'] ?? '');
 $category_id = trim($_POST['c_id'] ?? '');
 $priority = trim($_POST['priority'] ?? 'Low');
 $description = trim($_POST['desc'] ?? '');
 
+$semester = filter_var(
+    $semester,
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1, 'max_range' => 20]]
+);
+if ($semester === false) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid Semester'
+    ]);
+    exit();
+}
 if (
     $title === '' ||
     $category_id === '' ||
-    $description === ''
+    $description === '' ||
+    $semester === ''
 ) {
     echo json_encode([
         'success' => false,
@@ -129,6 +143,7 @@ if (
 $stmt = $pdo->prepare("
 INSERT INTO request(
 student_id,
+semester,
 category_id,
 title,
 label,
@@ -138,6 +153,7 @@ request_file
 )VALUES
 (
 :student_id,
+:semester,
 :category_id,
 :title,
 :label,
@@ -148,6 +164,7 @@ request_file
 
 //named parameters
 $stmt->bindParam(":student_id", $student_id);
+$stmt->bindParam(":semester", $semester);
 $stmt->bindParam(":category_id", $category_id);
 $stmt->bindParam(":title", $title);
 $stmt->bindParam(":label", $label);

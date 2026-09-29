@@ -128,7 +128,7 @@ if (!$userInfo) {
          FORM CONTENT
     ====================================================== -->
         <main class="middle-content">
-            <form id="ar_form" method="POST"
+            <form id="ar_form" class="form" method="POST"
                 action="../includes/submit-admin-request.php"
                 enctype="multipart/form-data">
                 <fieldset>

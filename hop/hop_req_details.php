@@ -8,6 +8,19 @@ if (!isset($_SESSION['user_id'])) {
     header("Location:../index.php");
     exit();
 }
+$hopStmt=$pdo->prepare("
+SELECT programme_id
+FROM head_of_programme
+WHERE user_id=:userid
+");
+
+$hopStmt->execute(['user_id'=> $_SESSION['user-id']]);
+
+$hop=$hopStmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$hop) {
+    die("Head of Programme not found.");
+}
 
 if (!isset($_GET['id'])) {
     die("Request ID is missing.");
@@ -23,7 +36,7 @@ $query = "
         u.name AS requester_name,
         c.category_name
     FROM request r
-    INNER student s
+    INNER JOIN student s
         ON r.student_id = s.student_id
     INNER JOIN users u
         ON s.user_id = u.user_id
@@ -36,7 +49,7 @@ $query = "
 $stmt = $pdo->prepare($query);
 
 $stmt->execute([':request_id' => $requestId,
-'programme_id'=> $userInfo['programme_id']]);
+':programme_id'=> $hop['programme_id']]);
 
 $request = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -71,7 +84,7 @@ if (!$request) {
                 <span>Priority:</span>
 
                 <span class="priority-value">
-                    <?= htmlspecialchars($request['ar_priority']); ?>
+                    <?= htmlspecialchars($request['priority']); ?>
                 </span>
             </div>
         </div>
@@ -81,13 +94,13 @@ if (!$request) {
 
         <p class="request_id">
             Request ID:
-            <?= htmlspecialchars($request['ar_request_id']); ?>
+            <?= htmlspecialchars($request['request_id']); ?>
         </p>
         <!------------            
         -----Middle
         -------------->
         <h1 class="request_title">
-            <?= htmlspecialchars($request['ar_title']); ?>
+            <?= htmlspecialchars($request['title']); ?>
         </h1>
 
         <div class="category">
@@ -99,15 +112,15 @@ if (!$request) {
             <div class="labels">
                 <strong>Tags: </strong>
 
-                <?= !empty($request['ar_label'])
-                    ? htmlspecialchars($request['ar_label'])
+                <?= !empty($request['label'])
+                    ? htmlspecialchars($request['label'])
                     : 'No tags'; ?>
             </div>
 
             <div class="status">
                 <strong>Status: </strong>
 
-                <?= htmlspecialchars($request['ar_stats']) ?>
+                <?= htmlspecialchars($request['stats']) ?>
             </div>
 
             <div class="updated-date">
@@ -115,7 +128,7 @@ if (!$request) {
                 <?= htmlspecialchars(
                     date(
                         'd/m/y',
-                        strtotime($request['ar_submission_date'])
+                        strtotime($request['submission_date'])
                     )
                 ); ?>
             </div>
@@ -129,7 +142,7 @@ if (!$request) {
 
                 <p>
                     <?= nl2br(
-                        htmlspecialchars($request['ar_description'])
+                        htmlspecialchars($request['description'])
                     ); ?>
                 </p>
             </section>
@@ -137,15 +150,15 @@ if (!$request) {
             <div class="attachment">
                 <h3>Attachment</h3>
 
-                <?php if (!empty($request['ar_request_file'])): ?>
+                <?php if (!empty($request['request_file'])): ?>
 
                     <a
-                        href="../uploads/admin_hop/<?= rawurlencode($request['ar_request_file']); ?>"
+                        href="../uploads/admin_hop/<?= rawurlencode($request['request_file']); ?>"
                         target="_blank"
                         class="file-button">
 
                         <?= htmlspecialchars(
-                            $request['ar_request_file']
+                            $request['request_file']
                         ); ?>
 
                     </a>
@@ -184,7 +197,7 @@ if (!$request) {
             <div id="status_form" class="status-form">
                 <form method="POST" action="../includes/update-request-status.php">
                     <input type="hidden" name="request_type" value="administrator">
-                    <input type="hidden" name="request_id" value="<?= htmlspecialchars($request['ar_request_id']); ?>">
+                    <input type="hidden" name="request_id" value="<?= htmlspecialchars($request['request_id']); ?>">
 
                     <label for="new_status">
                         Status:
@@ -192,25 +205,25 @@ if (!$request) {
 
                     <select name="status" id="new_status" required>
                         <option value="Pending"
-                            <?= $request['ar_stats'] === 'Pending'
+                            <?= $request['stats'] === 'Pending'
                                 ? 'selected' : ''; ?>>
                             Pending
                         </option>
 
                         <option value="In Progress"
-                            <?= $request['ar_stats'] === 'In Progress'
+                            <?= $request['stats'] === 'In Progress'
                                 ? 'selected' : ''; ?>>
                             In Progress
                         </option>
 
                         <option value="Completed"
-                            <?= $request['ar_stats'] === 'Completed'
+                            <?= $request['stats'] === 'Completed'
                                 ? 'selected' : ''; ?>>
                             Completed
                         </option>
 
                         <option value="Rejected"
-                            <?= $request['ar_stats'] === 'Rejected'
+                            <?= $request['stats'] === 'Rejected'
                                 ? 'selected' : ''; ?>>
                             Rejected
                         </option>

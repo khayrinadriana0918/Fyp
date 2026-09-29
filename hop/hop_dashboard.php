@@ -70,7 +70,7 @@ $requestQuery = "
 
 $requestStmt = $pdo->prepare($requestQuery);
 $requestStmt->execute([
-    ':programme_id'=> $userInfo['programme_id']
+    ':programme_id' => $userInfo['programme_id']
 ]);
 $recentRequests =
     $requestStmt->fetchAll(PDO::FETCH_ASSOC);
@@ -188,6 +188,9 @@ $requestCounts =
                         </a>
                     </li>
                     <li>
+                        <a href="../userProfile.php">User Profile</a>
+                    </li>
+                    <li>
                         <a href="hop_admin_requests.php">
                             Submit Request to Admin
                         </a>
@@ -233,13 +236,6 @@ $requestCounts =
                     </p>
                 </div>
             </section>
-
-            <!-- =================================================
-             USER INFORMATION
-        ================================================== -->
-
-            <?php include __DIR__ . '/../inc_reuse/account_info.php'; ?><br>
-            <!-- other profile.php -->
             <!-- =================================================
              DASHBOARD STATISTICS
         ================================================== -->
@@ -354,7 +350,7 @@ $requestCounts =
                                         );
                                     ?>
                                     <tr class="request-row"
-                                        onclick="window.location.href ='req_details.php?id=<?= urlencode($request['request_id']); ?>';">
+                                        onclick="window.location.href ='hop_req_details.php?id=<?= urlencode($request['request_id']); ?>';">
 
                                         <!-- REQUEST ID -->
                                         <td class="request-id">
@@ -413,6 +409,10 @@ $requestCounts =
                 <?php endif; ?>
             </section>
         </main>
+        <!-- =====================================================
+         programme
+    ====================================================== -->
+        <?php include __DIR__ . '/../inc_reuse/programme.php'; ?><br>
         <!-- =====================================================
          RIGHT FILTER
     ====================================================== -->

@@ -66,12 +66,15 @@ header {
 
     font-size: 13px;
 }
-.logout{
+
+.logout {
     text-decoration: none;
 }
-.logout:hover{
+
+.logout:hover {
     text-decoration: underline;
 }
+
 .notification-button {
     border: none;
     background: transparent;
@@ -154,33 +157,41 @@ header {
 
     background: #ffffff;
 }
+
 /* REQUEST FORM */
-#ar_form{
+.form {
     max-width: 850px;
     margin: 0 auto;
 }
 
-#ar_form fieldset{
+.form fieldset {
     border: 1px solid;
     border-radius: 8px;
     padding: 30px;
     /* background: background colour */
 }
-#ar_form legend{
+
+.form legend {
     font-size: 24px;
     font-weight: 600;
     padding: 0 10px;
 }
+/* semester slider for student user */
+.semester-box {
+    width: 100%;
+    /* Width of the outside container */
+}
 
-#ar_form label{
+
+.form label {
     display: inline-block;
     margin-bottom: 8px;
     font-weight: 600;
 }
 
-#ar_form input[type="text"],
-#ar_form select,
-#ar_form textarea{
+.form input[type="text"],
+.form select,
+.form textarea {
     width: 100%;
     padding: 12px;
 
@@ -192,27 +203,31 @@ header {
 
     /* background: form colour */
 }
-#ar_form textarea{
+
+.form textarea {
     resize: vertical;
     min-height: 180px;
 }
-#ar_form small{
-    color:#777777;
+
+.form small {
+    color: #777777;
 }
-#ar_form input[type="file"]{
+
+.form input[type="file"] {
     margin-top: 8px;
 }
 
-#preview_btn{
+#preview_btn {
     padding: 11px 20px;
 
     border: none;
     border-radius: 4px;
 
-    cursor:pointer;
+    cursor: pointer;
 }
-#preview_btn:hover{
-    background:#444444;
+
+#preview_btn:hover {
+    background: #444444;
 }
 
 #request_preview {
@@ -250,6 +265,7 @@ header {
     background: #eeeeee;
     color: #212121;
 }
+
 /* =========================================
    RESPONSIVE
 ========================================= */
@@ -278,13 +294,14 @@ header {
         display: block;
     }
 
-    .system-name h1{
+    .system-name h1 {
         font-size: 14px;
         font-weight: 1000;
     }
+
     .sidebar,
     header,
-    .middle-content{
+    .middle-content {
         width: 100%;
     }
 
