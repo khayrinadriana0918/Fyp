@@ -22,7 +22,7 @@ $programmes= $programmeStmt->fetchAll(PDO::FETCH_ASSOC);
   border: none;
   cursor: pointer;
   opacity: 0.8;
-  position:absolute;
+  position:fixed;
   bottom: 23px;
   right: 28px;
   width: 280px;

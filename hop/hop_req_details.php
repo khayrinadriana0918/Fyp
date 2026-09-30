@@ -14,7 +14,7 @@ FROM head_of_programme
 WHERE user_id=:userid
 ");
 
-$hopStmt->execute(['user_id'=> $_SESSION['user-id']]);
+$hopStmt->execute(['user_id'=> $_SESSION['user_id']]);
 
 $hop=$hopStmt->fetch(PDO::FETCH_ASSOC);
 

@@ -27,7 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($stmt->rowCount() > 0) {
             unset($_SESSION['password_reset']);
-            $message = "Password reset successful. You can now login.";
+
+            header("Location: index.php?reset=success");
+            exit();
         } else {
             $message = " Email not found.";
         }
@@ -155,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
     <script>
         $('#reset_pwd').on('input', function() {
-            
+
             const password = $(this).val();
 
             // 8-16 characters

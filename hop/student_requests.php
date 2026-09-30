@@ -24,7 +24,7 @@ ON s.user_id = u.user_id
 INNER JOIN category c
 ON r.category_id= c.category_id
 
-ORDER BY r.r_submission_date DESC
+ORDER BY r.submission_date DESC
 ";
 
 $stmt= $pdo->prepare($query);
@@ -37,7 +37,7 @@ $reqs= $stmt->fetchAll(PDO::FETCH_ASSOC);
     <thead>
         <tr>
             <th>Request ID</th>
-            <th>HoP Name</th>
+            <th>Head of Programme Name</th>
             <th>Staff ID</th>
             <th>Title</th>
             <th>Category</th>
@@ -54,7 +54,7 @@ $reqs= $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr
                 class="request-row"
                 onclick="window.location.href=
-                'req_details.php?id=<?= urlencode($request['r_request_id']); ?>'">
+                'req_details.php?id=<?= urlencode($request['request_id']); ?>'">
 
                 <td>
                     <?= htmlspecialchars($request['request_id']); ?>
