@@ -9,6 +9,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $pwd = $_POST["pwd"];
 
+// min 8 characters, max 16 characters, at least 1 number and 1  capital letter
+    if (strlen($pwd)<8 || strlen($pwd)>16) {
+        exit("Password");
+    }elseif(!preg_match('/[A-Z]/', $pwd)){
+        exit();
+    }elseif(!preg_match('/[0-9]/', $pwd)){
+        exit();
+    }
+
     try {
         require_once __DIR__ . '/database.php';
 

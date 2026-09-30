@@ -30,18 +30,6 @@ $category_id = trim($_POST['c_id'] ?? '');
 $priority = trim($_POST['priority'] ?? 'Low');
 $description = trim($_POST['desc'] ?? '');
 
-$semester = filter_var(
-    $semester,
-    FILTER_VALIDATE_INT,
-    ['options' => ['min_range' => 1, 'max_range' => 20]]
-);
-if ($semester === false) {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Invalid Semester'
-    ]);
-    exit();
-}
 if (
     $title === '' ||
     $category_id === '' ||
@@ -51,6 +39,18 @@ if (
     echo json_encode([
         'success' => false,
         'message' => 'Please fill in all required fields'
+    ]);
+    exit();
+}
+$semester = filter_var(
+    $semester,
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1, 'max_range' => 20]]
+);
+if ($semester === false) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid Semester'
     ]);
     exit();
 }

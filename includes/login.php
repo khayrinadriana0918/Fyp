@@ -29,7 +29,19 @@ if($_SERVER["REQUEST_METHOD"]== "POST"){
         if ($pwd!=$user["pwd"]) {
             die("incorrect password");
         }
+        $passwordIsWeak=
+        strlen($user['pwd'])<8 ||
+        strlen($user['pwd'])>15 ||
+        !preg_match('/[A-Z]/', $user['pwd'])||
+        !preg_match('/[0-9]/', $user['pwd']);
         
+        if ($passwordIsWeak) {
+            $_SESSION['user_id']=$user['user_id'];
+            $_SESSION['password_reset']=true;
+
+            header("Location:../reset.php");
+            exit();
+        }
         //success login
         $_SESSION['user_id']=$user['user_id'];
         $_SESSION['name']= $user['name'];
