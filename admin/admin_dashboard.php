@@ -267,7 +267,7 @@ $requestCounts =
                         <p>Your latest submitted requests.</p>
                     </div>
 
-                    <a href="student_requests.php">View All</a>
+                    <a href="submittedHop_requests.php">View All</a>
 
                 </div>
 

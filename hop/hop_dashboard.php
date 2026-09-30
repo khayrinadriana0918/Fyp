@@ -304,7 +304,7 @@ $requestCounts =
                         <p>Latest administrative requests submitted by students.</p>
                     </div>
 
-                    <a href="student_requests.php" class="view-all">View All</a>
+                    <a href="submittedStud_requests.php" class="view-all">View All</a>
 
                 </div>
 

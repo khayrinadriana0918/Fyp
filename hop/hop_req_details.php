@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 $hopStmt=$pdo->prepare("
 SELECT programme_id
 FROM head_of_programme
-WHERE user_id=:userid
+WHERE user_id=:user_id
 ");
 
 $hopStmt->execute(['user_id'=> $_SESSION['user_id']]);
