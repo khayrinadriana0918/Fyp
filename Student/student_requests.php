@@ -58,6 +58,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link
         rel="stylesheet"
         href="../CSS/tableReq.css">
+    <link rel="stylesheet" href="../CSS/popup.css">
 
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
@@ -157,7 +158,8 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <tr
                         class="request-row"
                         data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
-                        data-student-id="<?= htmlspecialchars($request['student_id']); ?>"
+                        data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
+                        data-requester-id="<?= htmlspecialchars($request['student_id']); ?>"
                         data-semester="<?= htmlspecialchars($request['semester']); ?>"
                         data-title="<?= htmlspecialchars($request['title']); ?>"
                         data-category="<?= htmlspecialchars($request['category_name']); ?>"
@@ -206,70 +208,9 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
 
         <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
-        
+
     </div>
-    <script>
-        $('.request-row').on('click', function() {
-            const requestId = $(this).data('request-id');
-            const studentId = $(this).data('student-id');
-            const semester = $(this).data('semester');
-            const title = $(this).data('title');
-            const category = $(this).data('category');
-            const label = $(this).data('label');
-            const priority = $(this).data('priority');
-            const status = $(this).data('status');
-            const desc = $(this).data('description');
-            const file = $(this).data('file');
-            const submitDate = $(this).data('submitted-date');
-            const resolved = $(this).data('resolved-date');
-
-            console.log("Request ID:", requestId);
-
-            $('#popup_student_id').text(studentId);
-            $('#popup_semester').text(semester);
-            $('#popup_title').text(title);
-            $('#popup_category').text(category);
-            $('#popup_labels').text(label);
-            $('#popup_priority').text(priority);
-            $('#popup_status').text(status);
-            $('#popup_desc').text(desc);
-            $('#popup_submit_date').text(submitDate);
-            $('#popup_resolved_date').text(resolved);
-
-            if(priority === 'Low'){
-                $('#priority_circle').css('background-color','green');
-            }else if(priority === 'Medium'){
-                $('#priority_circle').css('background-color','orange');
-            }else if(priority === 'Urgent'){
-                $('#priority_circle').css('background-color','red');
-            }
-
-            if (status === 'Completed' && resolved) {
-                $('#popup_resolved_date').text(resolved);
-                $('#resolved_date_container').show();
-            } else {
-                $('#popup_resolved_date').text('');
-                $('#resolved_date_container').hide('');
-            }
-
-            if (file) {
-                $('#popup_file').html(
-                    '<a href="../uploads/hop_student/' +
-                    encodeURIComponent(file) +
-                    '" target="_blank">View Attachment</a>'
-                );
-            } else {
-                $('#popup_file').text('No attachment');
-            }
-
-            $('#req_popup').css('display', 'flex');
-
-        });
-
-        $('#close_popup').on('click', function() {
-            $('#req_popup').hide();
-        });
-    </script>
+    <script src="../JS/requesterPopup.js"></script>
 </body>
 
 </html>

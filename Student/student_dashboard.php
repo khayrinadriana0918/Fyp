@@ -45,11 +45,7 @@ if (!$userInfo) {
 $roleIdLabel = 'Student ID';
 $requestQuery = "
     SELECT
-        r.request_id,
-        r.title,
-        r.stats,
-        r.priority,
-        r.submission_date,
+        r.*,
         s.student_id AS requester_id,
         u.name AS requester_name,
         c.category_name
@@ -129,9 +125,9 @@ $requestCounts =
         name="viewport"
         content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard | SIMSAP</title>
-    <link
-        rel="stylesheet"
-        href="../CSS/dashboard.css">
+
+    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/popup.css">
 
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
@@ -344,7 +340,19 @@ $requestCounts =
                                         );
                                     ?>
                                     <tr class="request-row"
-                                        onclick="window.location.href ='req_details.php?id=<?= urlencode($request['request_id']); ?>';">
+                                        data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
+                                        data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
+                                        data-requester-id="<?= htmlspecialchars($request['student_id']); ?>"
+                                        data-semester="<?= htmlspecialchars($request['semester']); ?>"
+                                        data-title="<?= htmlspecialchars($request['title']); ?>"
+                                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                        data-label="<?= htmlspecialchars($request['label']); ?>"
+                                        data-priority="<?= htmlspecialchars($request['priority']); ?>"
+                                        data-status="<?= htmlspecialchars($request['stats']); ?>"
+                                        data-description="<?= htmlspecialchars($request['description']); ?>"
+                                        data-file="<?= htmlspecialchars($request['request_file']); ?>"
+                                        data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
+                                        data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
 
                                         <!-- REQUEST ID -->
                                         <td class="request-id">
@@ -406,9 +414,9 @@ $requestCounts =
         <!-- =====================================================
          programme
     ====================================================== -->
-    <?php if(empty($userInfo['programme_id'])): ?>
-        <?php include __DIR__ . '/../inc_reuse/programme.php'; ?><br>
-    <?php endif ?>
+        <?php if (empty($userInfo['programme_id'])): ?>
+            <?php include __DIR__ . '/../inc_reuse/programme.php'; ?><br>
+        <?php endif ?>
         <!-- =====================================================
          RIGHT FILTER
     ====================================================== -->
@@ -418,7 +426,9 @@ $requestCounts =
                 '/../inc_reuse/filter.php';
             ?>
         </aside>
+        <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
     </div>
+
     <script>
         $(document).ready(function() {
 
@@ -427,19 +437,20 @@ $requestCounts =
                     ? 'true' : 'false'; ?>;
 
             $('.programme-required').on('click', function(event) {
-                const destination=$(this).data('url');
+                const destination = $(this).data('url');
                 // lock function
                 if (!programmeSelected) {
-                    
+
                     event.preventDefault();
 
                     openForm();
-                }else{
-                    window.location.href= destination
+                } else {
+                    window.location.href = destination
                 }
             });
         });
     </script>
+    <script src="../JS/requesterPopup.js"></script>
 </body>
 
 </html>
