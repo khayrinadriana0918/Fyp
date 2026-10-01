@@ -1,4 +1,4 @@
-.request-popup {
+.req-popup {
     display: none;
     position: fixed;
 
@@ -16,7 +16,7 @@
     z-index: 9999;
 }
 
-.request-popup-content {
+.req-popup-content {
     width: 80%;
     max-width: 900px;
     max-height: 90vh;

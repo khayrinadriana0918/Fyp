@@ -280,7 +280,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $('#popup_submit_date').text(submitDate);
             $('#popup_resolved_date').text(resolved);
 
-            if (status === 'completed' && resolved) {
+            if (status === 'Completed' && resolved) {
                 $('#popup_resolved_date').text(resolved);
                 $('#resolved_date_container').show();
             } else {
