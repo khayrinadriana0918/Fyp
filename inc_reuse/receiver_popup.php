@@ -54,14 +54,22 @@
 
 
                     <div class="popup-actions">
-                        <button type="button" id="change_priority">See change priority</button>
-                        <button type="button" id="change_status">Change Status</button>
-                        <button type="button" id="receiver_view_history">See change history</button>
+                        <select id="receiver_action">
+                            <option value="" selected disabled>
+                                Actions...
+                            </option>
+
+                            <option value="status">Change Status</option>
+
+                            <option value="priority">Change Priority</option>
+                        </select>
+
+                        <button type="button" id="give_feedback">Comment / Give Feedback</button>
                     </div>
                     <div id="receiver_status_form" style="display: none;">
                         <form id="update_status_form">
                             <input type="hidden" id="status_request_id" name="request_id">
-                            <input type="hidden" id="request_type" value="student">
+                            <input type="hidden" id="request_type" name="request_type" value="student">
 
                             <label for="receiver_new_status">Status: </label>
 
@@ -77,4 +85,3 @@
                 </div>
             </div>
         </div>
-

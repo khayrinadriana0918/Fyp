@@ -101,7 +101,7 @@ elseif ($requestType === 'student') {
     if($status==='Completed'){
         $query="
         UPDATE request
-        SET =:status,
+        SET stats =:status,
         resolved_date=NOW()
         WHERE request_id=:request_id
         ";
@@ -109,7 +109,7 @@ elseif ($requestType === 'student') {
         $query="
         UPDATE request
         SET
-         stats=:status
+         stats=:status,
          resolved_date=NULL
         WHERE request_id=:request_id
         ";

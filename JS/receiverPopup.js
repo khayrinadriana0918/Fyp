@@ -56,12 +56,32 @@ $('.receiver-request-row').on('click', function () {
     $('#status_request_id').val(requestId);
     $('#receiver_new_status').val(status);
     $('#receiver_status_form').hide();
+    $('#receiver_action').val('');
 
     $('#receiver_req_popup').css('display', 'flex');
 
 });
-$('#change_status').on('click',function(){
-    $('#receiver_status_form').toggle();
+// dropdown for status change
+$('#receiver_action').on('change', function () {
+
+    const action = $(this).val();
+
+    if (action === 'status') {
+
+        $('#receiver_status_form').show();
+
+    } else if (action === 'priority') {
+
+        $('#receiver_status_form').hide();
+        alert('Change Priority');
+
+    } else if (action === 'history') {
+
+        $('#receiver_status_form').hide();
+        alert('Change History');
+
+    }
+
 });
 $('#close_receiver_popup').on('click', function () {
 
