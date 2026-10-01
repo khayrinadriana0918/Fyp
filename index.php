@@ -50,6 +50,14 @@ include('includes/database.php');
         border-radius: var(--border-radius);
     }
 
+    #left-content img{
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+        object-fit: contain;
+        border-radius: var(--border-radius);
+    }
+
     #right-content {
         display: flex;
         min-height: 100vh;
@@ -142,7 +150,7 @@ include('includes/database.php');
 
 <body class="container">
     <div id="left-content">
-        <img src="/pictures/uptm3.jpg" alt="UPTM">
+        <img src="./pictures/index.png" alt="UPTM">
     </div>
     <div id="right-content">
         <div id="signup" class="form-box">
@@ -225,42 +233,42 @@ include('includes/database.php');
 
     $('#signup_pwd').on('input', function() {
 
-                const password = $(this).val();
+        const password = $(this).val();
 
-                if (password.length >= 8 && password.length <= 16) {
-                    $('#length_check')
-                        .text('✓ 8-16 characters')
-                        .removeClass('invalid')
-                        .addClass('valid');
-                } else {
-                    $('#length_check')
-                        .text('X 8-16 characters')
-                        .removeClass('valid')
-                        .addClass('invalid');
-                }
-                if (/[A-Z]/.test(password)) {
-                    $('#capital_check')
-                        .text('✓ At least 1 capital letter')
-                        .removeClass('invalid')
-                        .addClass('valid');
-                } else {
-                    $('#capital_check')
-                        .text('X At least 1 capital letter')
-                        .removeClass('valid')
-                        .addClass('invalid');
-                }
-                if (/[0-9]/.test(password)) {
-                    $('#number_check')
-                        .text('✓ At least 1 number')
-                        .removeClass('invalid')
-                        .addClass('valid');
-                } else {
-                    $('#number_check')
-                        .text('X At least 1 number')
-                        .removeClass('valid')
-                        .addClass('invalid');
-                }
-            });
+        if (password.length >= 8 && password.length <= 16) {
+            $('#length_check')
+                .text('✓ 8-16 characters')
+                .removeClass('invalid')
+                .addClass('valid');
+        } else {
+            $('#length_check')
+                .text('X 8-16 characters')
+                .removeClass('valid')
+                .addClass('invalid');
+        }
+        if (/[A-Z]/.test(password)) {
+            $('#capital_check')
+                .text('✓ At least 1 capital letter')
+                .removeClass('invalid')
+                .addClass('valid');
+        } else {
+            $('#capital_check')
+                .text('X At least 1 capital letter')
+                .removeClass('valid')
+                .addClass('invalid');
+        }
+        if (/[0-9]/.test(password)) {
+            $('#number_check')
+                .text('✓ At least 1 number')
+                .removeClass('invalid')
+                .addClass('valid');
+        } else {
+            $('#number_check')
+                .text('X At least 1 number')
+                .removeClass('valid')
+                .addClass('invalid');
+        }
+    });
 </script>
 
 </html>

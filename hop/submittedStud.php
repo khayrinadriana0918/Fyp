@@ -7,7 +7,21 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$query="
+$userId = $_SESSION['user_id'];
+
+$userStmt = $pdo->prepare("
+SELECT name
+FROM users
+WHERE user_id = :user_id");
+
+$userStmt->execute(['user_id' => $userId]);
+$userInfo = $userStmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$userInfo) {
+    die("User information not found.");
+}
+
+$query = "
 SELECT
 r.*,
 s.student_id AS requester_id,
@@ -18,80 +32,187 @@ FROM request r
 INNER JOIN student s
 ON r.student_id = s.student_id
 
-INNER JOIN users u
+INNER JOIN user u
 ON s.user_id = u.user_id
 
 INNER JOIN category c
 ON r.category_id= c.category_id
 
+WHERE s.programme_id= :programme_id
 ORDER BY r.submission_date DESC
 ";
 
-$stmt= $pdo->prepare($query);
-$stmt->execute();
+$stmt = $pdo->prepare($query);
+$stmt->execute([
+    ':user_id' => $userId
+]);
 
-$reqs= $stmt->fetchAll(PDO::FETCH_ASSOC);
+$reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<table>
+<!DOCTYPE html>
 
-    <thead>
-        <tr>
-            <th>Request ID</th>
-            <th>Head of Programme Name</th>
-            <th>Staff ID</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Submitted</th>
-        </tr>
-    </thead>
+<html lang="en">
 
-    <tbody>
 
-        <?php foreach ($reqs as $request): ?>
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <title>Head of Programme Dashboard | SIMSAP</title>
+    <link rel="stylesheet" href="../CSS/tableReq.css">
+    <link rel="stylesheet" href="../CSS/popup.css">
 
-            <tr
-                class="request-row"
-                onclick="window.location.href=
-                'req_details.php?id=<?= urlencode($request['request_id']); ?>'">
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+    </script>
 
-                <td>
-                    <?= htmlspecialchars($request['request_id']); ?>
-                </td>
+</head>
 
-                <td>
-                    <?= htmlspecialchars($request['requester_name']); ?>
-                </td>
+<body> 
+    <div class="layout">
+        <!-- =====================================================
+         HEADER
+    ====================================================== -->
+        <header>
+            <div class="header-top">
+                <div class="system-name">
+                    <h1>
+                        SIMSAP - Student Issue Management System
+                        for Academic Programme
+                    </h1>
+                </div>
+                <div class="header-user">
+                    <span class="header-name">
+                        <?= htmlspecialchars($userInfo['name']); ?>
+                    </span>
+                    <button
+                        type="button"
+                        class="notification-button"
+                        title="Notifications">
+                        🔔
+                    </button>
+                    <a href="../includes/logout.php" class="logout">
+                        Log out
+                    </a>
+                </div>
+            </div>
+        </header>
 
-                <td>
-                    <?= htmlspecialchars($request['requester_id']); ?>
-                </td>
+        <!-- =====================================================
+         LEFT SIDEBAR
+    ====================================================== -->
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="hop_Dashboard.php" class="active">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../userProfile.php">User Profile</a>
+                    </li>
+                    <li>
+                        <a href="hop_admin_requests.php">
+                            Submit Request to Admin
+                        </a>
+                    </li>
+                    <li>
+                        <a href="hop_requests.php">
+                            My Requests
+                        </a>
+                    </li>
+                    <li>
+                        <a href="userManual.html">
+                            User Manual
+                        </a>
+                    </li>
+                    <li>
+                        <a href="faq.html">
+                            FAQ
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+        <table>
 
-                <td>
-                    <?= htmlspecialchars($request['title']); ?>
-                </td>
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Semester</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Date Submitted</th>
+                    <th>Priority</th>
+                </tr>
+            </thead>
 
-                <td>
-                    <?= htmlspecialchars($request['category_name']); ?>
-                </td>
+            <tbody>
 
-                <td>
-                    <?= htmlspecialchars($request['priority']); ?>
-                </td>
+                <?php foreach ($reqs as $request): ?>
 
-                <td>
-                    <?= htmlspecialchars($request['stats']); ?>
-                </td>
+                    <tr
+                        class="request-row"
+                        data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
+                        data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
+                        data-requester-id="<?= htmlspecialchars($request['student_id']); ?>"
+                        data-semester="<?= htmlspecialchars($request['semester']); ?>"
+                        data-title="<?= htmlspecialchars($request['title']); ?>"
+                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                        data-label="<?= htmlspecialchars($request['label']); ?>"
+                        data-priority="<?= htmlspecialchars($request['priority']); ?>"
+                        data-status="<?= htmlspecialchars($request['stats']); ?>"
+                        data-description="<?= htmlspecialchars($request['description']); ?>"
+                        data-file="<?= htmlspecialchars($request['request_file']); ?>"
+                        data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
+                        data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
 
-                <td>
-                    <?= htmlspecialchars($request['submission_date']); ?>
-                </td>
+                        <td>
+                            <?= htmlspecialchars($request['request_id']); ?>
+                        </td>
 
-            </tr>
+                        <td>
+                            <?= htmlspecialchars($request['semester']); ?>
+                        </td>
 
-        <?php endforeach; ?>
+                        <td>
+                            <?= htmlspecialchars($request['title']); ?>
+                        </td>
 
-    </tbody>
+                        <td>
+                            <?= htmlspecialchars($request['category_name']); ?>
+                        </td>
 
-</table>
+                        <td>
+                            <?= htmlspecialchars($request['stats']); ?>
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($request['submission_date']); ?>
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($request['priority']); ?>
+                        </td>
+
+                    </tr>
+
+                <?php endforeach; ?>
+
+            </tbody>
+
+        </table>
+
+        <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
+
+    </div>
+    <script src="../JS/requesterPopup.js"></script>
+</body>
+
+</html>
