@@ -204,67 +204,9 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tbody>
 
         </table>
-        <div id="req_popup" class="req-popup">
-            <div class="req-popup-content">
-                <button type="button" id="close_popup">X</button>
-                <div id="request_details">
 
-                    <div class="popup-header">
-                        <div class="student-info">
-                            <h3>
-                                <?= htmlspecialchars($userInfo['name']); ?>
-                                (<span id="popup_student_id"></span>)
-                            </h3>
-
-                            <p>Semester: <span id="popup_semester"></span></p>
-                        </div>
-                        <div>
-                            <p>Priority: <span id="popup_priority"></span></p>
-                        </div>
-                    </div>
-
-                    <div class="title-section">
-                        <h2 id="popup_title"></h2>
-                        <p>Issue Category:
-                            <span id="popup_category"></span>
-                        </p>
-                    </div>
-
-                    <div class="popup-meta">
-                        <div class="labels-section">
-                            <p>Labels:</p>
-                            <div class="label-box">
-                                <span id="popup_labels"></span>
-                            </div>
-                        </div>
-
-                        <div class="status-section">
-                            <p>Status: <span id="popup_status"></span></p>
-                            <p>Date Submitted: <span id="popup_submit_date"></span></p>
-                            <p id="resolved_date_container">Date Resolved: <span id="popup_resolved_date"></span></p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="desc-section">
-                        <h3>Description</h3>
-                        <div class="desc-content">
-                            <p id="popup_desc"></p>
-                        </div>
-                    </div>
-
-                    <div class="attachment-section">
-                        <h3>Attachments</h3>
-                        <div id="popup_file"></div>
-                    </div>
-
-
-
-                    <div class="popup-actions">
-                        <button type="button" id="view_history">See change history</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
+        
     </div>
     <script>
         $('.request-row').on('click', function() {
@@ -301,7 +243,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }else if(priority === 'Urgent'){
                 $('#priority_circle').css('background-color','red');
             }
-            
+
             if (status === 'Completed' && resolved) {
                 $('#popup_resolved_date').text(resolved);
                 $('#resolved_date_container').show();
