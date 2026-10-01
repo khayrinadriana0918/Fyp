@@ -86,10 +86,6 @@ if (empty($userInfo['programme_id'])) {
                     </a>
                 </div>
             </div>
-
-            <div class="top-nav">
-                <a href="about.php">About</a>
-            </div>
         </header>
 
         <!-- =====================================================
@@ -99,17 +95,23 @@ if (empty($userInfo['programme_id'])) {
             <nav>
                 <ul>
                     <li>
-                        <a href="student_dashboard.php">
+                        <a href="student_dashboard.php" >
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="student_hop_requests.php" class="active">
+                        <a href="about.php">About</a>
+                    </li>
+                    <li>
+                        <a href="../userProfile.php">User Profile</a>
+                    </li>
+                    <li>
+                        <a href="student_hop_requests.php" class="programme-required" id="active">
                             Submit Request to Head of Programme
                         </a>
                     </li>
                     <li>
-                        <a href="student_requests.php">
+                        <a href="student_requests.php" class="programme-required">
                             My Requests
                         </a>
                     </li>

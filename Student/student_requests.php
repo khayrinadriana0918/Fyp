@@ -10,25 +10,23 @@ if (!isset($_SESSION['user_id'])) {
 $query="
 SELECT
 r.*,
-s.student_id AS requester_id,
-u.name AS requester_name,
 c.category_name
 FROM request r
 
 INNER JOIN student s
 ON r.student_id = s.student_id
 
-INNER JOIN users u
-ON s.user_id = u.user_id
-
 INNER JOIN category c
 ON r.category_id= c.category_id
 
+WHERE s.user_id= :user_id
 ORDER BY r.submission_date DESC
 ";
 
 $stmt= $pdo->prepare($query);
-$stmt->execute();
+$stmt->execute([
+    'user_id'=> $_SESSION['user_id']
+]);
 
 $reqs= $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -37,13 +35,13 @@ $reqs= $stmt->fetchAll(PDO::FETCH_ASSOC);
     <thead>
         <tr>
             <th>Request ID</th>
-            <th>Head of Programme Name</th>
-            <th>Staff ID</th>
+            <th>Semester</th>
+            <th>Student ID</th>
             <th>Title</th>
             <th>Category</th>
-            <th>Priority</th>
             <th>Status</th>
-            <th>Submitted</th>
+            <th>Date Submitted</th>
+            <th>Priority</th>
         </tr>
     </thead>
 
@@ -53,21 +51,16 @@ $reqs= $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <tr
                 class="request-row"
-                onclick="window.location.href=
-                'req_details.php?id=<?= urlencode($request['request_id']); ?>'">
+                data-request-id="<?= htmlspecialchars($request['request_id']); ?>">
 
                 <td>
                     <?= htmlspecialchars($request['request_id']); ?>
                 </td>
 
                 <td>
-                    <?= htmlspecialchars($request['requester_name']); ?>
+                    <?= htmlspecialchars($request['semester']); ?>
                 </td>
-
-                <td>
-                    <?= htmlspecialchars($request['requester_id']); ?>
-                </td>
-
+                
                 <td>
                     <?= htmlspecialchars($request['title']); ?>
                 </td>

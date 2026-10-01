@@ -134,9 +134,9 @@ header {
 }
 
 
-/* Dashboard button*/
+/* Dashboard button like sketch */
 
-.sidebar nav a.active {
+.sidebar nav a#active {
     border: 1px dashed #aaaaaa;
     background: #ffffff;
     text-align: center;
