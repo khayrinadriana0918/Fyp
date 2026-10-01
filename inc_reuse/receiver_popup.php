@@ -58,6 +58,23 @@
                         <button type="button" id="change_status">Change Status</button>
                         <button type="button" id="receiver_view_history">See change history</button>
                     </div>
+                    <div id="receiver_status_form" style="display: none;">
+                        <form id="update_status_form">
+                            <input type="hidden" id="status_request_id" name="request_id">
+                            <input type="hidden" id="request_type" value="student">
+
+                            <label for="receiver_new_status">Status: </label>
+
+                            <select name="status" id="receiver_new_status" required>
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+                            <button type="submit">Update Status</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+

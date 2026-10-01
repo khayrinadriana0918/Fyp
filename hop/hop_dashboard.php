@@ -343,9 +343,9 @@ $requestCounts =
                                             )
                                         );
                                     ?>
-                                    <tr class="request-row"
+                                    <tr class="request-row receiver-request-row"
                                         data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
-                                        data-requester-name="<?= htmlspecialchars($userInfo['requester_name']); ?>"
+                                        data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
                                         data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
                                         data-semester="<?= htmlspecialchars($request['semester']); ?>"
                                         data-title="<?= htmlspecialchars($request['title']); ?>"
@@ -354,9 +354,9 @@ $requestCounts =
                                         data-priority="<?= htmlspecialchars($request['priority']); ?>"
                                         data-status="<?= htmlspecialchars($request['stats']); ?>"
                                         data-description="<?= htmlspecialchars($request['description']); ?>"
-                                        data-file="<?= htmlspecialchars($request['request_file']); ?>"
+                                        data-file="<?= htmlspecialchars($request['request_file']?? ''); ?>"
                                         data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
-                                        data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
+                                        data-resolved-date="<?= htmlspecialchars($request['resolved_date']?? ''); ?>">
 
                                         <!-- REQUEST ID -->
                                         <td class="request-id">

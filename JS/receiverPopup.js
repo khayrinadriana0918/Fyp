@@ -32,7 +32,7 @@ $('.receiver-request-row').on('click', function () {
         $('#receiver_resolved_date').text(resolvedDate);
         $('#receiver_resolved_container').show();
 
-    }else {
+    } else {
 
         $('#receiver_resolved_date').text('');
         $('#receiver_resolved_container').hide();
@@ -53,13 +53,37 @@ $('.receiver-request-row').on('click', function () {
         'request-id',
         requestId
     );
-    $('#receiver_req_popup').css('display','flex');
+    $('#status_request_id').val(requestId);
+    $('#receiver_new_status').val(status);
+    $('#receiver_status_form').hide();
+
+    $('#receiver_req_popup').css('display', 'flex');
 
 });
-
-
+$('#change_status').on('click',function(){
+    $('#receiver_status_form').toggle();
+});
 $('#close_receiver_popup').on('click', function () {
 
     $('#receiver_req_popup').hide();
+
+});
+$('#update_status_form').on('submit', function (event) {
+
+    event.preventDefault();
+
+    $.ajax({
+        url: '../includes/update-request-status.php',
+        type: 'POST',
+        data: $(this).serialize(),
+
+        success: function () {
+            location.reload();
+        },
+
+        error: function () {
+            alert('Unable to update request status.');
+        }
+    });
 
 });

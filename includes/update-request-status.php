@@ -65,7 +65,7 @@ elseif ($requestType === 'student') {
 
     // Check that logged-in user is a HoP
     $roleStmt = $pdo->prepare("
-        SELECT staff_id
+        SELECT staff_id, programme_id
         FROM head_of_programme
         WHERE user_id = :user_id
     ");
@@ -79,13 +79,44 @@ elseif ($requestType === 'student') {
         die("Access denied.");
     }
 
-    $query = "
-    UPDATE request
-    SET stats=:status
-    WHERE request_id=:request_id";
+    $checkStmt=$pdo->prepare("
+    SELECT r.request_id
+    FROM request r
+    
+    INNER JOIN student s
+    ON r.student_id=s.student_id
+    
+    WHERE r.request_id=:request_id
+    AND s.programme_id=:programme_id"
+    );
+    $checkStmt->execute([
+        ':request_id'=>$requestId,
+        ':programme_id'=>$hop['programme_id']
+    ]);
+    $allowedRequest=$checkStmt->fetch(PDO::FETCH_ASSOC);
+    if(!$allowedRequest){
+        die("Access denied.");
+    }
+
+    if($status==='Completed'){
+        $query="
+        UPDATE request
+        SET =:status,
+        resolved_date=NOW()
+        WHERE request_id=:request_id
+        ";
+    }else{
+        $query="
+        UPDATE request
+        SET
+         stats=:status
+         resolved_date=NULL
+        WHERE request_id=:request_id
+        ";
+    }
 
     $returnPage =
-        "../hop/req_details.php?id=" . urlencode($requestId);
+        "../hop/hop_dashboard.php?id=" . urlencode($requestId);
 } else {
     die("Inavlid request type.");
 }
