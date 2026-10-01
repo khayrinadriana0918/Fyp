@@ -34,7 +34,7 @@
     box-sizing: border-box;
 }
 
-#close_popup{
+#close_popup, #close_receiver_popup{
     position:absolute;
     top: 15px;
     right: 20px;
