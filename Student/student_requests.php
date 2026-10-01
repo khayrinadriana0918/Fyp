@@ -156,7 +156,18 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <tr
                         class="request-row"
-                        data-request-id="<?= htmlspecialchars($request['request_id']); ?>">
+                        data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
+                        data-student-id="<?= htmlspecialchars($request['student_id']); ?>"
+                        data-semester="<?= htmlspecialchars($request['semester']); ?>"
+                        data-title="<?= htmlspecialchars($request['title']); ?>"
+                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                        data-label="<?= htmlspecialchars($request['label']); ?>"
+                        data-priority="<?= htmlspecialchars($request['priority']); ?>"
+                        data-status="<?= htmlspecialchars($request['stats']); ?>"
+                        data-description="<?= htmlspecialchars($request['description']); ?>"
+                        data-file="<?= htmlspecialchars($request['request_file']); ?>"
+                        data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
+                        data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
 
                         <td>
                             <?= htmlspecialchars($request['request_id']); ?>
@@ -197,7 +208,46 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="req-popup-content">
                 <button type="button" id="close_popup">X</button>
                 <div id="request_details">
+                    <div class="popup-top">
+                        <div>
+                            <h3>
+                                <?= htmlspecialchars($userInfo['name']); ?>
+                                (<span id="popup_student_id"></span>)
+                            </h3>
 
+                            <p>Semester: <span id="popup_semester"></span></p>
+                        </div>
+                        <div>
+                            <p>Priority: <span id="popup_priority"></span></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <h2 id="popup_title"></h2>
+                    <p>Issue Category:
+                        <span id="popup_category"></span>
+                    </p>
+                    <div class="popup-request-info">
+                        <div>
+                            <p>Labels: <span id="popup_labels"></span></p>
+                        </div>
+                        <div>
+                            <p>Status: <span id="popup_status"></span></p>
+                            <p>Date Submitted: <span id="popup_submit_date"></span></p>
+                            <p id="resolved_date_container">Date Resolved: <span id="popup_resolved_date"></span></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <h3>Description</h3>
+                    <p id="popup_desc"></p>
+
+                    <h3>Attachments</h3>
+                    <div id="popup_file"></div>
+
+                    <div class="popup-actions">
+                        <button type="button" id="edit_request">Edit Form</button>
+
+                        <button type="button" id="view history">See change history</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -205,11 +255,53 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script>
         $('.request-row').on('click', function() {
             const requestId = $(this).data('request-id');
+            const studentId = $(this).data('student-id');
+            const semester = $(this).data('semester');
+            const title = $(this).data('title');
+            const category = $(this).data('category');
+            const label = $(this).data('label');
+            const priority = $(this).data('priority');
+            const status = $(this).data('status');
+            const desc = $(this).data('description');
+            const file = $(this).data('file');
+            const submitDate = $(this).data('submitted-date');
+            const resolved = $(this).data('resolved-date');
 
-            console.log("Request ID: ", requestId);
+            console.log("Request ID:", requestId);
+
+            $('#popup_student_id').text(studentId);
+            $('#popup_semester').text(semester);
+            $('#popup_title').text(title);
+            $('#popup_category').text(category);
+            $('#popup_labels').text(label);
+            $('#popup_priority').text(priority);
+            $('#popup_status').text(status);
+            $('#popup_desc').text(desc);
+            $('#popup_submit_date').text(submitDate);
+            $('#popup_resolved_date').text(resolved);
+
+            if (status === 'completed' && resolved) {
+                $('#popup_resolved_date').text(resolved);
+                $('#resolved_date_container').show();
+            } else {
+                $('#popup_resolved_date').text('');
+                $('#resolved_date_container').hide('');
+            }
+
+            if(file){
+                $('#popup_file').html(
+            '<a href="../uploads/hop_student/' +
+            encodeURIComponent(file) +
+            '" target="_blank">View Attachment</a>'
+        );
+            }else{
+                $('#popup_file').text('No attachment');
+            }
 
             $('#req_popup').css('display', 'flex');
+
         });
+
         $('#close_popup').on('click', function() {
             $('#req_popup').hide();
         });
