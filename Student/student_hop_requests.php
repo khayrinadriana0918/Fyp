@@ -39,6 +39,39 @@ if (empty($userInfo['programme_id'])) {
     header("Location: student_dashboard.php");
     exit();
 }
+if (empty($userInfo['programme_id'])) {
+    header("Location: student_dashboard.php");
+    exit();
+}
+// EDIT EXISTING REQUEST
+$editMode = false;
+$editRequest = null;
+
+if (isset($_GET['edit']) && $_GET['edit'] !== '') {
+    $requestId = $_GET['edit'];
+
+    $editStmt = $pdo->prepare("
+    SELECT r.*
+    FROM request r
+    INNER JOIN student s
+    ON r.student_id = s.student_id
+    WHERE r.request_id= :request_id
+    AND s.user_id= :user_id
+    ");
+
+    $editStmt->execute([
+    ':request_id'=>$requestId,
+    ':user_id'=>$user
+    ]);
+
+    $editRequest = $editStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$editRequest) {
+        die("Request not found or access denied.");
+    }
+
+    $editMode = true;
+}
 ?>
 <!DOCTYPE html>
 
@@ -95,7 +128,7 @@ if (empty($userInfo['programme_id'])) {
             <nav>
                 <ul>
                     <li>
-                        <a href="student_dashboard.php" >
+                        <a href="student_dashboard.php">
                             Dashboard
                         </a>
                     </li>
@@ -135,22 +168,27 @@ if (empty($userInfo['programme_id'])) {
             <form id="form" class="form" method="POST"
                 action="../includes/submit-student-request.php"
                 enctype="multipart/form-data">
+                <?php if ($editMode): ?>
+                    <input type="hidden" name="request_id" value="<?= htmlspecialchars($editRequest['request_id']); ?>">
+                <?php endif; ?>
                 <fieldset>
-                    <legend>Request Form</legend>
+                    <legend>
+                        <?= $editMode ? 'Edit Request Form' : 'Request Form'; ?>
+                    </legend>
                     <div class="semester-box">
                         <label for="semester" id="semester_container">Current Semester:<span id="current_sem"></span></label><br>
-                        <input type="range" min="1" max="20" value="1" class="slider" id="semRange" name="semester" required>
+                        <input type="range" min="1" max="20" value="<?= $editMode ? htmlspecialchars($editRequest['semester']) : '1'; ?>" class="slider" id="semRange" name="semester" required>
 
                     </div>
                     <label for="title">Title:</label>
-                    <input type="text" id="title" name="title" placeholder="Enter Title Here." required>
+                    <input type="text" id="title" name="title" value="<?= $editMode ? htmlspecialchars($editRequest['title']) : ''; ?>" placeholder="Enter Title Here." required>
                     <br><br>
 
                     <div class=label-box>
                         <label for="label" id="label_container">Labels:</label><br>
                         <small>separates each label tags with space</small><br>
                         <!-- the tag labels separate and in a sphere each-->
-                        <input type="text" id="label" name="label" placeholder="e.g: time-strict, bug_report">
+                        <input type="text" id="label" name="label" value="<?= $editMode ? htmlspecialchars($editRequest['label']) : ''; ?>" placeholder="e.g: time-strict, bug_report">
 
                     </div>
                     <br>
@@ -167,8 +205,17 @@ if (empty($userInfo['programme_id'])) {
                 category_name ASC");
 
                             while ($category = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo '<option value="' . htmlspecialchars($category['category_id']) . '">' .
-                                    htmlspecialchars($category['category_name']) . '</option>';
+
+                                $selected = '';
+
+                                if ($editMode && $category['category_id'] == $editRequest['category_id']) {
+                                    $selected = 'selected';
+                                }
+                                echo '<option value="' .
+                                    htmlspecialchars($category['category_id']) .
+                                    '" ' . $selected . '>' .
+                                    htmlspecialchars($category['category_name']) .
+                                    '</option>';
                             }
                             ?>
                         </select>
@@ -188,7 +235,7 @@ if (empty($userInfo['programme_id'])) {
 
                     <div class="desc-box">
                         <label for="desc">Describe your request/issue regarding the system:</label><br>
-                        <textarea id="desc" name="desc" rows="10" cols="100" placeholder="Enter your request/issue here." required></textarea>
+                        <textarea id="desc" name="desc" rows="10" cols="100" placeholder="Enter your request/issue here." required><?= $editMode ? htmlspecialchars($editRequest['description']) : ''; ?></textarea>
                     </div>
                     <br>
 
@@ -196,6 +243,13 @@ if (empty($userInfo['programme_id'])) {
                         <label for="request_file">File (optional):</label><br>
                         <small>.jpg,.jpeg,.png,.pdf only</small><br>
                         <input type="file" name="request_file" id="request_file" accept=".jpg,.jpeg,.png,.pdf">
+
+                        <?php if ($editMode && !empty($editRequest['request_file'])
+                        ): ?>
+                            <p>Current file:
+                                <?= htmlspecialchars($editRequest['request_file']); ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
                     <br>
 
@@ -208,7 +262,7 @@ if (empty($userInfo['programme_id'])) {
             </form>
             <div id="request_preview" style="display: none;">
                 <h2>Preview Request</h2>
-                
+
                 <p>
                     <strong>Semester:</strong>
                     <span id="preview_semester"></span>
@@ -278,7 +332,7 @@ if (empty($userInfo['programme_id'])) {
         }
 
         // Get information from form
-        const semester= $('#semRange').val();
+        const semester = $('#semRange').val();
         const title = $('#title').val();
         const label = $('#label').val();
         const category =
@@ -293,7 +347,7 @@ if (empty($userInfo['programme_id'])) {
             document.getElementById('request_file');
 
         // Put information into preview
-        $('#preview_semester').text('Semester '+ semester);
+        $('#preview_semester').text('Semester ' + semester);
         $('#preview_title').text(title);
         $('#preview_label').text(
             label || 'No labels'
@@ -351,7 +405,9 @@ if (empty($userInfo['programme_id'])) {
             new FormData(form);
 
         $.ajax({
-            url: '../includes/submit-student-request.php',
+            url: <?= $editMode
+            ?"'../includes/update-student-request.php'"
+            :"'../includes/submit-student-request.php'"; ?>,
 
             type: 'POST',
             data: formData,
@@ -361,12 +417,17 @@ if (empty($userInfo['programme_id'])) {
 
             success: function(response) {
                 if (response.success) {
+                    <?php if($editMode): ?>
+                        window.location.href='student_requests.php';
+                    <?php else: ?>
+                        
                     $('#request_preview').hide();
                     $('#form')[0].reset();
                     $('#form').show();
                     $('#req_msg').text(
                         response.message
                     );
+                    <?php endif; ?>
                 } else {
                     $('#req_msg').text(
                         response.message

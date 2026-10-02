@@ -57,10 +57,19 @@ $('.request-row').on('click', function () {
         $('#popup_file').text('No attachment');
     }
 
+    $('#edit_request').data('request-id', requestId);
+
     $('#req_popup').css('display', 'flex');
 
 });
 
 $('#close_popup').on('click', function () {
     $('#req_popup').hide();
+});
+$('#edit_request').on('click', function () {
+
+    const requestId = $(this).data('request-id');
+    window.location.href =
+        'student_hop_requests.php?edit=' +
+        encodeURIComponent(requestId);
 });

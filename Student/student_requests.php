@@ -161,6 +161,19 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <tbody>
 
                         <?php foreach ($reqs as $request): ?>
+                            <?php
+                            
+                            //  Convert status into CSS class.
+                             
+                            $statusClass =
+                                strtolower(
+                                    str_replace(
+                                        ' ',
+                                        '-',
+                                        $request['stats']
+                                    )
+                                );
+                            ?>
 
                             <tr
                                 class="request-row"
@@ -170,6 +183,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 data-semester="<?= htmlspecialchars($request['semester']); ?>"
                                 data-title="<?= htmlspecialchars($request['title']); ?>"
                                 data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                data-category-id="<?= htmlspecialchars($request['category_id']); ?>"
                                 data-label="<?= htmlspecialchars($request['label']); ?>"
                                 data-priority="<?= htmlspecialchars($request['priority']); ?>"
                                 data-status="<?= htmlspecialchars($request['stats']); ?>"
