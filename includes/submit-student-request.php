@@ -2,6 +2,7 @@
 
 require_once 'config.php';
 require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/notification.php';
 
 header('Content-type:application/json');
 //avoid someone directy visits this php
@@ -174,6 +175,43 @@ $stmt->bindParam(":request_file", $request_file);
 
 
 $stmt->execute();
+
+$requestId = $pdo->lastInsertId();
+
+$hopStmt = $pdo->prepare("
+    SELECT user_id
+    FROM head_of_programme
+    WHERE programme_id = :programme_id
+");
+
+$hopStmt->execute([
+    ':programme_id' => $stud['programme_id']
+]);
+
+$hopUser = $hopStmt->fetch(PDO::FETCH_ASSOC);
+
+if ($hopUser) {
+
+    $message =
+        'Student submitted new Request #' .
+        $requestId .
+        ': "' .
+        $title .
+        '".';
+
+    if (!empty($request_file)) {
+        $message .=
+            ' Attachment: ' .
+            $request_file .
+            '.';
+    }
+
+    createNotification(
+        $pdo,
+        $hopUser['user_id'],
+        $message
+    );
+}
 
 echo json_encode([
     'success' => true,

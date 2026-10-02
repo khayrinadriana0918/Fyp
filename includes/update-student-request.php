@@ -142,32 +142,67 @@ if (
     }
 }
 if ($request['request_file'] !== $fileName) {
-    $changes[] = 'Attachment';
+
+    $oldFile = !empty($request['request_file'])
+        ? $request['request_file']
+        : 'No file';
+
+    $newFile = !empty($fileName)
+        ? $fileName
+        : 'No file';
+
+    $changes[] =
+        'Attachment: ' .
+        $oldFile .
+        ' → ' .
+        $newFile;
 }
 
 
 // =========================================================
 // UPDATE REQUEST
 // =========================================================
-
 if ((string)$request['semester'] !== (string)$semester) {
-    $changes[] = 'Semester';
+    $changes[] =
+        'Semester: ' .
+        $request['semester'] .
+        ' → ' .
+        $semester;
 }
 
 if ($request['title'] !== $title) {
-    $changes[] = 'Title';
+    $changes[] =
+        'Title: "' .
+        $request['title'] .
+        '" → "' .
+        $title .
+        '"';
 }
 
 if ($request['label'] !== $label) {
-    $changes[] = 'Label';
+    $changes[] =
+        'Label: "' .
+        $request['label'] .
+        '" → "' .
+        $label .
+        '"';
 }
 
 if ((string)$request['category_id'] !== (string)$categoryId) {
-    $changes[] = 'Category';
+    $changes[] =
+        'Category: ' .
+        $request['category_id'] .
+        ' → ' .
+        $categoryId;
 }
 
 if ($request['description'] !== $description) {
-    $changes[] = 'Description';
+    $changes[] =
+        'Description: "' .
+        $request['description'] .
+        '" → "' .
+        $description .
+        '"';
 }
 
 $updateStmt = $pdo->prepare("
@@ -209,13 +244,18 @@ $hopStmt->execute([
 ]);
 
 $hop = $hopStmt->fetch(PDO::FETCH_ASSOC);
-if ($hop) {
-    $changedFields = implode(', ', $changes);
+if ($hop && !empty($changes)) {
+
+    $changedFields = implode('; ', $changes);
+
     createNotification(
         $pdo,
         $hop['user_id'],
-        'Student updated Request #' . $requestId . ': ' .
-            $changedFields . '.'
+        'Student updated Request #' .
+            $requestId .
+            ': ' .
+            $changedFields .
+            '.'
     );
 }
 

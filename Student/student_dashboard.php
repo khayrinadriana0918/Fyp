@@ -2,6 +2,7 @@
 
 require_once '../includes/config.php';
 require_once __DIR__ . '/../includes/database.php';
+require_once __DIR__ . '/../includes/notification.php';
 
 /* =========================================================
    CHECK LOGIN
@@ -11,6 +12,8 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 $user = $_SESSION['user_id'];
+$notifications = getNotifs($pdo, $user);
+$unreadNotifCount = getUnreadNotifCount($pdo, $user);
 /* =========================================================
    GET LOGGED-IN STUDENT INFORMATION
 ========================================================= */
@@ -126,7 +129,7 @@ $requestCounts =
         content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard | SIMSAP</title>
 
-    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="../CSS/popup.css">
 
     <script
@@ -152,15 +155,56 @@ $requestCounts =
                     <span class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
-                    <button
-                        type="button"
-                        class="notification-button"
-                        title="Notifications">
-                        🔔
-                    </button>
-                    <a href="../includes/logout.php" class="logout">
-                        Log out
-                    </a>
+
+                    <div class="notif-container">
+
+                        <button
+                            type="button"
+                            class="notification-button"
+                            id="notification_btn"
+                            title="Notifications">
+
+                            <img
+                                id="notif_icon"
+                                src="<?= $unreadNotifCount > 0
+                                            ? '../pictures/haveNotif.png'
+                                            : '../pictures/noNotif.png'; ?>"
+                                alt="Notification">
+
+                        </button>
+
+                        <div class="notification-dropdown" id="notification_dropdown">
+                            <div class="notification-header">
+                                <strong>Notifications</strong>
+                            </div>
+
+                            <?php if (empty($notifications)): ?>
+
+                                <div class="notification-empty">
+                                    No notifications.
+                                </div>
+                            <?php else: ?>
+                                <?php foreach ($notifications as $notif): ?>
+                                    <div class="notification-item <?= $notif['n_mark_read'] == 0 ? 'unread' : ''; ?>"
+                                        data-notification-id="<?= htmlspecialchars($notif['n_id']); ?>">
+                                        <p>
+                                            <?= htmlspecialchars($notif['n_message']); ?>
+                                        </p>
+                                        <small>
+                                            <?= htmlspecialchars(
+                                                date(
+                                                    'd M Y, h:i A',
+                                                    strtotime($notif['n_created_at'])
+                                                )
+                                            ); ?>
+                                        </small>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </header>
@@ -449,6 +493,21 @@ $requestCounts =
         });
     </script>
     <script src="../JS/requesterPopup.js"></script>
+    <script>
+        $('#notification_btn').on('click', function(event) {
+            event.stopPropagation();
+
+            $('#notification_dropdown').toggleClass('show');
+        });
+
+        $(document).on('click', function() {
+            $('#notification_dropdown').removeClass('show');
+        });
+
+        $('#notification_dropdown').on('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
 </body>
 
 </html>

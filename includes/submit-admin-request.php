@@ -2,6 +2,7 @@
 
 require_once 'config.php';
 require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/notification.php';
 
 header('Content-type:application/json');
 //avoid someone directy visits this php
@@ -50,6 +51,40 @@ WHERE user_id = :user_id
 $stmt->execute([
     ':user_id' => $user
 ]);
+
+$requestId = $pdo->lastInsertId();
+
+$adminStmt = $pdo->prepare("
+    SELECT user_id
+    FROM administrator
+");
+
+$adminStmt->execute();
+
+$admins = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($admins as $admin) {
+
+    $message =
+        'Head of Programme submitted new Request #' .
+        $requestId .
+        ': "' .
+        $ar_title .
+        '".';
+
+    if (!empty($ar_request_file)) {
+        $message .=
+            ' Attachment: ' .
+            $ar_request_file .
+            '.';
+    }
+
+    createNotification(
+        $pdo,
+        $admin['user_id'],
+        $message
+    );
+}
 
 $hop = $stmt->fetch(PDO::FETCH_ASSOC);
 

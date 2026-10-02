@@ -81,15 +81,6 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <span class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
-                    <button
-                        type="button"
-                        class="notification-button"
-                        title="Notifications">
-                        🔔
-                    </button>
-                    <a href="../includes/logout.php" class="logout">
-                        Log out
-                    </a>
                 </div>
             </div>
         </header>

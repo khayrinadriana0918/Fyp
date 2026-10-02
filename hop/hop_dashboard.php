@@ -131,7 +131,7 @@ $requestCounts =
         name="viewport"
         content="width=device-width, initial-scale=1.0">
     <title>HoP Dashboard | SIMSAP</title>
-    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="../CSS/popup.css">
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
@@ -156,18 +156,27 @@ $requestCounts =
                     <span class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
+
                     <div class="notif-container">
+
                         <button
                             type="button"
                             class="notification-button"
                             id="notification_btn"
                             title="Notifications">
-                            <img id="notif_icon"
-                                src="<?= $unreadNotifCount > 0 ? '../pictures/haveNotif.png' : '../pictures/noNotif.png'; ?>"
-                                alt="">
+
+                            <img
+                                id="notif_icon"
+                                src="<?= $unreadNotifCount > 0
+                                            ? '../pictures/haveNotif.png'
+                                            : '../pictures/noNotif.png'; ?>"
+                                alt="Notification">
+
                         </button>
 
-                        <div class="notification-dropdown" id="notification_dropdown">
+                        <div
+                            class="notification-dropdown"
+                            id="notification_dropdown">
 
                             <div class="notification-header">
                                 <strong>Notifications</strong>
@@ -180,9 +189,11 @@ $requestCounts =
                                 </div>
 
                             <?php else: ?>
+
                                 <?php foreach ($notifications as $notif): ?>
 
-                                    <div class="notification-item <?= $notif['n_mark_read'] == 0 ? 'unread' : ''; ?>"
+                                    <div
+                                        class="notification-item <?= $notif['n_mark_read'] == 0 ? 'unread' : ''; ?>"
                                         data-notification-id="<?= htmlspecialchars($notif['n_id']); ?>">
 
                                         <p>
@@ -197,15 +208,16 @@ $requestCounts =
                                                 )
                                             ); ?>
                                         </small>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
-                    </div>
 
-                    <a href="../includes/logout.php" class="logout">
-                        Log out
-                    </a>
+                                    </div>
+
+                                <?php endforeach; ?>
+
+                            <?php endif; ?>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </header>

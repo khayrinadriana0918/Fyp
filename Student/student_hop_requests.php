@@ -106,17 +106,8 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
                 </div>
                 <div class="header-user">
                     <span class="header-name">
-                        Hi, <?= htmlspecialchars($userInfo['name']); ?>
+                        <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
-                    <button
-                        type="button"
-                        class="notification-button"
-                        title="Notifications">
-                        🔔
-                    </button>
-                    <a href="../includes/logout.php" class="logout">
-                        Log out
-                    </a>
                 </div>
             </div>
         </header>

@@ -2,6 +2,7 @@
 
 require_once 'config.php';
 require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/notification.php';
 
 if (!isset($_SESSION['user_id'])) {
     die("Access denied.");
@@ -44,7 +45,10 @@ if (!$hop) {
 
 // make sure request belong to head of programme
 $checkStmt = $pdo->prepare("
-    SELECT r.request_id
+    SELECT
+    r.request_id,
+    r.feedback,
+    s.user_id AS student_user_id
 
     FROM request r
 
@@ -77,5 +81,25 @@ $stmt->execute([
     ':feedback' => $feedback,
     ':request_id' => $requestId
 ]);
+
+if ($allowedRequest['feedback'] !== $feedback) {
+
+    $oldFeedback =
+        !empty($allowedRequest['feedback'])
+        ? $allowedRequest['feedback']
+        : 'No feedback';
+
+    createNotification(
+        $pdo,
+        $allowedRequest['student_user_id'],
+        'Feedback for Request #' .
+        $requestId .
+        ' changed: "' .
+        $oldFeedback .
+        '" → "' .
+        $feedback .
+        '".'
+    );
+}
 
 echo "success";

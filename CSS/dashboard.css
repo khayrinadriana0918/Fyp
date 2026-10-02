@@ -59,7 +59,7 @@ header {
     font-weight: 500;
 }
 
-/*hi, [name]+ notif + log out*/
+/*hi, [name]+ notif*/
 .header-user {
     display: flex;
     align-items: center;
@@ -68,36 +68,41 @@ header {
     font-size: 13px;
 }
 
-.logout {
-    text-decoration: none;
-}
-
-.logout:hover {
-    text-decoration: underline;
-}
+/* notifications */
 
 .notif-container {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .notification-button {
-    border: none;
-    background: none;
-    cursor: pointer;
+    width: 34px;
+    height: 34px;
     padding: 5px;
+
+    border: none;
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
 }
 
 #notif_icon {
     width: 24px;
     height: 24px;
-    object-fit: contain;
     display: block;
+    object-fit: contain;
 }
 
 .notification-dropdown {
     display: none;
+
     position: absolute;
-    top: 45px;
+    top: 40px;
     right: 0;
 
     width: 350px;
@@ -149,6 +154,7 @@ header {
     padding: 20px;
     text-align: center;
 }
+
 /* =========================================
    LEFT SIDEBAR
 ========================================= */

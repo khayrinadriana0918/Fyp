@@ -2,6 +2,7 @@
 
 require_once 'config.php';
 require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/notification.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../index.php");
@@ -79,8 +80,11 @@ elseif ($requestType === 'student') {
         die("Access denied.");
     }
 
-    $checkStmt=$pdo->prepare("
-    SELECT r.request_id
+    $checkStmt = $pdo->prepare("
+    SELECT
+    r.request_id,
+    r.stats,
+    s.user_id AS student_user_id
     FROM request r
     
     INNER JOIN student s
@@ -90,23 +94,23 @@ elseif ($requestType === 'student') {
     AND s.programme_id=:programme_id"
     );
     $checkStmt->execute([
-        ':request_id'=>$requestId,
-        ':programme_id'=>$hop['programme_id']
+        ':request_id' => $requestId,
+        ':programme_id' => $hop['programme_id']
     ]);
-    $allowedRequest=$checkStmt->fetch(PDO::FETCH_ASSOC);
-    if(!$allowedRequest){
+    $allowedRequest = $checkStmt->fetch(PDO::FETCH_ASSOC);
+    if (!$allowedRequest) {
         die("Access denied.");
     }
 
-    if($status==='Completed'){
-        $query="
+    if ($status === 'Completed') {
+        $query = "
         UPDATE request
         SET stats =:status,
         resolved_date=NOW()
         WHERE request_id=:request_id
         ";
-    }else{
-        $query="
+    } else {
+        $query = "
         UPDATE request
         SET
          stats=:status,
@@ -127,6 +131,24 @@ $stmt->execute([
     ':status' => $status,
     ':request_id' => $requestId
 ]);
+
+if (
+    $requestType === 'student' &&
+    $allowedRequest['stats'] !== $status
+) {
+
+    createNotification(
+        $pdo,
+        $allowedRequest['student_user_id'],
+        'Request #' .
+        $requestId .
+        ' status changed: ' .
+        $allowedRequest['stats'] .
+        ' → ' .
+        $status .
+        '.'
+    );
+}
 
 header("Location: " . $returnPage);
 exit();

@@ -38,7 +38,7 @@ if ($userInfo['role'] === 'student') {
     WHERE user_id=:user_id";
 
     $roleIdLabel = "Student ID";
-} elseif ($userInfo['role'] === 'hop') {
+} elseif ($userInfo['role'] === 'head_of_programme') {
     $roleQuery = "
     SELECT
     staff_id AS role_id,
@@ -82,7 +82,7 @@ $userInfo = array_merge(
 if ($userInfo['role'] === 'student') {
 
     $dashboardLink = "Student/student_dashboard.php";
-} elseif ($userInfo['role'] === 'hop') {
+} elseif ($userInfo['role'] === 'head_of_programme') {
 
     $dashboardLink = "hop/hop_Dashboard.php";
 } elseif ($userInfo['role'] === 'system_admin') {
@@ -129,81 +129,72 @@ if ($userInfo['role'] === 'student') {
                     <span class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
-                    <button
-                        type="button"
-                        class="notification-button"
-                        title="Notifications">
-                        🔔
-                    </button>
-                    <a href="includes/logout.php" class="logout">
-                        Log out
-                    </a>
                 </div>
             </div>
         </header>
 
-                    <a href="<?= htmlspecialchars($dashboardLink); ?>" class="back-dashboard"><- Back to Dashboard</a>
-        <!-- =====================================================
+        <a href="<?= htmlspecialchars($dashboardLink); ?>" class="back-dashboard">← Back to Dashboard</a>
+                <!-- =====================================================
          MIDDLE CONTENT
     ====================================================== -->
 
-        <main class="middle-content">
-            <section class="account-section">
+                <main class="middle-content">
+                    <section class="account-section">
 
 
-                <h2>
-                    Account Information
-                </h2>
+                        <h2>
+                            Account Information
+                        </h2>
 
-                <div class="account-info">
-                    <!-- USER ID -->
-                    <div>
-                        <span>User ID</span>
-                        <strong><?= htmlspecialchars($userInfo['user_id']); ?></strong>
-                    </div>
+                        <div class="account-info">
+                            <!-- USER ID -->
+                            <div>
+                                <span>User ID</span>
+                                <strong><?= htmlspecialchars($userInfo['user_id']); ?></strong>
+                            </div>
 
-                    <!-- ROLE ID -->
-                    <div>
-                        <span><?= htmlspecialchars($roleIdLabel); ?></span>
-                        <strong><?= htmlspecialchars($userInfo['role_id']); ?></strong>
-                    </div>
+                            <!-- ROLE ID -->
+                            <div>
+                                <span><?= htmlspecialchars($roleIdLabel); ?></span>
+                                <strong><?= htmlspecialchars($userInfo['role_id']); ?></strong>
+                            </div>
 
-                    <!-- FULL NAME -->
-                    <div>
-                        <span>Full Name</span>
-                        <strong><?= htmlspecialchars($userInfo['name']); ?></strong>
-                    </div>
+                            <!-- FULL NAME -->
+                            <div>
+                                <span>Full Name</span>
+                                <strong><?= htmlspecialchars($userInfo['name']); ?></strong>
+                            </div>
 
-                    <?php if ($userInfo['role']==='student' || $userInfo['role']==='hop'): ?>
-                        <div>
-                            <span>Programme</span>
+                            <?php if ($userInfo['role'] === 'student' || $userInfo['role'] === 'head_of_programme'): ?>
+                                <div>
+                                    <span>Programme</span>
 
-                            <strong>
-                                <?= !empty($userInfo['programme_id'])
-                                ? htmlspecialchars($userInfo['programme_id'])
-                                :'Not selected'; ?>
-                            </strong>
+                                    <strong>
+                                        <?= !empty($userInfo['programme_id'])
+                                            ? htmlspecialchars($userInfo['programme_id'])
+                                            : 'Not selected'; ?>
+                                    </strong>
+                                </div>
+                            <?php endif; ?>
+                            <!-- ACCOUNT CREATED -->
+                            <div>
+                                <span>Account Created</span>
+                                <strong>
+                                    <?php
+                                    echo htmlspecialchars(
+                                        date(
+                                            'd M Y',
+                                            strtotime(
+                                                $userInfo['created_at']
+                                            )
+                                        )
+                                    );
+                                    ?>
+                                </strong>
+                            </div>
                         </div>
-                        <?php endif; ?>
-                    <!-- ACCOUNT CREATED -->
-                    <div>
-                        <span>Account Created</span>
-                        <strong>
-                            <?php
-                            echo htmlspecialchars(
-                                date(
-                                    'd M Y',
-                                    strtotime(
-                                        $userInfo['created_at']
-                                    )
-                                )
-                            );
-                            ?>
-                        </strong>
-                    </div>
-                </div>
-            </section>
-        </main>
+                    </section>
+                </main>
     </div>
     <script>
         $(document).ready(function() {

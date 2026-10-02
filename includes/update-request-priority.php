@@ -2,6 +2,7 @@
 
 require_once 'config.php';
 require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/notification.php';
 
 if (!isset($_SESSION['user_id'])) {
     die("Access denied.");
@@ -53,7 +54,9 @@ if ($requestType === 'student') {
     }
 
     $checkStmt = $pdo->prepare("
-        SELECT r.request_id
+        SELECT r.request_id,
+        r.priority,
+        s.user_id AS student_user_id
         FROM request r
 
         INNER JOIN student s
@@ -89,6 +92,21 @@ if ($requestType === 'student') {
         ':priority' => $priority,
         ':request_id' => $requestId
     ]);
+
+    if ($allowedRequest['priority'] !== $priority) {
+
+        createNotification(
+            $pdo,
+            $allowedRequest['student_user_id'],
+            'Request #' .
+                $requestId .
+                ' priority changed: ' .
+                $allowedRequest['priority'] .
+                ' → ' .
+                $priority .
+                '.'
+        );
+    }
 
     exit("success");
 }
