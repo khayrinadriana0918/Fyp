@@ -10,6 +10,7 @@ $('.request-row').on('click', function () {
     const status = $(this).data('status');
     const desc = $(this).data('description');
     const feedback = $(this).data('feedback');
+
     const file = $(this).data('file');
     const submitDate = $(this).data('submitted-date');
     const resolved = $(this).data('resolved-date');

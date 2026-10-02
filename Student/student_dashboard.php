@@ -315,11 +315,11 @@ $requestCounts =
                             <thead>
                                 <tr>
                                     <th>Request</th>
-                                    <th>Name</th>
-                                    <th>Student ID</th>
+                                    <th>Semester</th>
                                     <th>Title</th>
                                     <th>Category</th>
                                     <th>Status</th>
+                                    <th>Priority</th>
                                     <th>Last Updated</th>
                                 </tr>
                             </thead>
@@ -350,6 +350,7 @@ $requestCounts =
                                         data-priority="<?= htmlspecialchars($request['priority']); ?>"
                                         data-status="<?= htmlspecialchars($request['stats']); ?>"
                                         data-description="<?= htmlspecialchars($request['description']); ?>"
+                                        data-feedback="<?= htmlspecialchars($request['feedback'] ?? ''); ?>"
                                         data-file="<?= htmlspecialchars($request['request_file']); ?>"
                                         data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
                                         data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
@@ -361,16 +362,9 @@ $requestCounts =
                                             ); ?>
                                         </td>
 
-                                        <!-- STUDENT NAME -->
-                                        <td>
-                                            <?= htmlspecialchars(
-                                                $request['requester_name']
-                                            ); ?>
-                                        </td>
-
-                                        <!-- STUDENT ID -->
-                                        <td>
-                                            <?= htmlspecialchars($request['requester_id']); ?>
+                                        <!-- SEMESTER -->
+                                        <td class="request-semester">
+                                            <?= htmlspecialchars($request['semester']); ?>
                                         </td>
 
                                         <!-- TITLE -->
@@ -388,6 +382,10 @@ $requestCounts =
                                             <span class="status status-<?= htmlspecialchars($statusClass); ?>">
                                                 <?= htmlspecialchars($request['stats']); ?>
                                             </span>
+                                        </td>
+                                        <!-- PRIORITY -->
+                                        <td>
+                                            <?= htmlspecialchars($request['priority']); ?>
                                         </td>
 
                                         <!-- LAST UPDATED -->
