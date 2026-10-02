@@ -2,6 +2,7 @@
 
 require_once '../includes/config.php';
 require_once __DIR__ . '/../includes/database.php';
+require_once __DIR__ . '/../includes/notification.php';
 
 /* =========================================================
    CHECK LOGIN
@@ -11,6 +12,8 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 $user = $_SESSION['user_id'];
+$notifications = getNotifs($pdo, $user);
+$unreadNotifCount = getUnreadNotifCount($pdo, $user);
 /* =========================================================
    GET LOGGED-IN HOP INFORMATION
 ========================================================= */
@@ -153,20 +156,56 @@ $requestCounts =
                     <span class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
-                    <button
-                        type="button"
-                        class="notification-button"
-                        title="Notifications">
-                        🔔
-                    </button>
+                    <div class="notif-container">
+                        <button
+                            type="button"
+                            class="notification-button"
+                            id="notification_btn"
+                            title="Notifications">
+                            <img src="<?= $unreadNotifCount > 0
+                                            ? '../pictures/haveNotif.png' : '../pictures/noNotif.png'; ?>" alt="Notifications" id="notif_icon">
+                        </button>
+
+                        <div class="notification-dropdown" id="notification_dropdown">
+
+                            <div class="notification-header">
+                                <strong>Notifications</strong>
+                            </div>
+
+                            <?php if (empty($notifications)): ?>
+
+                                <div class="notification-empty">
+                                    No notifications.
+                                </div>
+
+                            <?php else: ?>
+                                <?php foreach ($notifications as $notif): ?>
+
+                                    <div class="notification-item <?= $notif['n_mark_read'] == 0 ? 'unread' : ''; ?>"
+                                        data-notification-id="<?= htmlspecialchars($notif['n_id']); ?>">
+
+                                        <p>
+                                            <?= htmlspecialchars($notif['n_message']); ?>
+                                        </p>
+
+                                        <small>
+                                            <?= htmlspecialchars(
+                                                date(
+                                                    'd M Y, h:i A',
+                                                    strtotime($notif['n_created_at'])
+                                                )
+                                            ); ?>
+                                        </small>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
                     <a href="../includes/logout.php" class="logout">
                         Log out
                     </a>
                 </div>
-            </div>
-
-            <div class="top-nav">
-                <a href="about.php">About</a>
             </div>
         </header>
 
@@ -176,6 +215,11 @@ $requestCounts =
         <aside class="sidebar">
             <nav>
                 <ul>
+                    <li>
+                        <a href="hop_Dashboard.php">
+                            About
+                        </a>
+                    </li>
                     <li>
                         <a href="hop_Dashboard.php" class="active">
                             Dashboard
@@ -450,6 +494,25 @@ $requestCounts =
         <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
     </div>
     <script src="../JS/receiverPopup.js"></script>
+
+    <script>
+        // open/close notif dropdown
+        $('#notification_btn').on('click', function(event) {
+            event.stopPropagation();
+
+            $('#notification_dropdown').toggleClass('show');
+        });
+
+        //close
+        $(document).on('click', function() {
+            $('#notification_dropdown').removeClass('show');
+        });
+
+        //prevent close if click inside dropdown
+        $('#notification_dropdown').on('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
 </body>
 
 </html>

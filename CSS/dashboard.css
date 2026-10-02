@@ -67,19 +67,87 @@ header {
 
     font-size: 13px;
 }
-.logout{
+
+.logout {
     text-decoration: none;
 }
-.logout:hover{
+
+.logout:hover {
     text-decoration: underline;
 }
+
+.notification-container {
+    position: relative;
+}
+
 .notification-button {
     border: none;
-    background: transparent;
-    font-size: 18px;
+    background: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.notification-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.notification-dropdown {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+
+    width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    z-index: 1000;
+}
+
+.notification-dropdown.show {
+    display: block;
+}
+
+.notification-header {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.notification-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
     cursor: pointer;
 }
 
+.notification-item p {
+    margin: 0 0 5px;
+}
+
+.notification-item small {
+    color: #777;
+}
+
+.notification-item.unread {
+    font-weight: bold;
+    background: #f3f3f3;
+}
+
+.notification-item:hover {
+    background: #eee;
+}
+
+.notification-empty {
+    padding: 20px;
+    text-align: center;
+}
 /* =========================================
    LEFT SIDEBAR
 ========================================= */
@@ -541,10 +609,11 @@ header {
         display: block;
     }
 
-    .system-name h1{
+    .system-name h1 {
         font-size: 14px;
         font-weight: 1000;
     }
+
     .sidebar,
     header,
     .middle-content,
