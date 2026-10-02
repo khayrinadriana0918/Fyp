@@ -81,6 +81,8 @@ if (!$request) {
 // KEEP EXISTING FILE BY DEFAULT
 $fileName = $request['request_file'];
 
+$changes = [];
+
 // REPLACE FILE IF STUDENT UPLOADS A NEW ONE
 if (
     isset($_FILES['request_file']) &&
@@ -147,7 +149,6 @@ if ($request['request_file'] !== $fileName) {
 // =========================================================
 // UPDATE REQUEST
 // =========================================================
-$changes = [];
 
 if ((string)$request['semester'] !== (string)$semester) {
     $changes[] = 'Semester';
@@ -209,15 +210,13 @@ $hopStmt->execute([
 
 $hop = $hopStmt->fetch(PDO::FETCH_ASSOC);
 if ($hop) {
-    if ($hop && !empty($changes)) {
-        $changedFields= implode(', ', $changes);
-        createNotification(
-            $pdo,
-            $hop['user_id'],
-            'Student updated Request #' . $requestId . ': ' .
-                $changedFields . '.'
-        );
-    }
+    $changedFields = implode(', ', $changes);
+    createNotification(
+        $pdo,
+        $hop['user_id'],
+        'Student updated Request #' . $requestId . ': ' .
+            $changedFields . '.'
+    );
 }
 
 echo json_encode([

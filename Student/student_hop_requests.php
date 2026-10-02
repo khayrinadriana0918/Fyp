@@ -283,10 +283,9 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
                     <strong>Category:</strong>
                     <span id="preview_category"></span>
                 </p>
-                <p>
-                    <strong>Priority:</strong>
-                    <span id="preview_priority"></span>
-                </p>
+                <?php if (!$editMode): ?>
+                    <p><strong>Priority:</strong> <span id="preview_priority"></span></p>
+                <?php endif; ?>
                 <p>
                     <strong>Description:</strong>
                 </p>
@@ -362,41 +361,38 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
             label || 'No labels'
         );
         $('#preview_category').text(category);
-        <?php if (!$editMode): ?>
-                <p><strong>Priority:</strong> <span id = "preview_priority"></span></p>
-            <?php endif; ?>
-            $('#preview_description').text(description);
+        $('#preview_description').text(description);
 
-            // File name
-            if (fileInput.files.length > 0) {
-                $('#preview_file').text(
-                    fileInput.files[0].name
-                );
-                $('#remove_file_btn').show();
-            } else {
-                $('#preview_file').text(
-                    'No file attached'
-                );
-                $('#remove_file_btn').hide();
-            }
-            //Remove file
-            $('#remove_file_btn').on('click', function() {
+        // File name
+        if (fileInput.files.length > 0) {
+            $('#preview_file').text(
+                fileInput.files[0].name
+            );
+            $('#remove_file_btn').show();
+        } else {
+            $('#preview_file').text(
+                'No file attached'
+            );
+            $('#remove_file_btn').hide();
+        }
+        //Remove file
+        $('#remove_file_btn').on('click', function() {
 
-                //clear file input
-                $('#request_file').val('');
+            //clear file input
+            $('#request_file').val('');
 
-                //change preview
-                $('#preview_file').text('No file attached');
+            //change preview
+            $('#preview_file').text('No file attached');
 
-                //hide remove btn
-                $('#remove_file_btn').hide();
-            });
+            //hide remove btn
+            $('#remove_file_btn').hide();
+        });
 
-            // Hide form
-            $('#form').hide();
+        // Hide form
+        $('#form').hide();
 
-            // Show preview
-            $('#request_preview').show();
+        // Show preview
+        $('#request_preview').show();
     });
     // GO BACK AND EDIT
 
