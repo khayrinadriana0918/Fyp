@@ -60,8 +60,8 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
     ");
 
     $editStmt->execute([
-    ':request_id'=>$requestId,
-    ':user_id'=>$user
+        ':request_id' => $requestId,
+        ':user_id' => $user
     ]);
 
     $editRequest = $editStmt->fetch(PDO::FETCH_ASSOC);
@@ -222,16 +222,18 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
                     </div>
                     <br>
 
-                    <div class="priority-box">
-                        <label for="priority">Priority:</label>
-                        <select name="priority">
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                            <option value="Urgent">Urgent</option>
-                        </select>
-                    </div>
-                    <br>
+                    <?php if (!$editMode): ?>
+                        <div class="priority-box">
+                            <label for="priority">Priority:</label>
+                            <select name="priority">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <br>
+                    <?php endif; ?>
 
                     <div class="desc-box">
                         <label for="desc">Describe your request/issue regarding the system:</label><br>
@@ -244,7 +246,8 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
                         <small>.jpg,.jpeg,.png,.pdf only</small><br>
                         <input type="file" name="request_file" id="request_file" accept=".jpg,.jpeg,.png,.pdf">
 
-                        <?php if ($editMode && !empty($editRequest['request_file'])
+                        <?php if (
+                            $editMode && !empty($editRequest['request_file'])
                         ): ?>
                             <p>Current file:
                                 <?= htmlspecialchars($editRequest['request_file']); ?>
@@ -338,8 +341,14 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
         const category =
             $('select[name="c_id"] option:selected').text();
 
-        const priority =
-            $('select[name="priority"]').val();
+        <?php if (!$editMode): ?>
+
+            const priority =
+                $('select[name="priority"]').val();
+
+            $('#preview_priority').text(priority);
+
+        <?php endif; ?>
 
         const description = $('#desc').val();
 
@@ -353,39 +362,41 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
             label || 'No labels'
         );
         $('#preview_category').text(category);
-        $('#preview_priority').text(priority);
-        $('#preview_description').text(description);
+        <?php if (!$editMode): ?>
+                <p><strong>Priority:</strong> <span id = "preview_priority"></span></p>
+            <?php endif; ?>
+            $('#preview_description').text(description);
 
-        // File name
-        if (fileInput.files.length > 0) {
-            $('#preview_file').text(
-                fileInput.files[0].name
-            );
-            $('#remove_file_btn').show();
-        } else {
-            $('#preview_file').text(
-                'No file attached'
-            );
-            $('#remove_file_btn').hide();
-        }
-        //Remove file
-        $('#remove_file_btn').on('click', function() {
+            // File name
+            if (fileInput.files.length > 0) {
+                $('#preview_file').text(
+                    fileInput.files[0].name
+                );
+                $('#remove_file_btn').show();
+            } else {
+                $('#preview_file').text(
+                    'No file attached'
+                );
+                $('#remove_file_btn').hide();
+            }
+            //Remove file
+            $('#remove_file_btn').on('click', function() {
 
-            //clear file input
-            $('#request_file').val('');
+                //clear file input
+                $('#request_file').val('');
 
-            //change preview
-            $('#preview_file').text('No file attached');
+                //change preview
+                $('#preview_file').text('No file attached');
 
-            //hide remove btn
-            $('#remove_file_btn').hide();
-        });
+                //hide remove btn
+                $('#remove_file_btn').hide();
+            });
 
-        // Hide form
-        $('#form').hide();
+            // Hide form
+            $('#form').hide();
 
-        // Show preview
-        $('#request_preview').show();
+            // Show preview
+            $('#request_preview').show();
     });
     // GO BACK AND EDIT
 
@@ -406,8 +417,8 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
 
         $.ajax({
             url: <?= $editMode
-            ?"'../includes/update-student-request.php'"
-            :"'../includes/submit-student-request.php'"; ?>,
+                        ? "'../includes/update-student-request.php'"
+                        : "'../includes/submit-student-request.php'"; ?>,
 
             type: 'POST',
             data: formData,
@@ -417,16 +428,16 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
 
             success: function(response) {
                 if (response.success) {
-                    <?php if($editMode): ?>
-                        window.location.href='student_requests.php';
+                    <?php if ($editMode): ?>
+                        window.location.href = 'student_requests.php';
                     <?php else: ?>
-                        
-                    $('#request_preview').hide();
-                    $('#form')[0].reset();
-                    $('#form').show();
-                    $('#req_msg').text(
-                        response.message
-                    );
+
+                        $('#request_preview').hide();
+                        $('#form')[0].reset();
+                        $('#form').show();
+                        $('#req_msg').text(
+                            response.message
+                        );
                     <?php endif; ?>
                 } else {
                     $('#req_msg').text(

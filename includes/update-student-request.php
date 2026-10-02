@@ -2,7 +2,7 @@
 
 require_once 'config.php';
 require_once __DIR__ . '/database.php';
-require_once './inc_reuse/notification.php';
+require_once __DIR__ . '/notification.php';
 
 header('Content-Type: application/json');
 
@@ -29,7 +29,6 @@ $semester = $_POST['semester'] ?? '';
 $title = trim($_POST['title'] ?? '');
 $label = trim($_POST['label'] ?? '');
 $categoryId = $_POST['c_id'] ?? '';
-$priority = $_POST['priority'] ?? '';
 $description = trim($_POST['desc'] ?? '');
 
 if (
@@ -37,7 +36,6 @@ if (
     $semester === '' ||
     $title === '' ||
     $categoryId === '' ||
-    $priority === '' ||
     $description === ''
 ) {
     echo json_encode([
@@ -50,8 +48,13 @@ if (
 
 $checkStmt = $pdo->prepare("
     SELECT
-        r.request_id,
-        r.request_file
+    r.request_id,
+    r.semester,
+    r.title,
+    r.label,
+    r.category_id,
+    r.description,
+    r.request_file
     FROM request r
 
     INNER JOIN student s
@@ -136,11 +139,35 @@ if (
         exit();
     }
 }
+if ($request['request_file'] !== $fileName) {
+    $changes[] = 'Attachment';
+}
 
 
 // =========================================================
 // UPDATE REQUEST
 // =========================================================
+$changes = [];
+
+if ((string)$request['semester'] !== (string)$semester) {
+    $changes[] = 'Semester';
+}
+
+if ($request['title'] !== $title) {
+    $changes[] = 'Title';
+}
+
+if ($request['label'] !== $label) {
+    $changes[] = 'Label';
+}
+
+if ((string)$request['category_id'] !== (string)$categoryId) {
+    $changes[] = 'Category';
+}
+
+if ($request['description'] !== $description) {
+    $changes[] = 'Description';
+}
 
 $updateStmt = $pdo->prepare("
     UPDATE request
@@ -150,7 +177,6 @@ $updateStmt = $pdo->prepare("
         title = :title,
         label = :label,
         category_id = :category_id,
-        priority = :priority,
         description = :description,
         request_file = :request_file
 
@@ -162,7 +188,6 @@ $updateStmt->execute([
     ':title' => $title,
     ':label' => $label,
     ':category_id' => $categoryId,
-    ':priority' => $priority,
     ':description' => $description,
     ':request_file' => $fileName,
     ':request_id' => $requestId
@@ -184,10 +209,15 @@ $hopStmt->execute([
 
 $hop = $hopStmt->fetch(PDO::FETCH_ASSOC);
 if ($hop) {
-    createNotification(
-        $pdo,$hop['user_id'],
-        'Student updated Request #'. $requestId.'.'
-    );
+    if ($hop && !empty($changes)) {
+        $changedFields= implode(', ', $changes);
+        createNotification(
+            $pdo,
+            $hop['user_id'],
+            'Student updated Request #' . $requestId . ': ' .
+                $changedFields . '.'
+        );
+    }
 }
 
 echo json_encode([
