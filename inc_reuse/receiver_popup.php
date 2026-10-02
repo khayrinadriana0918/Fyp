@@ -82,6 +82,56 @@
                             <button type="submit">Update Status</button>
                         </form>
                     </div>
+                    <div id="receiver_priority_form" style="display: none;">
+
+                        <form id="update_priority_form">
+
+                            <input type="hidden" id="priority_request_id" name="request_id">
+
+                            <input type="hidden" name="request_type" value="student">
+
+                            <label for="receiver_new_priority">
+                                Priority:
+                            </label>
+
+                            <select name="priority" id="receiver_new_priority" required>
+
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Urgent">Urgent</option>
+
+                            </select>
+
+                            <button type="submit">Update Priority</button>
+
+                        </form>
+
+                    </div>
+                    <div id="receiver_feedback_form" style="display: none;">
+
+                        <form id="update_feedback_form">
+
+                            <input type="hidden" id="feedback_request_id" name="request_id">
+
+                            <input type="hidden"name="request_type" value="student">
+
+                            <label for="receiver_feedback">
+                                Give Feedback:
+                            </label>
+
+                            <textarea
+                                name="feedback"
+                                id="receiver_feedback"
+                                rows="5"
+                                required
+                                placeholder="Enter feedback for the student regarding the request."></textarea>
+
+                            <button type="submit">Sent Feedback</button>
+
+                        </form>
+
+                    </div>
                 </div>
             </div>
         </div>

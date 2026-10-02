@@ -321,9 +321,11 @@ $requestCounts =
                                     <th>Request</th>
                                     <th>Name</th>
                                     <th>Student ID</th>
+                                    <th>Semester</th>
                                     <th>Title</th>
                                     <th>Category</th>
                                     <th>Status</th>
+                                    <th>Feedback</th>
                                     <th>Last Updated</th>
                                 </tr>
                             </thead>
@@ -354,9 +356,10 @@ $requestCounts =
                                         data-priority="<?= htmlspecialchars($request['priority']); ?>"
                                         data-status="<?= htmlspecialchars($request['stats']); ?>"
                                         data-description="<?= htmlspecialchars($request['description']); ?>"
-                                        data-file="<?= htmlspecialchars($request['request_file']?? ''); ?>"
+                                        data-file="<?= htmlspecialchars($request['request_file'] ?? ''); ?>"
+                                        data-feedback="<?= htmlspecialchars($request['feedback'] ?? '') ?>"
                                         data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
-                                        data-resolved-date="<?= htmlspecialchars($request['resolved_date']?? ''); ?>">
+                                        data-resolved-date="<?= htmlspecialchars($request['resolved_date'] ?? ''); ?>">
 
                                         <!-- REQUEST ID -->
                                         <td class="request-id">
@@ -377,6 +380,11 @@ $requestCounts =
                                             <?= htmlspecialchars($request['requester_id']); ?>
                                         </td>
 
+                                        <!-- semester -->
+                                        <td class="request-semester">
+                                            <?= htmlspecialchars($request['semester']); ?>
+                                        </td>
+
                                         <!-- TITLE -->
                                         <td class="request-title">
                                             <?= htmlspecialchars($request['title']); ?>
@@ -392,6 +400,15 @@ $requestCounts =
                                             <span class="status status-<?= htmlspecialchars($statusClass); ?>">
                                                 <?= htmlspecialchars($request['stats']); ?>
                                             </span>
+                                        </td>
+
+                                        <!-- FEEDBACK -->
+                                        <td class="request-feedback">
+                                            <?php if (!empty($request['feedback'])): ?>
+                                                <?= htmlspecialchars($request['feedback']); ?>
+                                            <?php else: ?>
+                                                No feedback provided yet.
+                                            <?php endif; ?>
                                         </td>
 
                                         <!-- LAST UPDATED -->

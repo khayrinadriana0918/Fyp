@@ -12,6 +12,7 @@ $('.receiver-request-row').on('click', function () {
     const status = $(this).data('status');
     const description = $(this).data('description');
     const file = $(this).data('file');
+    const feedback = $(this).data('feedback');
 
     const submitDate = $(this).data('submitted-date');
     const resolvedDate = $(this).data('resolved-date');
@@ -55,30 +56,43 @@ $('.receiver-request-row').on('click', function () {
     );
     $('#status_request_id').val(requestId);
     $('#receiver_new_status').val(status);
+    $('#priority_request_id').val(requestId);
+    $('#receiver_new_priority').val(priority);
+    $('#feedback_request_id').val(requestId);
+    $('#receiver_feedback').val(feedback || '');
+
+    // hide forms when popup opens
     $('#receiver_status_form').hide();
-    $('#receiver_action').val('');
+    $('#receiver_priority_form').hide();
+    $('#receiver_feedback_form').hide();
+
+    $('#receiver_action').val(''); // Reset the dropdown selection
 
     $('#receiver_req_popup').css('display', 'flex');
 
 });
-// dropdown for status change
+// give feedback
+$('#give_feedback').on('click', function () {
+    $('#receiver_status_form').hide();
+    $('#receiver_priority_form').hide();
+
+    $('#receiver_feedback_form').toggle();
+    $('#receiver_action').val('');
+});
+//status change
 $('#receiver_action').on('change', function () {
 
     const action = $(this).val();
 
     if (action === 'status') {
 
+        $('#receiver_priority_form').hide();
         $('#receiver_status_form').show();
 
     } else if (action === 'priority') {
 
         $('#receiver_status_form').hide();
-        alert('Change Priority');
-
-    } else if (action === 'history') {
-
-        $('#receiver_status_form').hide();
-        alert('Change History');
+        $('#receiver_priority_form').show();
 
     }
 
@@ -93,9 +107,7 @@ $('#update_status_form').on('submit', function (event) {
     event.preventDefault();
 
     $.ajax({
-        url: '../includes/update-request-status.php',
-        type: 'POST',
-        data: $(this).serialize(),
+        url: '../includes/update-request-status.php', type: 'POST', data: $(this).serialize(),
 
         success: function () {
             location.reload();
@@ -106,4 +118,47 @@ $('#update_status_form').on('submit', function (event) {
         }
     });
 
+});
+//priority change
+$('#update_priority_form').on('submit', function (event) {
+
+    event.preventDefault();
+
+    $.ajax({
+        url: '../includes/update-request-priority.php', type: 'POST',
+
+        data: $(this).serialize(),
+
+        success: function (response) {
+            if ($.trim(response) === 'success') {
+                location.reload();
+            } else {
+                alert(response);
+            }
+        },
+        error: function () {
+            alert('Unable to update request priority.');
+        }
+    });
+});
+// update feedback
+$('#update_feedback_form').on('submit', function (event) {
+
+    event.preventDefault();
+
+    $.ajax({
+        url: '../includes/update-request-feedback.php', type: 'POST',
+        data: $(this).serialize(),
+        success: function (response) {
+
+            if ($.trim(response) === 'success') {
+                location.reload();
+            } else {
+                alert(response);
+            }
+        },
+        error: function () {
+            alert('Unable to save feedback.');
+        }
+    });
 });
