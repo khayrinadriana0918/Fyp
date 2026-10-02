@@ -21,28 +21,110 @@ if (!$userInfo) {
     die("User information not found.");
 }
 
+$search = trim($_GET['search'] ?? '');
+$priority = $_GET['priority'] ?? '';
+$status = $_GET['status'] ?? '';
+$category = $_GET['category'] ?? '';
+$sort = $_GET['sort'] ?? 'newest';
+
+
 $query = "
 SELECT
-r.*,
-c.category_name
+    r.*,
+    c.category_name
+
 FROM request r
 
 INNER JOIN student s
-ON r.student_id = s.student_id
+    ON r.student_id = s.student_id
 
 INNER JOIN category c
-ON r.category_id= c.category_id
+    ON r.category_id = c.category_id
 
-WHERE s.user_id= :user_id
-ORDER BY r.submission_date DESC
+WHERE s.user_id = :user_id
 ";
 
-$stmt = $pdo->prepare($query);
-$stmt->execute([
-    ':user_id' => $userId
-]);
 
-$reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$params = [
+    ':user_id' => $userId
+];
+
+
+/* SEARCH */
+if ($search !== '') {
+
+    $query .= "
+        AND (
+            CAST(r.request_id AS CHAR) LIKE :search
+            OR r.title LIKE :search
+        )
+    ";
+
+    $params[':search'] =
+        '%' . $search . '%';
+}
+
+
+/* PRIORITY */
+if ($priority !== '') {
+
+    $query .= "
+        AND r.priority = :priority
+    ";
+
+    $params[':priority'] = $priority;
+}
+
+
+/* STATUS */
+if ($status !== '') {
+
+    $query .= "
+        AND r.stats = :status
+    ";
+
+    $params[':status'] = $status;
+}
+
+
+/* CATEGORY */
+if ($category !== '') {
+
+    $query .= "
+        AND r.category_id = :category_id
+    ";
+
+    $params[':category_id'] = $category;
+}
+
+
+/* SORT */
+switch ($sort) {
+
+    case 'oldest':
+        $query .= "
+            ORDER BY r.submission_date ASC
+        ";
+        break;
+    case 'title':
+        $query .= "
+            ORDER BY r.title ASC
+        ";
+        break;
+    case 'newest':
+    default:
+        $query .= "
+            ORDER BY r.submission_date DESC
+        ";
+        break;
+}
+
+
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
+
+$reqs =
+    $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 
@@ -54,8 +136,8 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard | SIMSAP</title>
-    <link rel="stylesheet" href="../CSS/dashboard.css">
+    <title>Student Requests | SIMSAP</title>
+    <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="../CSS/popup.css">
 
     <script
@@ -153,9 +235,9 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <?php foreach ($reqs as $request): ?>
                             <?php
-                            
+
                             //  Convert status into CSS class.
-                             
+
                             $statusClass =
                                 strtolower(
                                     str_replace(
@@ -227,8 +309,13 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </section>
 
-
         <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
+
+        <aside class="filter-sidebar">
+            <?php
+            include __DIR__ . '/../inc_reuse/filter.php';
+            ?>
+        </aside>
 
     </div>
     <script src="../JS/requesterPopup.js"></script>

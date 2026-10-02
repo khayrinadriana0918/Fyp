@@ -539,6 +539,119 @@ header {
 .filters label {
     font-size: 12px;
 }
+/* =========================================
+   FILTER SEARCH
+========================================= */
+
+.filter-search {
+    margin-bottom: 15px;
+}
+
+.filter-search label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.filter-search input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #aaaaaa;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   FILTER GROUPS
+========================================= */
+
+.filter-group {
+    width: 100%;
+}
+
+.filter-group > button {
+    width: 100%;
+    padding: 10px 5px;
+
+    border: none;
+    border-bottom: 1px solid #dddddd;
+
+    background: #ffffff;
+
+    text-align: left;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.filter-group > button:hover {
+    background: #f5f5f5;
+}
+
+
+/* Make radio options VERTICAL */
+.filter-options {
+    padding: 10px 5px;
+}
+
+.filter-options label {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.filter-options input[type="radio"] {
+    margin-right: 6px;
+}
+
+
+/* =========================================
+   FILTER ACTIONS
+========================================= */
+
+.filter-actions {
+    margin-top: 20px;
+}
+
+.filter-actions button {
+    width: 100%;
+
+    padding: 9px;
+
+    background: #212121;
+    color: white;
+
+    border: none;
+    border-radius: 3px;
+
+    text-align: center;
+
+    cursor: pointer;
+}
+
+.filter-actions button:hover {
+    background: #444444;
+}
+
+.filter-actions a {
+    display: block;
+
+    margin-top: 10px;
+    padding: 8px;
+
+    border: 1px solid #aaaaaa;
+    border-radius: 3px;
+
+    text-align: center;
+    font-size: 12px;
+}
+
+.filter-actions a:hover {
+    background: #f5f5f5;
+}
 
 
 /* =========================================

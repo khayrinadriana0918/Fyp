@@ -209,6 +209,7 @@ $requestCounts =
                         </div>
 
                     </div>
+                    <a href="../index.php">Log Out</a>
                 </div>
             </div>
         </header>

@@ -1,150 +1,335 @@
-<form class="filters" id="req-filters" method="GET">
+<?php
+
+// Get categories
+$filterCategoryStmt = $pdo->prepare("
+    SELECT category_id, category_name
+    FROM category
+    ORDER BY category_name ASC
+");
+
+$filterCategoryStmt->execute();
+
+$filterCategories =
+    $filterCategoryStmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+// Current filter values
+$filterSearch =
+    trim($_GET['search'] ?? '');
+
+$filterPriority =
+    $_GET['priority'] ?? '';
+
+$filterStatus =
+    $_GET['status'] ?? '';
+
+$filterCategory =
+    $_GET['category'] ?? '';
+
+$filterSort =
+    $_GET['sort'] ?? 'newest';
+?>
+
+<form
+    class="filters"
+    id="req-filters"
+    method="GET">
+
     <fieldset>
+
         <legend>Filter Requests</legend>
-        <dl>
-            <dt class="sort">
-                <label for="req-search-sort-dropdown">sort by:</label>
-            </dt>
-            <dd class="sort">
-                <select name="req-search[sort_dropdown]" id="req-search-sort-dropdown">
-                    <option value="date_updated">Date Updated</option>
-                    <option value="date_submitted">Date Submitted</option>
-                    <option value="student_name">User ID</option>
-                </select>
-            </dd>
-            <dd class="tags group">
-                <dl>
-                    <!--PRIORITY TAGS -->
-                    <!--              -->
-                    <dt id="toggle-priority-tags" class="filter-toggle-collapsed">
-                        <button type="button" aria-expanded="false" aria-controls="priority_tags" id="priority">Priority</button>
-                    </dt>
-                    <dd id="priority_tags" hidden class="expandable tags">
-                        <ul>
-                            <li>
-                                <label for="search-priority-urgent">
-                                    <input type="radio" name="req-search[priority][]" value="urgent" id="search-priority-urgent">
-                                    Urgent
-                                </label>
-                            </li>
-                            <li>
-                                <label for="search-priority-medium">
-                                    <input type="radio" name="req-search[priority][]" value="medium" id="search-priority-medium">
-                                    Medium
-                                </label>
-                            </li>
-                            <li>
-                                <label for="search-priority-low">
-                                    <input type="radio" name="req-search[priority][]" value="low" id="search-priority-low">
-                                    Low
-                                </label>
-                            </li>
-                        </ul>
-                    </dd>
-                    <!--STATUS TAGS -->
-                    <!--              -->
-                    <dt id="toggle-status-tags" class="filter-toggle-collapsed">
-                        <button type="button" aria-expanded="false" aria-controls=status_tags id="status">Status</button>
-                    </dt>
-                    <dd id="status_tags" hidden class="expandable tags">
-                        <ul>
-                            <li>
-                                <label for="search-status-completed">
-                                    <input type="radio" name="req-search[status][]" value="completed" id="search-status-completed">
-                                    Completed
-                                </label>
-                            </li>
-                            <li>
-                                <label for="search-status-wip">
-                                    <input type="radio" name="req-search[status][]" value="wip" id="search-status-wip">
-                                    Work in Progress
-                                </label>
-                            </li>
-                            <li>
-                                <label for="search-status-pending">
-                                    <input type="radio" name="req-search[status][]" value="pending" id="search-status-pending">
-                                    Pending
-                                </label>
-                            </li>
-                            <li>
-                                <label for="search-status-rejected">
-                                    <input type="radio" name="req-search[status][]" value="rejected" id="search-status-rejected">
-                                    Rejected
-                                </label>
-                            </li>
-                        </ul>
-                    </dd>
-                    <!--PROGRAMME TAGS -->
-                    <!--              -->
-                    <dt id="toggle-programme-tags" class="filter-toggle-collapsed">
-                        <button type="button" aria-expanded="false" aria-controls=programme_tags id="programme">Programme</button>
-                    </dt>
-                    <dd id="programme_tags" hidden class="expandable tags">
-                        <ul>
-                            <?php foreach ($programmes as $programme): ?>
-                                <li>
-                                    <label for="search-prog-<?php echo htmlspecialchars($programme['programme_id']); ?>">
 
-                                        <input
-                                            type="radio" name="req-search[programme][]"
-                                            value="<?php echo htmlspecialchars($programme['programme_id']); ?>"
-                                            id="search-prog-<?php echo htmlspecialchars($programme['programme_id']); ?>">
 
-                                        <?php echo htmlspecialchars($programme['programme_name']); ?>
-                                    </label>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </dd>
-                    <!-- CATEGORY TAGS -->
-                    <!--               -->
-                    <dt id="toggle-category-tags" class="filter-toggle-collapsed">
-                        <button type="button" aria-expanded="false" aria-controls=category_tags id="category">Category</button>
-                    </dt>
-                    <dd id="category_tags" hidden class="expandable tags">
-                        <ul>
-                            <?php foreach ($c as $category): ?>
-                                <li>
-                                    <label for="search-category-<?php echo htmlspecialchars($category['category_id']); ?>">
+        <!-- =========================
+             SEARCH
+        ========================== -->
+        <div class="filter-search">
 
-                                        <input
-                                            type="radio" name="req-search[category][]"
-                                            value="<?php echo htmlspecialchars($category['category_id']); ?>"
-                                            id="search-category-<?php echo htmlspecialchars($category['category_id']); ?>">
+            <label for="request-search">
+                Search
+            </label>
 
-                                        <?php echo htmlspecialchars($category['category_name']); ?>
-                                    </label>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </dd>
-                </dl>
-            </dd>
-        </dl>
+            <input
+                type="text"
+                id="request-search"
+                name="search"
+                placeholder="Request ID or title..."
+                value="<?= htmlspecialchars($filterSearch); ?>">
+
+        </div>
+
+
+        <!-- =========================
+             SORT
+        ========================== -->
+        <div class="sort">
+
+            <label for="req-search-sort-dropdown">
+                Sort by:
+            </label>
+
+            <select
+                name="sort"
+                id="req-search-sort-dropdown">
+
+                <option
+                    value="newest"
+                    <?= $filterSort === 'newest'
+                        ? 'selected'
+                        : ''; ?>>
+
+                    Newest
+
+                </option>
+
+
+                <option
+                    value="oldest"
+                    <?= $filterSort === 'oldest'
+                        ? 'selected'
+                        : ''; ?>>
+
+                    Oldest
+
+                </option>
+
+
+                <option
+                    value="title"
+                    <?= $filterSort === 'title'
+                        ? 'selected'
+                        : ''; ?>>
+
+                    Title
+
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- =========================
+             PRIORITY
+        ========================== -->
+        <div class="filter-group">
+
+            <button
+                type="button"
+                id="priority"
+                aria-expanded="false">
+
+                Priority
+            </button>
+
+
+            <div
+                id="priority_tags"
+                class="filter-options"
+                hidden>
+
+                <?php
+                $priorities = [
+                    'Low',
+                    'Medium',
+                    'High',
+                    'Urgent'
+                ];
+                ?>
+
+
+                <?php foreach ($priorities as $priority): ?>
+
+                    <label>
+
+                        <input
+                            type="radio"
+                            name="priority"
+                            value="<?= htmlspecialchars($priority); ?>"
+                            <?= $filterPriority === $priority
+                                ? 'checked'
+                                : ''; ?>>
+
+                        <?= htmlspecialchars($priority); ?>
+
+                    </label>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STATUS
+        ========================== -->
+        <div class="filter-group">
+
+            <button
+                type="button"
+                id="status"
+                aria-expanded="false">
+
+                Status
+            </button>
+
+
+            <div
+                id="status_tags"
+                class="filter-options"
+                hidden>
+
+                <?php
+                $statuses = [
+                    'Pending',
+                    'In Progress',
+                    'Completed',
+                    'Rejected'
+                ];
+                ?>
+
+
+                <?php foreach ($statuses as $status): ?>
+
+                    <label>
+
+                        <input
+                            type="radio"
+                            name="status"
+                            value="<?= htmlspecialchars($status); ?>"
+                            <?= $filterStatus === $status
+                                ? 'checked'
+                                : ''; ?>>
+
+                        <?= htmlspecialchars($status); ?>
+
+                    </label>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CATEGORY
+        ========================== -->
+        <div class="filter-group">
+
+            <button
+                type="button"
+                id="category"
+                aria-expanded="false">
+
+                Category
+            </button>
+
+
+            <div
+                id="category_tags"
+                class="filter-options"
+                hidden>
+
+                <?php foreach ($filterCategories as $category): ?>
+
+                    <label>
+
+                        <input
+                            type="radio"
+                            name="category"
+                            value="<?= htmlspecialchars(
+                                $category['category_id']
+                            ); ?>"
+                            <?= (string)$filterCategory ===
+                                (string)$category['category_id']
+                                ? 'checked'
+                                : ''; ?>>
+
+                        <?= htmlspecialchars(
+                            $category['category_name']
+                        ); ?>
+
+                    </label>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             ACTION BUTTONS
+        ========================== -->
+        <div class="filter-actions">
+
+            <button type="submit">
+                Apply Filters
+            </button>
+
+            <a href="<?= htmlspecialchars(
+                strtok($_SERVER['REQUEST_URI'], '?')
+            ); ?>">
+                Clear Filters
+            </a>
+
+        </div>
+
     </fieldset>
+
 </form>
+
+
 <script>
     $('#priority').on('click', function() {
-        const expanded = $(this).attr('aria-expanded') === 'true';
-        $(this).attr('aria-expanded', !expanded);
-        $('#priority_tags').prop('hidden', expanded);
+
+        const expanded =
+            $(this).attr('aria-expanded') === 'true';
+
+        $(this).attr(
+            'aria-expanded',
+            expanded ? 'false' : 'true'
+        );
+
+        $('#priority_tags').prop(
+            'hidden',
+            expanded
+        );
     });
+
 
     $('#status').on('click', function() {
-        const expanded = $(this).attr('aria-expanded') === 'true';
-        $(this).attr('aria-expanded', !expanded);
-        $('#status_tags').prop('hidden', expanded);
+
+        const expanded =
+            $(this).attr('aria-expanded') === 'true';
+
+        $(this).attr(
+            'aria-expanded',
+            expanded ? 'false' : 'true'
+        );
+
+        $('#status_tags').prop(
+            'hidden',
+            expanded
+        );
     });
 
-    $('#programme').on('click', function() {
-        const expanded = $(this).attr('aria-expanded') === 'true';
-        $(this).attr('aria-expanded', !expanded);
-        $('#programme_tags').prop('hidden', expanded);
-    });
 
     $('#category').on('click', function() {
-        const expanded = $(this).attr('aria-expanded') === 'true';
-        $(this).attr('aria-expanded', !expanded);
-        $('#category_tags').prop('hidden', expanded);
+
+        const expanded =
+            $(this).attr('aria-expanded') === 'true';
+
+        $(this).attr(
+            'aria-expanded',
+            expanded ? 'false' : 'true'
+        );
+
+        $('#category_tags').prop(
+            'hidden',
+            expanded
+        );
     });
 </script>

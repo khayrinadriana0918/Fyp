@@ -10,9 +10,16 @@ if (!isset($_SESSION['user_id'])) {
 $userId = $_SESSION['user_id'];
 
 $userStmt = $pdo->prepare("
-SELECT name
-FROM users
-WHERE user_id = :user_id");
+SELECT 
+u.name,
+h.programme_id
+
+FROM users u
+
+INNER JOIN head_of_programme h
+ON u.user_id = h.user_id
+
+WHERE u.user_id = :user_id");
 
 $userStmt->execute(['user_id' => $userId]);
 $userInfo = $userStmt->fetch(PDO::FETCH_ASSOC);
@@ -20,6 +27,12 @@ $userInfo = $userStmt->fetch(PDO::FETCH_ASSOC);
 if (!$userInfo) {
     die("User information not found.");
 }
+
+$search = trim($_GET['search'] ?? '');
+$priority = $_GET['priority'] ?? '';
+$status = $_GET['status'] ?? '';
+$category = $_GET['category'] ?? '';
+$sort = $_GET['sort'] ?? 'newest';
 
 $query = "
 SELECT
@@ -32,20 +45,70 @@ FROM request r
 INNER JOIN student s
 ON r.student_id = s.student_id
 
-INNER JOIN user u
+INNER JOIN users u
 ON s.user_id = u.user_id
 
 INNER JOIN category c
 ON r.category_id= c.category_id
 
 WHERE s.programme_id= :programme_id
-ORDER BY r.submission_date DESC
 ";
 
+$params = [
+    ':programme_id' => $userInfo['programme_id']
+];
+
+// search
+if ($search !== '') {
+    $query .= "
+    AND (
+    CAST(r.request_id AS CHAR) LIKE :search
+    OR r.title LIKE :search
+    OR u.name LIKE :search
+    OR s.student_id LIKE :search
+    )";
+
+    $params[':search'] =
+        '%' . $search . '%';
+}
+//priority
+if ($priority !== '') {
+    $query .= "
+    AND r.priority = :priority";
+
+    $params[':priority'] = $priority;
+}
+//status
+if ($status !== '') {
+    $query .= "
+    AND r.stats = :status";
+
+    $params[':status'] = $status;
+}
+if ($category !== '') {
+    $query .= "
+    AND r.category_id = :category_id";
+
+    $params[':category_id'] = $category;
+}
+// sort
+switch ($sort) {
+
+    case 'oldest':
+        $query .= "ORDER BY r.submission_date ASC";
+        break;
+    case 'title':
+        $query .= "ORDER BY r.title ASC";
+        break;
+    case 'newest':
+    default:
+        $query .= "ORDER BY r.submission_date DESC";
+        break;
+}
+
+
 $stmt = $pdo->prepare($query);
-$stmt->execute([
-    ':user_id' => $userId
-]);
+$stmt->execute($params);
 
 $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -60,7 +123,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         name="viewport"
         content="width=device-width, initial-scale=1.0">
     <title>Head of Programme Dashboard | SIMSAP</title>
-    <link rel="stylesheet" href="../CSS/tableReq.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="../CSS/popup.css">
 
     <script
@@ -69,7 +132,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </head>
 
-<body> 
+<body>
     <div class="layout">
         <!-- =====================================================
          HEADER
@@ -151,7 +214,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <tr
                         class="request-row"
                         data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
-                        data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
+                        data-requester-name="<?= htmlspecialchars($request['name']); ?>"
                         data-requester-id="<?= htmlspecialchars($request['student_id']); ?>"
                         data-semester="<?= htmlspecialchars($request['semester']); ?>"
                         data-title="<?= htmlspecialchars($request['title']); ?>"
@@ -199,6 +262,12 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tbody>
 
         </table>
+
+        <aside class="filter-sidebar">
+            <?php
+            include __DIR__ . '/../inc_reuse/filter.php';
+            ?>
+        </aside>
 
         <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
 

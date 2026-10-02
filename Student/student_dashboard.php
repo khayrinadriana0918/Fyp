@@ -46,6 +46,18 @@ if (!$userInfo) {
 }
 
 $roleIdLabel = 'Student ID';
+$search =
+    trim($_GET['search'] ?? '');
+$priority =
+    $_GET['priority'] ?? '';
+$status =
+    $_GET['status'] ?? '';
+$category =
+    $_GET['category'] ?? '';
+$sort =
+    $_GET['sort'] ?? 'newest';
+
+
 $requestQuery = "
     SELECT
         r.*,
@@ -53,25 +65,90 @@ $requestQuery = "
         u.name AS requester_name,
         c.category_name
     FROM request r
+
     INNER JOIN student s
         ON r.student_id = s.student_id
+
     INNER JOIN users u
         ON s.user_id = u.user_id
+
     INNER JOIN category c
         ON r.category_id = c.category_id
-    WHERE s.user_id= :user_id
-    ORDER BY r.submission_date DESC
-    LIMIT 5
+
+    WHERE s.user_id = :user_id
 ";
 
 
-$requestStmt = $pdo->prepare($requestQuery);
-$requestStmt->execute([
+$requestParams = [
     ':user_id' => $user
-]);
+];
+
+
+/* =========================
+   SEARCH
+========================= */
+
+if ($search !== '') {
+    $requestQuery .= "AND (CAST(r.request_id AS CHAR) LIKE :search OR r.title LIKE :search)";
+    $requestParams[':search'] =
+        '%' . $search . '%';
+}
+
+/* =========================
+   PRIORITY
+========================= */
+
+if ($priority !== '') {
+    $requestQuery .= "AND r.priority = :priority";
+    $requestParams[':priority'] =$priority;
+}
+
+/* =========================
+   STATUS
+========================= */
+if ($status !== '') {
+    $requestQuery .= "AND r.stats = :status";
+    $requestParams[':status'] =$status;
+}
+/* =========================
+   CATEGORY
+========================= */
+if ($category !== '') {
+    $requestQuery .= "
+        AND r.category_id = :category_id
+    ";
+    $requestParams[':category_id'] =
+        $category;
+}
+/* =========================
+   SORT
+========================= */
+switch ($sort) {
+    case 'oldest':
+        $requestQuery .= "
+            ORDER BY r.submission_date ASC
+        ";
+        break;
+    case 'title':
+        $requestQuery .= "
+            ORDER BY r.title ASC
+        ";
+        break;
+    case 'newest':
+    default:
+        $requestQuery .= "ORDER BY r.submission_date DESC";break;
+}
+
+
+$requestQuery .= "LIMIT 5";
+
+
+$requestStmt =
+    $pdo->prepare($requestQuery);
+
+$requestStmt->execute($requestParams);
 $recentRequests =
     $requestStmt->fetchAll(PDO::FETCH_ASSOC);
-
 /* =========================================================
    GET DASHBOARD REQUEST COUNTS
 ========================================================= */
@@ -205,6 +282,7 @@ $requestCounts =
                         </div>
 
                     </div>
+                    <a href="../index.php">Log Out</a>
                 </div>
             </div>
         </header>
