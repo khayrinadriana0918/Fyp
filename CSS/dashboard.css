@@ -87,8 +87,11 @@ header {
     padding: 5px;
 }
 
-.notification-button img {
+#notif_icon {
+    width: 24px;
+    height: 24px;
     object-fit: contain;
+    display: block;
 }
 
 .notification-dropdown {

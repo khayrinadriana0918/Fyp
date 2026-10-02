@@ -162,8 +162,9 @@ $requestCounts =
                             class="notification-button"
                             id="notification_btn"
                             title="Notifications">
-                            <img src="<?= $unreadNotifCount > 0
-                                            ? '../pictures/haveNotif.png' : '../pictures/noNotif.png'; ?>" alt="Notifications" id="notif_icon">
+                            <img id="notif_icon"
+                                src="<?= $unreadNotifCount > 0 ? '../pictures/haveNotif.png' : '../pictures/noNotif.png'; ?>"
+                                alt="">
                         </button>
 
                         <div class="notification-dropdown" id="notification_dropdown">
