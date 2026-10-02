@@ -76,7 +76,7 @@ header {
     text-decoration: underline;
 }
 
-.notification-container {
+.notif-container {
     position: relative;
 }
 
@@ -88,8 +88,6 @@ header {
 }
 
 .notification-button img {
-    width: 24px;
-    height: 24px;
     object-fit: contain;
 }
 
