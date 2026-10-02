@@ -46,6 +46,14 @@
                         </div>
                     </div>
 
+                    <div class="feedback-section">
+                        <h3>Head of Programme Feedback</h3>
+                        <div class="feedback-content">
+                            <p id="popup_feedback"></p>
+                        </div>
+                    </div>
+
+
                     <div class="attachment-section">
                         <h3>Attachments</h3>
                         <div id="popup_file"></div>
@@ -54,7 +62,7 @@
 
 
                     <div class="popup-actions">
-                        <button type="button" id="view_history">See change history</button>
+                        <button type="button" id="edit_request">Edit Form</button>
                     </div>
                 </div>
             </div>

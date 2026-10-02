@@ -168,6 +168,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         data-status="<?= htmlspecialchars($request['stats']); ?>"
                         data-description="<?= htmlspecialchars($request['description']); ?>"
                         data-file="<?= htmlspecialchars($request['request_file']); ?>"
+                        data-feedback="<?= htmlspecialchars($request['feedback']?? ''); ?>"
                         data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
                         data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
 
