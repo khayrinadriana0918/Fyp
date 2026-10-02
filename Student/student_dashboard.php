@@ -136,7 +136,7 @@ switch ($sort) {
         break;
     case 'newest':
     default:
-        $requestQuery .= "ORDER BY r.submission_date DESC";break;
+        $requestQuery .= " ORDER BY r.submission_date DESC ";break;
 }
 
 
