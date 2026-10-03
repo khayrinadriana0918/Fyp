@@ -180,7 +180,7 @@ $reqs =
                         </a>
                     </li>
                     <li>
-                        <a href="about.php">About</a>
+                        <a href="../about.html">About</a>
                     </li>
                     <li>
                         <a href="../userProfile.php">User Profile</a>
@@ -196,12 +196,12 @@ $reqs =
                         </a>
                     </li>
                     <li>
-                        <a href="userManual.html">
+                        <a href="../userManual.html">
                             User Manual
                         </a>
                     </li>
                     <li>
-                        <a href="faq.html">
+                        <a href="../faq.html">
                             FAQ
                         </a>
                     </li>
@@ -232,7 +232,7 @@ $reqs =
 
                                 <tr
                                     class="request-row receiver-request-row"
-                                    data-request-type="system_admin"
+                                    data-request-type="administrator"
 
                                     data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
                                     data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"

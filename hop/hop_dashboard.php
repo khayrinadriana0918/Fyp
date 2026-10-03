@@ -339,7 +339,7 @@ $requestCounts =
             <nav>
                 <ul>
                     <li>
-                        <a href="hop_Dashboard.php">About</a>
+                        <a href="../about.html">About</a>
                     </li>
                     <li>
                         <a href="hop_Dashboard.php" class="active">Dashboard</a>
@@ -360,10 +360,10 @@ $requestCounts =
                         <a href="hop_report.php">Administrative Report</a>
                     </li>
                     <li>
-                        <a href="userManual.html">User Manual</a>
+                        <a href="../userManual.html">User Manual</a>
                     </li>
                     <li>
-                        <a href="faq.html">FAQ</a>
+                        <a href="../faq.html">FAQ</a>
                     </li>
                 </ul>
             </nav>

@@ -149,9 +149,9 @@ $requestCounts =
                     </h1>
                 </div>
                 <div class="header-user">
-                    <span class="header-name">
+                    <a href="admin_dashboard.php" class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
-                    </span>
+                    </a>
                     <div class="notif-container">
 
                         <button
@@ -230,7 +230,7 @@ $requestCounts =
                         </a>
                     </li>
                     <li>
-                        <a href="about.php">About</a>
+                        <a href="../about.html">About</a>
                     </li>
                     <li>
                         <a href="../userProfile.php">User Profile</a>
@@ -241,17 +241,17 @@ $requestCounts =
                         </a>
                     </li>
                     <li>
-                        <a href="hop_requests.php">
-                            Request
+                        <a href="submittedHop_requests.php">
+                            Head of Programme Requests
                         </a>
                     </li>
                     <li>
-                        <a href="userManual.html">
+                        <a href="../userManual.html">
                             User Manual
                         </a>
                     </li>
                     <li>
-                        <a href="faq.html">
+                        <a href="../faq.html">
                             FAQ
                         </a>
                     </li>
@@ -373,7 +373,7 @@ $requestCounts =
                                     ?>
                                     <tr class="request-row receiver-request-row"
 
-                                        data-request-type="system_admin"
+                                        data-request-type="administrator"
 
                                         data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
 

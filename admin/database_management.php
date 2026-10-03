@@ -107,7 +107,7 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </li>
                     <li>
-                        <a href="about.php">About</a>
+                        <a href="../about.html">About</a>
                     </li>
                     <li>
                         <a href="../userProfile.php">User Profile</a>
@@ -123,12 +123,12 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </li>
                     <li>
-                        <a href="userManual.html">
+                        <a href="../userManual.html">
                             User Manual
                         </a>
                     </li>
                     <li>
-                        <a href="faq.html">
+                        <a href="../faq.html">
                             FAQ
                         </a>
                     </li>

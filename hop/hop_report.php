@@ -269,7 +269,7 @@ $monthData =
         <nav>
             <ul>
                 <li>
-                    <a href="hop_Dashboard.php">About</a>
+                    <a href="../about.html">About</a>
                 </li>
                 <li>
                     <a href="hop_Dashboard.php">Dashboard</a>
@@ -290,10 +290,10 @@ $monthData =
                     <a href="hop_report.php" class="active">Administrative Report</a>
                 </li>
                 <li>
-                    <a href="userManual.html">User Manual</a>
+                    <a href="../userManual.html">User Manual</a>
                 </li>
                 <li>
-                    <a href="faq.html">FAQ</a>
+                    <a href="../faq.html">FAQ</a>
                 </li>
             </ul>
         </nav>

@@ -126,7 +126,7 @@ if ($requestType === 'student') {
    HOP -> ADMIN
 ========================================= */
 
-if ($requestType === 'system_admin') {
+if ($requestType === 'administrator') {
 
     $adminStmt = $pdo->prepare("
         SELECT admin_code

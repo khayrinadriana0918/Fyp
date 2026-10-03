@@ -129,6 +129,8 @@ if ($userInfo['role'] === 'student') {
                     <span class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
+
+                    <a href="../index.php">Log Out</a>
                 </div>
             </div>
         </header>

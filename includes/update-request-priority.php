@@ -110,7 +110,7 @@ if ($requestType === 'student') {
 
     exit("success");
 }
-if ($requestType === 'system_admin') {
+if ($requestType === 'administrator') {
 
     $adminStmt = $pdo->prepare("
         SELECT admin_code
@@ -129,6 +129,27 @@ if ($requestType === 'system_admin') {
         die("Access denied.");
     }
 
+    $checkStmt= $pdo->prepare("
+    SELECT
+    ar.ar_request_id,
+    ar.ar_priority,
+    h.user_id AS hop_user_id
+    FROM admin_request ar
+    
+    INNER JOIN head_of_programme h
+    ON ar.staff_id = h.staff_id
+    WHERE ar.ar_request_id= :request_id
+    ");
+
+    $checkStmt->execute([
+        ':request_id'=> $requestId
+    ]);
+
+    $allowedRequest= $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$allowedRequest) {
+        die("Request not found.");
+    }
 
     $stmt = $pdo->prepare("
         UPDATE admin_request
@@ -142,6 +163,18 @@ if ($requestType === 'system_admin') {
         ':priority' => $priority,
         ':request_id' => $requestId
     ]);
+
+    if ($allowedRequest['ar_priority'] !== $priority) {
+        createNotification(
+            $pdo,
+            $allowedRequest['hop_user_id'],
+            'request #' . 
+            $requestId . 
+            ' priority changed: ' . 
+            $allowedRequest['ar_priority'] . 
+            ' → ' . $priority . '.' 
+        );
+    }
 
     exit("success");
 }

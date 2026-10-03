@@ -174,13 +174,14 @@ $reqs =
             <nav>
                 <ul>
                     <li>
+                        <a href="../about.html">About</a>
+                    </li>
+                    <li>
                         <a href="student_dashboard.php">
                             Dashboard
                         </a>
                     </li>
-                    <li>
-                        <a href="about.php">About</a>
-                    </li>
+                    
                     <li>
                         <a href="../userProfile.php">User Profile</a>
                     </li>
@@ -195,12 +196,12 @@ $reqs =
                         </a>
                     </li>
                     <li>
-                        <a href="userManual.html">
+                        <a href="../userManual.html">
                             User Manual
                         </a>
                     </li>
                     <li>
-                        <a href="faq.html">
+                        <a href="../faq.html">
                             FAQ
                         </a>
                     </li>

@@ -51,7 +51,7 @@ $('.receiver-request-row').on('click', function () {
     if (file) {
 
         const folder =
-            requestType === 'system_admin'
+            requestType === 'administrator'
                 ? '../uploads/admin_hop/'
                 : '../uploads/hop_student/';
 

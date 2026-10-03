@@ -31,7 +31,7 @@ if (!in_array($status, $allowedStatuses, true)) {
 // =====================
 
 if ($requestType === 'administrator') {
-    // Check that logged-in user is Admin
+
     $roleStmt = $pdo->prepare("
         SELECT admin_code
         FROM administrator
@@ -49,13 +49,34 @@ if ($requestType === 'administrator') {
         die("Access denied.");
     }
 
+    $checkStmt= $pdo->prepare("
+    SELECT
+    ar.ar_request_id,
+    ar.ar_stats,
+    h.user_id AS hop_user_id
+    
+    FROM admin_request ar
+    
+    INNER JOIN head_of_programme h
+    ON ar.staff_id = h.staff_id
+    
+    WHERE ar.ar_request_id = :request_id
+    ");
+    $checkStmt->execute([
+        ':request_id'=> $requestId
+    ]);
+
+    $allowedRequest=
+    $checkStmt->fetch(PDO::FETCH_ASSOC);
+    if (!$allowedRequest) {
+        die("Request not found.");
+    }
+    
     $query = "
     UPDATE admin_request
     SET ar_stats=:status
     WHERE ar_request_id=:request_id";
 
-    $returnPage =
-        "../admin/req_details.php?id=" . urlencode($requestId);
 }
 
 // =====================
@@ -131,7 +152,9 @@ $stmt->execute([
     ':status' => $status,
     ':request_id' => $requestId
 ]);
-
+if ($requestType === 'administrator') {
+    exit("success");
+}
 if (
     $requestType === 'student' &&
     $allowedRequest['stats'] !== $status

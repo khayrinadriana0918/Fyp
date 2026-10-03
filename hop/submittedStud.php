@@ -125,6 +125,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Head of Programme Dashboard | SIMSAP</title>
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="../CSS/popup.css">
+    <link rel="stylesheet" href="../CSS/request.css">
 
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
@@ -161,7 +162,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <nav>
                 <ul>
                     <li>
-                        <a href="hop_Dashboard.php">About</a>
+                        <a href="../about.html">About</a>
                     </li>
                     <li>
                         <a href="hop_Dashboard.php">Dashboard</a>
@@ -182,10 +183,10 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <a href="hop_report.php">Administrative Report</a>
                     </li>
                     <li>
-                        <a href="userManual.html">User Manual</a>
+                        <a href="../userManual.html">User Manual</a>
                     </li>
                     <li>
-                        <a href="faq.html">FAQ</a>
+                        <a href="../faq.html">FAQ</a>
                     </li>
                 </ul>
             </nav>
@@ -194,75 +195,96 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- =====================================================
          MAIN CONTENT
     ====================================================== -->
-        <table>
+        <section class="request-section">
+            <div class="section-header">
+                <h2>Student Requests</h2>
+            </div>
+            <div class="table-container">
+                <table class="request-table">
 
-            <thead>
-                <tr>
-                    <th>Request ID</th>
-                    <th>Semester</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Date Submitted</th>
-                    <th>Priority</th>
-                </tr>
-            </thead>
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Semester</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Date Submitted</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
 
-            <tbody>
+                    <tbody>
 
-                <?php foreach ($reqs as $request): ?>
+                        <?php foreach ($reqs as $request): ?>
+                            <?php
+                            $statusClass =
+                                strtolower(
+                                    str_replace(
+                                        ' ',
+                                        '-',
+                                        $request['stats']
+                                    )
+                                );
+                            ?>
 
-                    <tr
-                        class="request-row"
-                        data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
-                        data-requester-name="<?= htmlspecialchars($request['name']); ?>"
-                        data-requester-id="<?= htmlspecialchars($request['student_id']); ?>"
-                        data-semester="<?= htmlspecialchars($request['semester']); ?>"
-                        data-title="<?= htmlspecialchars($request['title']); ?>"
-                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
-                        data-label="<?= htmlspecialchars($request['label']); ?>"
-                        data-priority="<?= htmlspecialchars($request['priority']); ?>"
-                        data-status="<?= htmlspecialchars($request['stats']); ?>"
-                        data-description="<?= htmlspecialchars($request['description']); ?>"
-                        data-file="<?= htmlspecialchars($request['request_file']); ?>"
-                        data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
-                        data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
+                            <tr
+                                class="request-row receiver-request-row"
+                                data-request-type="student"
+                                data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
+                                data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
+                                data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
+                                data-semester="<?= htmlspecialchars($request['semester']); ?>"
+                                data-title="<?= htmlspecialchars($request['title']); ?>"
+                                data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                data-label="<?= htmlspecialchars($request['label']?? ''); ?>"
+                                data-priority="<?= htmlspecialchars($request['priority']); ?>"
+                                data-status="<?= htmlspecialchars($request['stats']); ?>"
+                                data-description="<?= htmlspecialchars($request['description']); ?>"
+                                data-feedbacl="<?= htmlspecialchars($request['feedback']?? ''); ?>"
+                                data-file="<?= htmlspecialchars($request['request_file']?? ''); ?>"
+                                data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
+                                data-resolved-date="<?= htmlspecialchars($request['resolved_date']?? ''); ?>">
 
-                        <td>
-                            <?= htmlspecialchars($request['request_id']); ?>
-                        </td>
+                                <td>
+                                    <?= htmlspecialchars($request['request_id']); ?>
+                                </td>
 
-                        <td>
-                            <?= htmlspecialchars($request['semester']); ?>
-                        </td>
+                                <td>
+                                    <?= htmlspecialchars($request['semester']); ?>
+                                </td>
 
-                        <td>
-                            <?= htmlspecialchars($request['title']); ?>
-                        </td>
+                                <td>
+                                    <?= htmlspecialchars($request['title']); ?>
+                                </td>
 
-                        <td>
-                            <?= htmlspecialchars($request['category_name']); ?>
-                        </td>
+                                <td>
+                                    <?= htmlspecialchars($request['category_name']); ?>
+                                </td>
 
-                        <td>
-                            <?= htmlspecialchars($request['stats']); ?>
-                        </td>
+                                <td>
+                                    <span class="status status-<?= htmlspecialchars($statusClass); ?>">
+                                        <?= htmlspecialchars($request['stats']); ?>
+                                    </span>
+                                </td>
 
-                        <td>
-                            <?= htmlspecialchars($request['submission_date']); ?>
-                        </td>
+                                <td>
+                                    <?= htmlspecialchars($request['submission_date']); ?>
+                                </td>
 
-                        <td>
-                            <?= htmlspecialchars($request['priority']); ?>
-                        </td>
+                                <td>
+                                    <?= htmlspecialchars($request['priority']); ?>
+                                </td>
 
-                    </tr>
+                            </tr>
 
-                <?php endforeach; ?>
+                        <?php endforeach; ?>
 
-            </tbody>
+                    </tbody>
 
-        </table>
+                </table>
+            </div>
+        </section>
 
         <aside class="filter-sidebar">
             <?php
@@ -270,10 +292,10 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             ?>
         </aside>
 
-        <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
+        <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
 
     </div>
-    <script src="../JS/requesterPopup.js"></script>
+    <script src="../JS/receiverPopup.js"></script>
 </body>
 
 </html>
