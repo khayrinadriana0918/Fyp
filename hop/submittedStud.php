@@ -149,6 +149,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <span class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
+                    <a href="../index.php">Log Out</a>
                 </div>
             </div>
         </header>
@@ -160,36 +161,36 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <nav>
                 <ul>
                     <li>
-                        <a href="hop_Dashboard.php" class="active">
-                            Dashboard
-                        </a>
+                        <a href="hop_Dashboard.php">About</a>
+                    </li>
+                    <li>
+                        <a href="hop_Dashboard.php">Dashboard</a>
                     </li>
                     <li>
                         <a href="../userProfile.php">User Profile</a>
                     </li>
                     <li>
-                        <a href="hop_admin_requests.php">
-                            Submit Request to Admin
-                        </a>
+                        <a href="hop_admin_requests.php">Submit Request to Admin</a>
                     </li>
                     <li>
-                        <a href="hop_requests.php">
-                            My Requests
-                        </a>
+                        <a href="hop_requests.php">My Requests</a>
                     </li>
                     <li>
-                        <a href="userManual.html">
-                            User Manual
-                        </a>
+                        <a href="submittedStud.php" class="active">Students Requests</a>
                     </li>
                     <li>
-                        <a href="faq.html">
-                            FAQ
-                        </a>
+                        <a href="hop_report.php">Administrative Report</a>
+                    </li>
+                    <li>
+                        <a href="userManual.html">User Manual</a>
+                    </li>
+                    <li>
+                        <a href="faq.html">FAQ</a>
                     </li>
                 </ul>
             </nav>
         </aside>
+
         <!-- =====================================================
          MAIN CONTENT
     ====================================================== -->

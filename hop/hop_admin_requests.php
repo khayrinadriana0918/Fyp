@@ -71,13 +71,9 @@ if (!$userInfo) {
                 </div>
                 <div class="header-user">
                     <span class="header-name">
-                        Hi, <?= htmlspecialchars($userInfo['name']); ?>
+                        <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
                 </div>
-            </div>
-
-            <div class="top-nav">
-                <a href="about.php">About</a>
             </div>
         </header>
 
@@ -88,29 +84,31 @@ if (!$userInfo) {
             <nav>
                 <ul>
                     <li>
-                        <a href="hop_Dashboard.php">
-                            Dashboard
-                        </a>
+                        <a href="hop_Dashboard.php">About</a>
                     </li>
                     <li>
-                        <a href="hop_admin_requests.php" class="active">
-                            Submit Request to Admin
-                        </a>
+                        <a href="hop_Dashboard.php">Dashboard</a>
                     </li>
                     <li>
-                        <a href="hop_requests.php">
-                            My Requests
-                        </a>
+                        <a href="../userProfile.php">User Profile</a>
                     </li>
                     <li>
-                        <a href="userManual.html">
-                            User Manual
-                        </a>
+                        <a href="hop_admin_requests.php" class="active">Submit Request to Admin</a>
                     </li>
                     <li>
-                        <a href="faq.html">
-                            FAQ
-                        </a>
+                        <a href="hop_requests.php">My Requests</a>
+                    </li>
+                    <li>
+                        <a href="submittedStud.php">Students Requests</a>
+                    </li>
+                    <li>
+                        <a href="hop_report.php">Administrative Report</a>
+                    </li>
+                    <li>
+                        <a href="userManual.html">User Manual</a>
+                    </li>
+                    <li>
+                        <a href="faq.html">FAQ</a>
                     </li>
                 </ul>
             </nav>
@@ -235,9 +233,8 @@ if (!$userInfo) {
 </html>
 <!-- preview form -->
 <script>
-
     // PREVIEW REQUEST
-    $('#preview_btn').on('click', function () {
+    $('#preview_btn').on('click', function() {
         // Check required fields first
         const form = document.getElementById('ar_form');
 
@@ -282,18 +279,18 @@ if (!$userInfo) {
             $('#remove_file_btn').hide();
         }
         //Remove file
-        $('#remove_file_btn').on('click', function(){
+        $('#remove_file_btn').on('click', function() {
 
-        //clear file input
-        $('#request_file').val('');
+            //clear file input
+            $('#request_file').val('');
 
-        //change preview
-        $('#preview_file').text('No file attached');
+            //change preview
+            $('#preview_file').text('No file attached');
 
-        //hide remove btn
-        $('#remove_file_btn').hide();
+            //hide remove btn
+            $('#remove_file_btn').hide();
         });
-        
+
         // Hide form
         $('#ar_form').hide();
 
@@ -302,7 +299,7 @@ if (!$userInfo) {
     });
     // GO BACK AND EDIT
 
-    $('#edit_btn').on('click', function () {
+    $('#edit_btn').on('click', function() {
         $('#request_preview').hide();
         $('#ar_form').show();
 
@@ -310,7 +307,7 @@ if (!$userInfo) {
 
     // CONFIRM AND SEND TO DATABASE
 
-    $('#confirm_btn').on('click', function () {
+    $('#confirm_btn').on('click', function() {
         let form =
             document.getElementById('ar_form');
 
@@ -326,7 +323,7 @@ if (!$userInfo) {
             contentType: false,
             dataType: 'json',
 
-            success: function (response) {
+            success: function(response) {
                 if (response.success) {
                     $('#request_preview').hide();
                     $('#ar_form')[0].reset();
@@ -341,12 +338,11 @@ if (!$userInfo) {
                 }
             },
 
-            error: function () {
+            error: function() {
                 $('#req_msg').text(
                     'Request failed to send.'
                 );
             }
         });
     });
-
 </script>

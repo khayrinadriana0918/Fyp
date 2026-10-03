@@ -294,9 +294,7 @@ $requestCounts =
             <nav>
                 <ul>
                     <li>
-                        <a href="student_dashboard.php" class="active">
-                            Dashboard
-                        </a>
+                        <a href="student_dashboard.php" class="active">Dashboard</a>
                     </li>
                     <li>
                         <a href="about.php">About</a>

@@ -170,11 +170,9 @@ switch ($sort) {
         break;
     case 'newest':
     default:
-        $requestQuery .= "ORDER BY r.submission_date DESC";
+        $requestQuery .= "ORDER BY r.submission_date DESC ";
         break;
 }
-
-
 $requestQuery .= "LIMIT 5";
 
 
@@ -341,42 +339,35 @@ $requestCounts =
             <nav>
                 <ul>
                     <li>
-                        <a href="hop_Dashboard.php">
-                            About
-                        </a>
+                        <a href="hop_Dashboard.php">About</a>
                     </li>
                     <li>
-                        <a href="hop_Dashboard.php" class="active">
-                            Dashboard
-                        </a>
+                        <a href="hop_Dashboard.php" class="active">Dashboard</a>
                     </li>
                     <li>
                         <a href="../userProfile.php">User Profile</a>
                     </li>
                     <li>
-                        <a href="hop_admin_requests.php">
-                            Submit Request to Admin
-                        </a>
+                        <a href="hop_admin_requests.php">Submit Request to Admin</a>
                     </li>
                     <li>
-                        <a href="hop_requests.php">
-                            My Requests
-                        </a>
+                        <a href="hop_requests.php">My Requests</a>
                     </li>
                     <li>
-                        <a href="userManual.html">
-                            User Manual
-                        </a>
+                        <a href="submittedStud.php">Students Requests</a>
                     </li>
                     <li>
-                        <a href="faq.html">
-                            FAQ
-                        </a>
+                        <a href="hop_report.php">Administrative Report</a>
+                    </li>
+                    <li>
+                        <a href="userManual.html">User Manual</a>
+                    </li>
+                    <li>
+                        <a href="faq.html">FAQ</a>
                     </li>
                 </ul>
             </nav>
         </aside>
-
         <!-- =====================================================
          MIDDLE CONTENT
     ====================================================== -->
