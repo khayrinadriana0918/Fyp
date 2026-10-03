@@ -173,18 +173,22 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php else: ?>
                                 <?php foreach ($categories as $category): ?>
                                     <tr>
-                                        <td>
-                                            <?= htmlspecialchars(
-                                                $category['category_id']
-                                            ); ?>
+                                        <td><?= htmlspecialchars($category['category_id']); ?>
                                         </td>
                                         <td>
+
                                             <form method="POST" action="../includes/edit-category.php" class="inline-edit-form">
                                                 <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
-                                                <input type="text" name="category_name" value="<?= htmlspecialchars($category['category_name']); ?>" required>
 
-                                                <button type="submit">Edit</button>
+                                                <input type="text" name="category_name" value="<?= htmlspecialchars($category['category_name']); ?>"
+                                                    class="edit-input"
+                                                    readonly
+                                                    required>
+
+                                                <button type="button" class="edit-toggle-button">Edit</button>
+
                                             </form>
+
                                         </td>
                                         <td>
                                             <form method="POST" action="../includes/delete-category.php" onsubmit="return confirm('Are you sure you want to delete this category?');">
@@ -207,24 +211,10 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                         <label for="category_name">
                             Category Name
                         </label>
+                        <input type="text" id="category_name" name="category_name" placeholder="Enter category name" required>
 
-                        <input
-                            type="text"
-                            id="category_name"
-                            name="category_name"
-                            placeholder="Enter category name"
-                            required>
-
-                        <button type="submit">
-                            Add
-                        </button>
-
-                        <button
-                            type="button"
-                            id="cancel_category">
-                            Cancel
-                        </button>
-
+                        <button type="submit">Add</button>
+                        <button type="button" id="cancel_category">Cancel</button>
                     </form>
                 </div>
             </section>
@@ -265,9 +255,9 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td>
                                             <form method="POST" action="../includes/edit-user-name.php" class="inline-edit-form">
                                                 <input type="hidden" name="user_id" value="<?= htmlspecialchars($account['user_id']); ?>">
-                                                <input type="text" name="name" value="<?= htmlspecialchars($account['name']); ?>" required>
+                                                <input type="text" name="name" value="<?= htmlspecialchars($account['name']); ?>" class="edit-input" readonly required>
 
-                                                <button type="submit">Edit</button>
+                                                <button type="button" class="edit-toggle-button">Edit</button>
                                             </form>
                                         </td>
 
@@ -279,14 +269,14 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                                             )); ?></td>
 
                                         <td>
-                                            <?php if($account['user_id']== $userId): ?>
+                                            <?php if ($account['user_id'] == $userId): ?>
                                                 <span>Current Account</span>
-                                               <?php else: ?>
+                                            <?php else: ?>
                                                 <form method="POST" action="../includes/delete-user.php" onsubmit="return confirm('Are you sure you want to delete this user account? ');">
                                                     <input type="hidden" name="user_id" value="<?= htmlspecialchars($account['user_id']); ?>">
 
                                                     <button type="submit" class="delete-button">Delete</button>
-                                                </form> 
+                                                </form>
                                             <?php endif; ?>
                                         </td>
 
@@ -303,15 +293,30 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </body>
 <script>
-    $(document).ready(function(){
-        $('#category_btn').on('click', function(){
+    $(document).ready(function() {
+        $('#category_btn').on('click', function() {
             $('#category_form').slideDown();
             $('#category_name').focus();
         });
 
-        $('#cancel_category').on('click',function(){
+        $('#cancel_category').on('click', function() {
             $('#category_form').slideUp();
             $('#category_name').val('');
+        });
+
+        S('.edit-toggle-button').on('click', function(){
+            const button= $(this);
+            const form = button.closest('.inline-edit-form');
+            const input = form.find('.edit-input');
+
+            if (input.prop('readonly')) {
+                input.prop('readonly', false);
+                input.focus();
+
+                button.text('Save');
+            }else{
+                form.submit();
+            }
         });
     });
 </script>
