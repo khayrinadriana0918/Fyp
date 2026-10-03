@@ -110,5 +110,39 @@ if ($requestType === 'student') {
 
     exit("success");
 }
+if ($requestType === 'system_admin') {
 
+    $adminStmt = $pdo->prepare("
+        SELECT admin_code
+        FROM administrator
+        WHERE user_id = :user_id
+    ");
+
+    $adminStmt->execute([
+        ':user_id' => $userId
+    ]);
+
+    $admin =
+        $adminStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$admin) {
+        die("Access denied.");
+    }
+
+
+    $stmt = $pdo->prepare("
+        UPDATE admin_request
+
+        SET ar_priority = :priority
+
+        WHERE ar_request_id = :request_id
+    ");
+
+    $stmt->execute([
+        ':priority' => $priority,
+        ':request_id' => $requestId
+    ]);
+
+    exit("success");
+}
 die("Invalid request type.");

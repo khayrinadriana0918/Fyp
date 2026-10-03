@@ -73,6 +73,7 @@ $('.receiver-request-row').on('click', function () {
     $('#priority_request_id').val(requestId);
     $('#receiver_new_priority').val(priority);
     $('#feedback_request_id').val(requestId);
+    $('#receiver_feedback').val(feedback || '');
     $('#request_type')
         .val(requestType);
 
@@ -81,8 +82,6 @@ $('.receiver-request-row').on('click', function () {
 
     $('#update_feedback_form input[name="request_type"]')
         .val(requestType);
-    $('#receiver_feedback').val(feedback || '');
-
     // hide forms when popup opens
     $('#receiver_status_form').hide();
     $('#receiver_priority_form').hide();

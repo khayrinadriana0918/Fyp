@@ -14,7 +14,7 @@ u.user_id,
 u.name,
 a.admin_code
 FROM users u
-INNER JOIN administrator a
+INNER JOIN system_admin a
 ON u.user_id=a.user_id
 WHERE u.user_id=:user_id
 ");

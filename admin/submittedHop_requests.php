@@ -6,6 +6,28 @@ if (!isset($_SESSION['user_id'])) {
     header("Location:../index.php");
     exit();
 }
+$userId = $_SESSION['user_id'];
+
+$adminStmt = $pdo->prepare("
+    SELECT
+        u.user_id,
+        u.name,
+        a.admin_code
+    FROM users u
+    INNER JOIN system_admin a
+        ON u.user_id = a.user_id
+    WHERE u.user_id = :user_id
+");
+
+$adminStmt->execute([
+    ':user_id' => $userId
+]);
+
+$userInfo = $adminStmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$userInfo) {
+    die("Access denied.");
+}
 
 $search = trim($_GET['search'] ?? '');
 $priority = $_GET['priority'] ?? '';
@@ -116,7 +138,8 @@ $reqs =
     <title>Admin Dashboard | SIMSAP</title>
 
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
-    <link rel="stylesheet" href="../CSS/popup.css">
+    <link rel="stylesheet" href="../CSS/request.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="../CSS/popup.css?v=<?= time(); ?>">
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     </script>
@@ -185,84 +208,87 @@ $reqs =
                 </ul>
             </nav>
         </aside>
+        <main class="middle-content">
+            <section class="request-section">
+                <div class="table-container">
+                    <table class="request-table">
 
-        <div class="layout">
-            <table>
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>HoP Name</th>
+                                <th>Staff ID</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Submitted</th>
+                            </tr>
+                        </thead>
 
-                <thead>
-                    <tr>
-                        <th>Request ID</th>
-                        <th>HoP Name</th>
-                        <th>Staff ID</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Submitted</th>
-                    </tr>
-                </thead>
+                        <tbody>
 
-                <tbody>
+                            <?php foreach ($reqs as $request): ?>
 
-                    <?php foreach ($reqs as $request): ?>
+                                <tr
+                                    class="request-row receiver-request-row"
+                                    data-request-type="system_admin"
 
-                        <tr
-                            class="request-row receiver-request-row"
-                            data-request-type="system_admin"
+                                    data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
+                                    data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
+                                    data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
+                                    data-title="<?= htmlspecialchars($request['ar_title']); ?>"
+                                    data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                    data-label="<?= htmlspecialchars($request['ar_label']); ?>"
+                                    data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
+                                    data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
+                                    data-description="<?= htmlspecialchars($request['ar_description']); ?>"
+                                    data-file="<?= htmlspecialchars($request['ar_request_file'] ?? ''); ?>"
+                                    data-feedback="<?= htmlspecialchars($request['ar_feedback'] ?? ''); ?>"
+                                    data-submitted-date="<?= htmlspecialchars($request['ar_submission_date']); ?>"
+                                    data-resolved-date="<?= htmlspecialchars($request['ar_resolved_date'] ?? ''); ?>">
 
-                            data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
-                            data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
-                            data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
-                            data-title="<?= htmlspecialchars($request['ar_title']); ?>"
-                            data-category="<?= htmlspecialchars($request['category_name']); ?>"
-                            data-label="<?= htmlspecialchars($request['ar_label']); ?>"
-                            data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
-                            data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
-                            data-description="<?= htmlspecialchars($request['ar_description']); ?>"
-                            data-file="<?= htmlspecialchars($request['ar_request_file'] ?? ''); ?>"
-                            data-submitted-date="<?= htmlspecialchars($request['ar_submission_date']); ?>"
-                            data-resolved-date="<?= htmlspecialchars($request['ar_resolved_date'] ?? ''); ?>">
+                                    <td>
+                                        <?= htmlspecialchars($request['ar_request_id']); ?>
+                                    </td>
 
-                            data-request-id="">
-                            <td>
-                                <?= htmlspecialchars($request['ar_request_id']); ?>
-                            </td>
+                                    <td>
+                                        <?= htmlspecialchars($request['requester_name']); ?>
+                                    </td>
 
-                            <td>
-                                <?= htmlspecialchars($request['requester_name']); ?>
-                            </td>
+                                    <td>
+                                        <?= htmlspecialchars($request['requester_id']); ?>
+                                    </td>
 
-                            <td>
-                                <?= htmlspecialchars($request['requester_id']); ?>
-                            </td>
+                                    <td>
+                                        <?= htmlspecialchars($request['ar_title']); ?>
+                                    </td>
 
-                            <td>
-                                <?= htmlspecialchars($request['ar_title']); ?>
-                            </td>
+                                    <td>
+                                        <?= htmlspecialchars($request['category_name']); ?>
+                                    </td>
 
-                            <td>
-                                <?= htmlspecialchars($request['category_name']); ?>
-                            </td>
+                                    <td>
+                                        <?= htmlspecialchars($request['ar_priority']); ?>
+                                    </td>
 
-                            <td>
-                                <?= htmlspecialchars($request['ar_priority']); ?>
-                            </td>
+                                    <td>
+                                        <?= htmlspecialchars($request['ar_stats']); ?>
+                                    </td>
 
-                            <td>
-                                <?= htmlspecialchars($request['ar_stats']); ?>
-                            </td>
+                                    <td>
+                                        <?= htmlspecialchars($request['ar_submission_date']); ?>
+                                    </td>
 
-                            <td>
-                                <?= htmlspecialchars($request['ar_submission_date']); ?>
-                            </td>
+                                </tr>
 
-                        </tr>
+                            <?php endforeach; ?>
 
-                    <?php endforeach; ?>
+                        </tbody>
 
-                </tbody>
-
-            </table>
+                    </table>
+                </div>
+            </section>
             <aside class="filter-sidebar">
 
                 <?php
@@ -270,11 +296,12 @@ $reqs =
                 ?>
 
             </aside>
+        </main>
 
-            <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
 
-        </div>
-        <script src="../JS/requesterPopup.js"></script>
+        <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
+
+        <script src="../JS/receiverPopup.js"></script>
 </body>
 
 </html>

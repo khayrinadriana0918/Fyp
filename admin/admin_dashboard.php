@@ -436,6 +436,7 @@ $requestCounts =
                 '/../inc_reuse/filter.php';
             ?>
         </aside>
+        <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
     </div>
     <script>
         $('#notification_btn').on('click', function(event) {

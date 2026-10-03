@@ -10,9 +10,9 @@ if (!isset($_SESSION['user_id'])) {
 }
 $user = $_SESSION['user_id'];
 
-$query = "SELECT users.user_id,users.name,users.created_at,administrator.admin_code 
+$query = "SELECT users.user_id,users.name,users.created_at,system_admin.admin_code 
 FROM users
-INNER JOIN administrator ON users.user_id = administrator.user_id
+INNER JOIN system_admin ON users.user_id = system_admin.user_id
 WHERE users.user_id = :user_id;";
 
 $stmt = $pdo->prepare($query);

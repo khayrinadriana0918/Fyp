@@ -69,7 +69,7 @@
                     <div id="receiver_status_form" style="display: none;">
                         <form id="update_status_form">
                             <input type="hidden" id="status_request_id" name="request_id">
-                            <input type="hidden" id="request_type" name="request_type" value="student">
+                            <input type="hidden" id="request_type" name="request_type" value="">
 
                             <label for="receiver_new_status">Status: </label>
 
@@ -88,7 +88,7 @@
 
                             <input type="hidden" id="priority_request_id" name="request_id">
 
-                            <input type="hidden" name="request_type" value="student">
+                            <input type="hidden" name="request_type" value="">
 
                             <label for="receiver_new_priority">
                                 Priority:
@@ -114,7 +114,7 @@
 
                             <input type="hidden" id="feedback_request_id" name="request_id">
 
-                            <input type="hidden"name="request_type" value="student">
+                            <input type="hidden"name="request_type" value="">
 
                             <label for="receiver_feedback">
                                 Give Feedback:
@@ -125,7 +125,7 @@
                                 id="receiver_feedback"
                                 rows="5"
                                 required
-                                placeholder="Enter feedback for the student regarding the request."></textarea>
+                                placeholder="Enter feedback regarding the request."></textarea>
 
                             <button type="submit">Sent Feedback</button>
 
