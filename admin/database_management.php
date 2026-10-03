@@ -62,6 +62,7 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Management | SIMSAP</title>
     <link rel="stylesheet" href="../CSS/dashboard.css">
+    <link rel="stylesheet" href="../CSS/database.css">
 
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
@@ -178,12 +179,19 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                                             ); ?>
                                         </td>
                                         <td>
-                                            <?= htmlspecialchars(
-                                                $category['category_name']
-                                            ); ?>
+                                            <form method="POST" action="../includes/edit-category.php" class="inline-edit-form">
+                                                <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
+                                                <input type="text" name="category_name" value="<?= htmlspecialchars($category['category_name']); ?>" required>
+
+                                                <button type="submit">Edit</button>
+                                            </form>
                                         </td>
                                         <td>
-                                            <button type="button" class="delete-button">Delete</button>
+                                            <form method="POST" action="../includes/delete-category.php" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                                <input type="hidden" name="category_id" value="<?= htmlspecialchars($category['category_id']); ?>">
+
+                                                <button type="submit" class="delete-button">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -253,7 +261,16 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php foreach ($users as $account): ?>
                                     <tr>
                                         <td><?= htmlspecialchars($account['user_id']); ?></td>
-                                        <td><?= htmlspecialchars($account['name']); ?></td>
+
+                                        <td>
+                                            <form method="POST" action="../includes/edit-user-name.php" class="inline-edit-form">
+                                                <input type="hidden" name="user_id" value="<?= htmlspecialchars($account['user_id']); ?>">
+                                                <input type="text" name="name" value="<?= htmlspecialchars($account['name']); ?>" required>
+
+                                                <button type="submit">Edit</button>
+                                            </form>
+                                        </td>
+
                                         <td><?= htmlspecialchars($account['email']); ?></td>
                                         <td><?= htmlspecialchars($account['role']); ?></td>
                                         <td><?= htmlspecialchars(date(
@@ -262,10 +279,14 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                                             )); ?></td>
 
                                         <td>
-                                            <?php if ($account['user_id'] == $userId): ?>
+                                            <?php if($account['user_id']== $userId): ?>
                                                 <span>Current Account</span>
-                                            <?php else: ?>
-                                                <button type="button" class="delete-button">Delete</button>
+                                               <?php else: ?>
+                                                <form method="POST" action="../includes/delete-user.php" onsubmit="return confirm('Are you sure you want to delete this user account? ');">
+                                                    <input type="hidden" name="user_id" value="<?= htmlspecialchars($account['user_id']); ?>">
+
+                                                    <button type="submit" class="delete-button">Delete</button>
+                                                </form> 
                                             <?php endif; ?>
                                         </td>
 
