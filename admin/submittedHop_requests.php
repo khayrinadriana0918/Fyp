@@ -116,7 +116,7 @@ $reqs =
     <title>Admin Dashboard | SIMSAP</title>
 
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
-    <link rel="stylesheet" href="../CSS/request.css">
+    <link rel="stylesheet" href="../CSS/popup.css">
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     </script>
@@ -207,10 +207,23 @@ $reqs =
                     <?php foreach ($reqs as $request): ?>
 
                         <tr
-                            class="request-row"
-                            onclick="window.location.href=
-                'req_details.php?id=<?= urlencode($request['ar_request_id']); ?>'">
+                            class="request-row receiver-request-row"
+                            data-request-type="system_admin"
 
+                            data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
+                            data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
+                            data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
+                            data-title="<?= htmlspecialchars($request['ar_title']); ?>"
+                            data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                            data-label="<?= htmlspecialchars($request['ar_label']); ?>"
+                            data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
+                            data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
+                            data-description="<?= htmlspecialchars($request['ar_description']); ?>"
+                            data-file="<?= htmlspecialchars($request['ar_request_file'] ?? ''); ?>"
+                            data-submitted-date="<?= htmlspecialchars($request['ar_submission_date']); ?>"
+                            data-resolved-date="<?= htmlspecialchars($request['ar_resolved_date'] ?? ''); ?>">
+
+                            data-request-id="">
                             <td>
                                 <?= htmlspecialchars($request['ar_request_id']); ?>
                             </td>
@@ -258,8 +271,10 @@ $reqs =
 
             </aside>
 
+            <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
+
         </div>
-<script src="../JS/requesterPopup.js"></script>
+        <script src="../JS/requesterPopup.js"></script>
 </body>
 
 </html>

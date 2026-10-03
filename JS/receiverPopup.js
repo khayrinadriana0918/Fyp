@@ -1,6 +1,8 @@
 $('.receiver-request-row').on('click', function () {
 
+    const requestType = $(this).data('request-type') || 'student';
     const requestId = $(this).data('request-id');
+
 
     const requesterName = $(this).data('requester-name');
     const requesterId = $(this).data('requester-id');
@@ -19,7 +21,14 @@ $('.receiver-request-row').on('click', function () {
 
     $('#receiver_requester_name').text(requesterName);
     $('#receiver_requester_id').text(requesterId);
-    $('#receiver_semester').text(semester);
+
+    if (requestType === 'student') {
+        $('#receiver_semester').text(semester);
+        $('#receiver_semester_container').show();
+    } else {
+        $('#receiver_semester_container').hide();
+    }
+
     $('#receiver_title').text(title);
     $('#receiver_category').text(category);
     $('#receiver_labels').text(label || 'No labels');
@@ -41,8 +50,13 @@ $('.receiver-request-row').on('click', function () {
 
     if (file) {
 
+        const folder =
+            requestType === 'system_admin'
+                ? '../uploads/admin_hop/'
+                : '../uploads/hop_student/';
+
         $('#receiver_file').html(
-            '<a href="../uploads/hop_student/' +
+            '<a href="' + folder +
             encodeURIComponent(file) +
             '" target="_blank">View Attachment</a>'
         );
@@ -59,6 +73,14 @@ $('.receiver-request-row').on('click', function () {
     $('#priority_request_id').val(requestId);
     $('#receiver_new_priority').val(priority);
     $('#feedback_request_id').val(requestId);
+    $('#request_type')
+        .val(requestType);
+
+    $('#update_priority_form input[name="request_type"]')
+        .val(requestType);
+
+    $('#update_feedback_form input[name="request_type"]')
+        .val(requestType);
     $('#receiver_feedback').val(feedback || '');
 
     // hide forms when popup opens
