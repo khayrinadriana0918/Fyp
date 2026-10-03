@@ -452,6 +452,7 @@ $requestCounts =
             event.stopPropagation();
         });
     </script>
+    <script src="../JS/requesterPopup.js"></script>
 </body>
 
 </html>

@@ -55,18 +55,22 @@ $userStmt->execute();
 $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
+
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Management | SIMSAP</title>
-    <link rel="stylesheet" href="../CSS/dashboard.css">
-    <link rel="stylesheet" href="../CSS/database.css">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | SIMSAP</title>
 
+    <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     </script>
+
 </head>
 
 <body>
@@ -86,15 +90,7 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                     <span class="header-name">
                         <?= htmlspecialchars($userInfo['name']); ?>
                     </span>
-                    <button
-                        type="button"
-                        class="notification-button"
-                        title="Notifications">
-                        🔔
-                    </button>
-                    <a href="../includes/logout.php" class="logout">
-                        Log out
-                    </a>
+                    <a href="../index.php">Log Out</a>
                 </div>
             </div>
         </header>
@@ -122,8 +118,8 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </li>
                     <li>
-                        <a href="admin_requests.php">
-                            Requests
+                        <a href="submittedHop_requests.php">
+                            Head of Programme Requests
                         </a>
                     </li>
                     <li>
@@ -250,32 +246,61 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php else: ?>
                                 <?php foreach ($users as $account): ?>
                                     <tr>
-                                        <td><?= htmlspecialchars($account['user_id']); ?></td>
 
                                         <td>
-                                            <form method="POST" action="../includes/edit-user-name.php" class="inline-edit-form">
-                                                <input type="hidden" name="user_id" value="<?= htmlspecialchars($account['user_id']); ?>">
-                                                <input type="text" name="name" value="<?= htmlspecialchars($account['name']); ?>" class="edit-input" readonly required>
-
-                                                <button type="button" class="edit-toggle-button">Edit</button>
-                                            </form>
+                                            <?= htmlspecialchars($account['user_id']); ?>
                                         </td>
 
-                                        <td><?= htmlspecialchars($account['email']); ?></td>
-                                        <td><?= htmlspecialchars($account['role']); ?></td>
-                                        <td><?= htmlspecialchars(date(
-                                                'd M Y',
-                                                strtotime($account['created_at'])
-                                            )); ?></td>
+                                        <td>
+                                            <input type="text" name="name" form="edit-user-<?= htmlspecialchars($account['user_id']); ?>"
+                                                value="<?= htmlspecialchars($account['name']); ?>"
+                                                class="edit-input" readonly required>
+                                        </td>
 
                                         <td>
+                                            <input type="email" name="email" form="edit-user-<?= htmlspecialchars($account['user_id']); ?>"
+                                                value="<?= htmlspecialchars($account['email']); ?>"
+                                                class="edit-input" readonly required>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars($account['role']); ?>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars(
+                                                date(
+                                                    'd M Y',
+                                                    strtotime($account['created_at'])
+                                                )
+                                            ); ?>
+                                        </td>
+
+                                        <td>
+
+                                            <form method="POST" action="../includes/edit-user.php"
+                                                id="edit-user-<?= htmlspecialchars($account['user_id']); ?>"
+                                                class="inline-edit-form">
+
+                                                <input type="hidden" name="user_id" value="<?= htmlspecialchars($account['user_id']); ?>">
+
+                                                <button type="button" class="edit-toggle-button">Edit</button>
+
+                                            </form>
+
                                             <?php if ($account['user_id'] == $userId): ?>
+
                                                 <span>Current Account</span>
+
                                             <?php else: ?>
-                                                <form method="POST" action="../includes/delete-user.php" onsubmit="return confirm('Are you sure you want to delete this user account? ');">
+
+                                                <form method="POST" action="../includes/delete-user.php"
+                                                    onsubmit="return confirm('Are you sure you want to delete this user account?');">
+
                                                     <input type="hidden" name="user_id" value="<?= htmlspecialchars($account['user_id']); ?>">
 
                                                     <button type="submit" class="delete-button">Delete</button>
+
                                                 </form>
                                             <?php endif; ?>
                                         </td>
@@ -304,17 +329,35 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
             $('#category_name').val('');
         });
 
-        S('.edit-toggle-button').on('click', function(){
-            const button= $(this);
+        $('.edit-toggle-button').on('click', function() {
+            const button = $(this);
             const form = button.closest('.inline-edit-form');
-            const input = form.find('.edit-input');
+            const formId = form.attr('id');
+
+            if (formId) {
+                const inputs = $('[form="' + formId + '"]');
+
+                if (inputs.first().prop('readonly')) {
+                    inputs.prop('readonly', false);
+
+                    inputs.first().focus();
+                    button.text('Save');
+                } else {
+                    form.submit();
+                }
+                return;
+            }
+
+            const input =
+                form.find('.edit-input');
 
             if (input.prop('readonly')) {
                 input.prop('readonly', false);
+
                 input.focus();
 
                 button.text('Save');
-            }else{
+            } else {
                 form.submit();
             }
         });

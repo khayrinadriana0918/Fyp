@@ -14,9 +14,7 @@ $adminUserId =
     $_SESSION['user_id'];
 
 
-/* =========================================
-   CHECK ADMIN
-========================================= */
+/* CHECK ADMIN */
 
 $adminStmt = $pdo->prepare("
     SELECT admin_code
@@ -41,24 +39,34 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 
-$targetUserId =
+$userId =
     $_POST['user_id'] ?? '';
 
 $name =
     trim($_POST['name'] ?? '');
 
+$email =
+    trim($_POST['email'] ?? '');
+
 
 if (
-    $targetUserId === '' ||
-    $name === ''
+    $userId === '' ||
+    $name === '' ||
+    $email === ''
 ) {
     die("User information is required.");
 }
 
 
-/* =========================================
-   MAKE SURE USER EXISTS
-========================================= */
+if (!filter_var(
+    $email,
+    FILTER_VALIDATE_EMAIL
+)) {
+    die("Invalid email address.");
+}
+
+
+/* CHECK USER EXISTS */
 
 $checkStmt = $pdo->prepare("
     SELECT user_id
@@ -67,7 +75,7 @@ $checkStmt = $pdo->prepare("
 ");
 
 $checkStmt->execute([
-    ':user_id' => $targetUserId
+    ':user_id' => $userId
 ]);
 
 if (!$checkStmt->fetch()) {
@@ -75,24 +83,44 @@ if (!$checkStmt->fetch()) {
 }
 
 
-/* =========================================
-   UPDATE NAME
-========================================= */
+/* CHECK EMAIL DUPLICATE */
+
+$emailStmt = $pdo->prepare("
+    SELECT user_id
+    FROM users
+    WHERE email = :email
+    AND user_id != :user_id
+");
+
+$emailStmt->execute([
+    ':email' => $email,
+    ':user_id' => $userId
+]);
+
+if ($emailStmt->fetch()) {
+    die("Email already registered.");
+}
+
+
+/* UPDATE USER */
 
 $updateStmt = $pdo->prepare("
     UPDATE users
-    SET name = :name
+
+    SET
+        name = :name,
+        email = :email
+
     WHERE user_id = :user_id
 ");
 
 $updateStmt->execute([
     ':name' => $name,
-    ':user_id' => $targetUserId
+    ':email' => $email,
+    ':user_id' => $userId
 ]);
 
 
-header(
-    "Location: ../admin/database_management.php"
-);
+header("Location: ../admin/database_management.php");
 
 exit();

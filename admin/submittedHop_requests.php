@@ -83,7 +83,6 @@ switch ($sort) {
 
     case 'oldest':
         $query .= "ORDER BY ar.ar_submission_date ASC";
-
         break;
 
     case 'title':
@@ -105,20 +104,19 @@ $reqs =
     $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
+
 <html lang="en">
 
+
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0">
-
-    <title>Submitted HOP Requests | SIMSAP</title>
+    <title>Admin Dashboard | SIMSAP</title>
 
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
-
+    <link rel="stylesheet" href="../CSS/request.css">
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     </script>
@@ -126,81 +124,142 @@ $reqs =
 </head>
 
 <body>
-
     <div class="layout">
-        <table>
+        <!-- =====================================================
+         HEADER
+    ====================================================== -->
+        <header>
+            <div class="header-top">
+                <div class="system-name">
+                    <h1>
+                        SIMSAP - Student Issue Management System
+                        for Academic Programme
+                    </h1>
+                </div>
+                <div class="header-user">
+                    <span class="header-name">
+                        <?= htmlspecialchars($userInfo['name']); ?>
+                    </span>
+                    <a href="../index.php">Log Out</a>
+                </div>
+            </div>
+        </header>
 
-            <thead>
-                <tr>
-                    <th>Request ID</th>
-                    <th>HoP Name</th>
-                    <th>Staff ID</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th>Submitted</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                <?php foreach ($reqs as $request): ?>
-
-                    <tr
-                        class="request-row"
-                        onclick="window.location.href=
-                'req_details.php?id=<?= urlencode($request['ar_request_id']); ?>'">
-
-                        <td>
-                            <?= htmlspecialchars($request['ar_request_id']); ?>
-                        </td>
-
-                        <td>
-                            <?= htmlspecialchars($request['requester_name']); ?>
-                        </td>
-
-                        <td>
-                            <?= htmlspecialchars($request['requester_id']); ?>
-                        </td>
-
-                        <td>
-                            <?= htmlspecialchars($request['ar_title']); ?>
-                        </td>
-
-                        <td>
-                            <?= htmlspecialchars($request['category_name']); ?>
-                        </td>
-
-                        <td>
-                            <?= htmlspecialchars($request['ar_priority']); ?>
-                        </td>
-
-                        <td>
-                            <?= htmlspecialchars($request['ar_stats']); ?>
-                        </td>
-
-                        <td>
-                            <?= htmlspecialchars($request['ar_submission_date']); ?>
-                        </td>
-
-                    </tr>
-
-                <?php endforeach; ?>
-
-            </tbody>
-
-        </table>
-        <aside class="filter-sidebar">
-
-            <?php
-            include __DIR__ . '/../inc_reuse/filter.php';
-            ?>
-
+        <!-- =====================================================
+         LEFT SIDEBAR
+    ====================================================== -->
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="admin_dashboard.php">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="about.php">About</a>
+                    </li>
+                    <li>
+                        <a href="../userProfile.php">User Profile</a>
+                    </li>
+                    <li>
+                        <a href="database_management.php">
+                            Database Management
+                        </a>
+                    </li>
+                    <li>
+                        <a href="submittedHop_requests.php" class="active">
+                            Head of Programme Request
+                        </a>
+                    </li>
+                    <li>
+                        <a href="userManual.html">
+                            User Manual
+                        </a>
+                    </li>
+                    <li>
+                        <a href="faq.html">
+                            FAQ
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </aside>
 
-    </div>
+        <div class="layout">
+            <table>
 
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>HoP Name</th>
+                        <th>Staff ID</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <?php foreach ($reqs as $request): ?>
+
+                        <tr
+                            class="request-row"
+                            onclick="window.location.href=
+                'req_details.php?id=<?= urlencode($request['ar_request_id']); ?>'">
+
+                            <td>
+                                <?= htmlspecialchars($request['ar_request_id']); ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($request['requester_name']); ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($request['requester_id']); ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($request['ar_title']); ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($request['category_name']); ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($request['ar_priority']); ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($request['ar_stats']); ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars($request['ar_submission_date']); ?>
+                            </td>
+
+                        </tr>
+
+                    <?php endforeach; ?>
+
+                </tbody>
+
+            </table>
+            <aside class="filter-sidebar">
+
+                <?php
+                include __DIR__ . '/../inc_reuse/filter.php';
+                ?>
+
+            </aside>
+
+        </div>
+<script src="../JS/requesterPopup.js"></script>
 </body>
 
 </html>
