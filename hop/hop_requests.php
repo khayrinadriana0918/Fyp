@@ -321,7 +321,7 @@ $reqs =
         </aside>
 
     </div>
-    <script src="../JS/requesterPopup.js"></script>
+    <script src="../JS/requesterPopup.js?v=<?= time(); ?>"></script>
 </body>
 
 </html>

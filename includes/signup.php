@@ -28,7 +28,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($check->rowCount() > 0) {
             exit("Email Already Registered");
         }
+        //  ADMIN= SIGN UP WITH REGISTRATION CODE ONLY
+        if ($role === "system_admin") {
 
+        if (!preg_match('/^[A-Z]{2}[0-9]{5}$/', $userIdentifier)) {
+            exit("Invalid admin registration code format.");
+        }
+            $codeStmt =$pdo->prepare("
+            SELECT code_id
+            FROM admin_registration_code
+            WHERE registration_code = :registration_code
+            AND is_used = 0");
+
+            $codeStmt->execute([
+                ':registration_code' => $userIdentifier
+            ]);
+            $validCode =$codeStmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$validCode) {
+                exit("Invalid or already used Admin registration cde.");
+            }
+        }
+        
         $pdo->beginTransaction();
 
         $query = "INSERT INTO users (name,email,pwd,role) VALUES(:name, :email, :pwd, :role);";
@@ -47,14 +68,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         if ($role === "system_admin") {
+            $adminCode= 'ADM'. $user;
 
             $query = "INSERT INTO administrator(admin_code,user_id) VALUES(:admin_code,:user_id);";
 
             $identifyStmt = $pdo->prepare($query);
 
             $identifyStmt->execute([
-                ':admin_code' => $userIdentifier,
+                ':admin_code' => $adminCode,
                 ':user_id' => $user
+            ]);
+            $useCodeStmt = $pdo->prepare("
+            UPDATE admin_registration_code
+            SET
+            is_used=1,
+            used_by= :user_id,
+            used_at= NOW()
+            WHERE code_id = :code_id");
+
+            $useCodeStmt->execute([
+                ':user_id'=> $user,
+                ':code_id'=> $validCode['code_id']
             ]);
         } else if ($role === "head_of_programme") {
 

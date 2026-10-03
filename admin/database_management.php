@@ -143,6 +143,21 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
         <main class="middle-content">
             <section class="management-section">
                 <div class="section-heading">
+
+                    <form method="POST" action="../includes/generate-admin-code.php">
+                        <button type="submit">Generate Admin Registration Code</button>
+                    </form>
+
+                    <?php if(isset($_SESSION['gen_admin_code'])): ?>
+                    <div class="gen-code">
+                        <p>Generate Admin Registration Code: </p>
+                        <strong>
+                            <?= htmlspecialchars($_SESSION['gen_admin_code']); ?>
+                        </strong>
+                    </div>
+                    <?php unset($_SESSION['gen_admin_code']); ?>
+                    <?php endif; ?>
+
                     <div>
                         <h2>Category Management</h2>
 

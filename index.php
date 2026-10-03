@@ -220,8 +220,8 @@ include('includes/database.php');
     role.addEventListener("change", function() {
 
         if (role.value === "system_admin") {
-            identifierLabel.textContent = "Admin Code: ";
-            idInput.placeholder = "Enter Admin Code Given";
+            identifierLabel.textContent = "Admin Registration Code: ";
+            idInput.placeholder = "Enter Registration Code Given by Admin";
         } else if (role.value === "head_of_programme") {
             identifierLabel.textContent = "Staff ID: ";
             idInput.placeholder = "Enter Your Staff ID";
