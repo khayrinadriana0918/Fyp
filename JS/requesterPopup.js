@@ -1,5 +1,7 @@
 $('.request-row').on('click', function () {
     const requestId = $(this).data('request-id');
+    const requestType = $(this).data('request-type') || 'student';
+
     const requesterName = $(this).data('requester-name');
     const requesterId = $(this).data('requester-id');
     const semester = $(this).data('semester');
@@ -18,6 +20,12 @@ $('.request-row').on('click', function () {
     $('#popup_requester_name').text(requesterName);
     $('#popup_requester_id').text(requesterId);
     $('#popup_semester').text(semester);
+    if (requestType === 'student') {
+        $('#popup_semester').text(semester);
+        $('#semester_container').show();
+    }else{
+        $('#semester_container').hide();
+    }
     $('#popup_title').text(title);
     $('#popup_category').text(category);
     $('#popup_labels').text(label);
@@ -48,8 +56,13 @@ $('.request-row').on('click', function () {
     }
 
     if (file) {
+
+        const folder=
+        requestType === 'administrator'
+        ? '../uploads/admin_hop/'
+        : '../uploads/hop_student/';
         $('#popup_file').html(
-            '<a href="../uploads/hop_student/' +
+            '<a href="' + folder +
             encodeURIComponent(file) +
             '" target="_blank">View Attachment</a>'
         );
@@ -58,6 +71,7 @@ $('.request-row').on('click', function () {
     }
 
     $('#edit_request').data('request-id', requestId);
+    $('#edit_request').data('request-type', requestType);
 
     $('#req_popup').css('display', 'flex');
 
@@ -69,7 +83,18 @@ $('#close_popup').on('click', function () {
 $('#edit_request').on('click', function () {
 
     const requestId = $(this).data('request-id');
-    window.location.href =
-        'student_hop_requests.php?edit=' +
-        encodeURIComponent(requestId);
+
+    const requestType = $(this).data('request-type');
+
+    if (requestType === 'administrator') {
+        window.location.href =
+            'hop_admin_requests.php?edit=' +
+            encodeURIComponent(requestId);
+    } else {
+        window.location.href =
+            'student_hop_requests.php?edit=' +
+            encodeURIComponent(requestId);
+    }
+
+
 });

@@ -251,6 +251,8 @@ $reqs =
 
                             <tr
                                 class="request-row"
+                                data-request-type="administrator"
+
                                 data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
                                 data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
                                 data-requester-id="<?= htmlspecialchars($userInfo['staff_id']); ?>"
@@ -278,7 +280,7 @@ $reqs =
                                 <td>
                                     <?= htmlspecialchars($request['category_name']); ?>
                                 </td>
-                                
+
                                 <td>
                                     <?= htmlspecialchars($request['ar_description']); ?>
                                 </td>

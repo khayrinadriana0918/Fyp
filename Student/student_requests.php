@@ -251,6 +251,8 @@ $reqs =
 
                             <tr
                                 class="request-row"
+                                data-request-type="student"
+
                                 data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
                                 data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
                                 data-requester-id="<?= htmlspecialchars($request['student_id']); ?>"
