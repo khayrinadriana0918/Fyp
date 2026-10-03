@@ -47,22 +47,24 @@ if (!$userInfo) {
 $roleIdLabel = 'Admin Code';
 $requestQuery = "
     SELECT
-        r.ar_request_id,
-        r.ar_title,
-        r.ar_stats,
-        r.ar_priority,
-        r.ar_submission_date,
+        r.*,
         h.staff_id AS requester_id,
         u.name AS requester_name,
         c.category_name
+
     FROM admin_request r
+
     INNER JOIN head_of_programme h
         ON r.staff_id = h.staff_id
+
     INNER JOIN users u
         ON h.user_id = u.user_id
+
     INNER JOIN category c
         ON r.category_id = c.category_id
+
     ORDER BY r.ar_submission_date DESC
+
     LIMIT 5
 ";
 
@@ -125,6 +127,8 @@ $requestCounts =
     <title>Admin Dashboard | SIMSAP</title>
 
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="../CSS/popup.css?v=<?= time(); ?>">
+
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     </script>
@@ -367,8 +371,25 @@ $requestCounts =
                                             )
                                         );
                                     ?>
-                                    <tr class="request-row"
-                                        onclick="window.location.href ='req_details.php?id=<?= urlencode($request['ar_request_id']); ?>';">
+                                    <tr class="request-row receiver-request-row"
+
+                                        data-request-type="system_admin"
+
+                                        data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
+
+                                        data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
+                                        data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
+                                        data-semester=""
+                                        data-title="<?= htmlspecialchars($request['ar_title']); ?>"
+                                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                        data-label="<?= htmlspecialchars($request['ar_label'] ?? ''); ?>"
+                                        data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
+                                        data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
+                                        data-description="<?= htmlspecialchars($request['ar_description'] ?? ''); ?>"
+                                        data-file="<?= htmlspecialchars($request['ar_request_file'] ?? ''); ?>"
+                                        data-feedback="<?= htmlspecialchars($request['ar_feedback'] ?? ''); ?>"
+                                        data-submitted-date="<?= htmlspecialchars($request['ar_submission_date']); ?>"
+                                        data-resolved-date="<?= htmlspecialchars($request['ar_resolved_date'] ?? ''); ?>">
 
                                         <!-- REQUEST ID -->
                                         <td class="request-id">
@@ -453,7 +474,7 @@ $requestCounts =
             event.stopPropagation();
         });
     </script>
-    <script src="../JS/requesterPopup.js"></script>
+    <script src="../JS/receiverPopup.js"></script>
 </body>
 
 </html>
