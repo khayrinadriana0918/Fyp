@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions</title>
+</head>
+<style>
+    :root {
+        --text: #212121;
+        --muted: #666666;
+
+        --page-bg: #f6f7fb;
+        --card-bg: #ffffff;
+        --section-bg: #eef2ff;
+
+        --border: #d9dce5;
+
+        --link-base: #212121;
+        --link-hover: #ffffff;
+        --link-hover-bg: #575e5f;
+
+        --radius: 10px;
+    }
+
+
+    /* =========================================
+   GENERAL
+========================================= */
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+
+        font-family: Arial, Helvetica, sans-serif;
+
+        background: var(--page-bg);
+        color: var(--text);
+
+        line-height: 1.6;
+    }
+
+
+    .layout {
+        width: min(1100px, 92%);
+        margin: 40px auto;
+    }
+
+
+    /* =========================================
+   PAGE TITLE
+========================================= */
+
+    .layout>h1 {
+        margin: 0 0 25px;
+
+        font-size: 34px;
+        font-weight: 600;
+
+        text-align: center;
+    }
+
+
+    /* =========================================
+   QUICK CLICK
+========================================= */
+
+    .guides-nav {
+        padding: 22px;
+
+        margin-bottom: 30px;
+
+        background: var(--card-bg);
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    }
+
+
+    .guides-nav h2 {
+        margin: 0 0 15px;
+
+        font-size: 20px;
+    }
+
+
+    .guides-nav ul {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 12px;
+
+        margin: 0;
+        padding: 0;
+
+        list-style: none;
+    }
+
+
+    .guides-nav ul li {
+        margin: 0;
+        padding: 0;
+
+        background: transparent;
+    }
+
+
+    .guides-nav a {
+        display: inline-block;
+
+        padding: 10px 16px;
+
+        background: #f1f1f1;
+
+        border: 1px solid var(--border);
+        border-radius: 6px;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            transform 0.2s ease;
+    }
+
+
+    .guides-nav a:link,
+    .guides-nav a:visited {
+        color: var(--link-base);
+    }
+
+
+    .guides-nav a:hover {
+        background: var(--link-hover-bg);
+        color: var(--link-hover);
+
+        transform: translateY(-2px);
+    }
+
+
+    /* =========================================
+   ALL LINKS
+========================================= */
+
+    #user_manual {
+        text-decoration: underline;
+    }
+
+    #user_manual:hover {
+        background: var(--link-hover-bg);
+        color: var(--link-hover);
+        padding: 3px;
+        border-radius: 5px;
+    }
+
+    a {
+        color: var(--link-base);
+        text-decoration: none;
+    }
+
+
+    /* =========================================
+   GUIDE SECTIONS
+========================================= */
+
+    section {
+        margin: 35px 0;
+
+        padding: 30px 35px;
+
+        background: var(--card-bg);
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+
+        scroll-margin-top: 25px;
+    }
+
+
+    /* Main heading inside each guide */
+
+    section>ol {
+        margin-top: 0;
+    }
+
+
+    section>ol>li {
+        margin-bottom: 15px;
+
+        font-size: 26px;
+        font-weight: 700;
+
+        color: #2c365a;
+    }
+
+
+    /* =========================================
+   LIST STYLING
+========================================= */
+
+    ol {
+        padding-left: 28px;
+    }
+
+
+    ul {
+        padding-left: 28px;
+    }
+
+
+    li {
+        margin-bottom: 8px;
+    }
+
+
+    /* second-level feature headings */
+
+    section>ol>ol>li {
+        margin-top: 20px;
+
+        font-size: 18px;
+        font-weight: 600;
+
+        color: #303030;
+    }
+
+
+    /* instructions */
+
+    section ol ol ol {
+        margin-top: 10px;
+
+        padding: 15px 20px 15px 40px;
+
+        background: var(--section-bg);
+
+        border-left: 4px solid #8c98c9;
+        border-radius: 6px;
+    }
+
+
+    section ol ol ol li {
+        margin-bottom: 7px;
+
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+
+    /* =========================================
+   DIVIDERS
+========================================= */
+
+    hr {
+        border: none;
+        border-top: 1px solid var(--border);
+
+        margin: 35px 0;
+    }
+
+
+    /* =========================================
+   FOOTER
+========================================= */
+
+    footer {
+        margin-top: 40px;
+
+        padding: 20px;
+
+        text-align: center;
+
+        background: var(--card-bg);
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+    }
+
+
+    footer a {
+        display: inline-block;
+
+        padding: 10px 18px;
+
+        border: 1px solid var(--border);
+        border-radius: 6px;
+
+        background: #eeeeee;
+
+        font-weight: 600;
+    }
+
+
+    footer a:hover {
+        background: #575e5f;
+        color: #ffffff;
+    }
+
+
+    /* =========================================
+   RESPONSIVE
+========================================= */
+
+    @media (max-width: 700px) {
+
+        .layout {
+            width: 94%;
+            margin: 20px auto;
+        }
+
+
+        .layout>h1 {
+            font-size: 28px;
+        }
+
+
+        .guides-nav ul {
+            flex-direction: column;
+        }
+
+
+        .guides-nav a {
+            width: 100%;
+        }
+
+
+        section {
+            padding: 20px;
+        }
+
+
+        section>ol>li:first-child {
+            font-size: 22px;
+        }
+    }
+</style>
+
+<body>
+    <div class="layout">
+        <h1>FAQ</h1>
+        <h3>Frequently Asked Questions</h3>
+        <nav class="guides-nav">
+            <h2>Quick Click</h2>
+            <ul>
+                <li><a href="#about">What is the Student Issue Management System?</a></li>
+                <li><a href="#target_users">Who can use this system?</a></li>
+                <li><a href="#issue_types">What type of issues can I submit?</a></li>
+                <li><a href="#submit_new_req">How do I submit a new request?</a></li>
+                <li><a href="#upload_doc">Can I upload document to my request?</a></li>
+                <li><a href="#who_review">Who will review my request?</a></li>
+                <li><a href="#req_stored">Is my request information stored in the system?</a></li>
+            </ul>
+        </nav>
+        <hr>
+
+        <!-- =====================================================
+    Admin Guide
+    ====================================================== -->
+        <section id="faq">
+            <ol>
+                <li>
+                    <p id="about">What is the Student Issue Management System?</p>
+                </li>
+                <p>The Student Issue Management System is a web-based platform that allows students to submit academic
+                    or administrative issues to their Head of Programme (HoP),
+                    track the progress of their requests, and receive feedback or updates through one centralized
+                    system.</p>
+                <hr>
+                <li>
+                    <p id="target_users">
+                        Who Can Use This System?
+                    </p>
+                </li>
+                <p>
+                    The system is intended for students from the course CC101, CT204, CT206, and the Heads of Programme
+                    (HoP) from the same courses,
+                    and system administrators. Students use it to submit and track requests,
+                    while HoPs manage and respond to requests from students in their programme.
+                </p>
+
+                <li>
+                    <p id="issue_types">
+                        What type of issues can I submit?
+                    </p>
+                </li>
+                <p>You can submit academic or administrative issues related to your programme,
+                    such as course registration matters, timetable conflicts, section changes, inactive status, or other
+                    programme-related requests.
+                    You can see category issues on the request form when submitting a form.</p>
+
+                <li>
+                    <p id="submit_new_req">
+                        How do I submit a new request?
+                    </p>
+                </li>
+                <p>
+                    Check out the <a href="userManual.html" id="user_manual">User Manual</a> to see the guides on how to
+                    submit a new request depending on your role in the system.
+                </p>
+
+                <li>
+                    <p id="upload_doc">
+                        Can I upload document to my request?
+                    </p>
+                </li>
+                <p>
+                    Yes. You can upload supporting document if they are required for your request.
+                </p>
+
+                <li>
+                    <p id="who_review">
+                        Who will review my request?
+                    </p>
+                </li>
+                <p>
+                    As a student, the request will be reviewed and managed by the Head of Programme responsible for your
+                    academic programme.
+                    As a head of programme, the request will be reviewed and managed by the system admins for this
+                    system.
+                </p>
+
+                <li>
+                    <p id="req_stored">
+                        Is my request information stored in the system?
+                    </p>
+                </li>
+                <p>
+                    Yes. Submitted requests are stored in the system database so that they can be managed, monitored, 
+                    and retrieved throughout the resolution process.
+                </p>
+
+            </ol>
+        </section>
+        <hr>
+        <footer>
+            <a href="index.php">Go back to sign up.</a>
+            <a href="userManual.html">See User Manual</a>
+        </footer>
+    </div>
+</body>
+
+</html>

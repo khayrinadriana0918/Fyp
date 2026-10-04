@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Manual</title>
+</head>
+<style>
+
+:root {
+    --text: #212121;
+    --muted: #666666;
+
+    --page-bg: #f6f7fb;
+    --card-bg: #ffffff;
+    --section-bg: #eef2ff;
+
+    --border: #d9dce5;
+
+    --link-base: #212121;
+    --link-hover: #ffffff;
+    --link-hover-bg: #575e5f;
+
+    --radius: 10px;
+}
+
+
+/* =========================================
+   GENERAL
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: var(--page-bg);
+    color: var(--text);
+
+    line-height: 1.6;
+}
+
+
+.layout {
+    width: min(1100px, 92%);
+    margin: 40px auto;
+}
+
+
+/* =========================================
+   PAGE TITLE
+========================================= */
+
+.layout > h1 {
+    margin: 0 0 25px;
+
+    font-size: 34px;
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   QUICK CLICK
+========================================= */
+
+.guides-nav {
+    padding: 22px;
+
+    margin-bottom: 30px;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+
+.guides-nav h2 {
+    margin: 0 0 15px;
+
+    font-size: 20px;
+}
+
+
+.guides-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+
+.guides-nav ul li {
+    margin: 0;
+    padding: 0;
+
+    background: transparent;
+}
+
+
+.guides-nav a {
+    display: inline-block;
+
+    padding: 10px 16px;
+
+    background: #f1f1f1;
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.guides-nav a:link,
+.guides-nav a:visited {
+    color: var(--link-base);
+}
+
+
+.guides-nav a:hover {
+    background: var(--link-hover-bg);
+    color: var(--link-hover);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   ALL LINKS
+========================================= */
+
+a {
+    color: var(--link-base);
+    text-decoration: none;
+}
+
+
+/* =========================================
+   GUIDE SECTIONS
+========================================= */
+
+section {
+    margin: 35px 0;
+
+    padding: 30px 35px;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+
+    scroll-margin-top: 25px;
+}
+
+
+/* Main heading inside each guide */
+
+section > ol {
+    margin-top: 0;
+}
+
+
+section > ol > li:first-child {
+    margin-bottom: 15px;
+
+    font-size: 26px;
+    font-weight: 700;
+
+    color: #2c365a;
+}
+
+
+/* =========================================
+   LIST STYLING
+========================================= */
+
+ol {
+    padding-left: 28px;
+}
+
+
+ul {
+    padding-left: 28px;
+}
+
+
+li {
+    margin-bottom: 8px;
+}
+
+
+/* second-level feature headings */
+
+section > ol > ol > li {
+    margin-top: 20px;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    color: #303030;
+}
+
+
+/* instructions */
+
+section ol ol ol {
+    margin-top: 10px;
+
+    padding: 15px 20px 15px 40px;
+
+    background: var(--section-bg);
+
+    border-left: 4px solid #8c98c9;
+    border-radius: 6px;
+}
+
+
+section ol ol ol li {
+    margin-bottom: 7px;
+
+    font-size: 14px;
+    font-weight: 400;
+}
+
+
+/* =========================================
+   DIVIDERS
+========================================= */
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border);
+
+    margin: 35px 0;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+    margin-top: 40px;
+
+    padding: 20px;
+
+    text-align: center;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+
+footer a {
+    display: inline-block;
+
+    padding: 10px 18px;
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    background: #eeeeee;
+
+    font-weight: 600;
+}
+
+
+footer a:hover {
+    background: #575e5f;
+    color: #ffffff;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .layout {
+        width: 94%;
+        margin: 20px auto;
+    }
+
+
+    .layout > h1 {
+        font-size: 28px;
+    }
+
+
+    .guides-nav ul {
+        flex-direction: column;
+    }
+
+
+    .guides-nav a {
+        width: 100%;
+    }
+
+
+    section {
+        padding: 20px;
+    }
+
+
+    section > ol > li:first-child {
+        font-size: 22px;
+    }
+}
+</style>
+
+<body>
+    <div class="layout">
+        <h1>User Manual</h1>
+        <nav class="guides-nav">
+            <h2>Quick Click</h2>
+            <ul>
+                <li><a href="#admin_guides">System Admin Guides</a></li>
+                <li><a href="#hop_guides">Head of programme Guides</a></li>
+                <li><a href="#student_guides">Student Guides</a></li>
+            </ul>
+        </nav>
+        <hr>
+
+        <!-- =====================================================
+    Admin Guide
+    ====================================================== -->
+        <section id="admin_guides">
+            <ol>
+                <li>
+                    Admin Guides
+                </li>
+                <ol>
+                    <li>
+                        Create an Administrator Account
+                    </li>
+                    <ol>
+                        <li>
+                            Open the SIMSAP login page.
+                        </li>
+                        <li>
+                            Select 'Create Account'.
+                        </li>
+                        <li>
+                            Enter your full name.
+                        </li>
+                        <li>
+                            Select administrator as the role.
+                        </li>
+                        <li>
+                            Enter the admin registration code that provided by an existing administrator. Please ask the
+                            existing admin for a new code if the code given already being used.
+                        </li>
+                        <li>
+                            Enter your email.
+                        </li>
+                        <li>
+                            Create a password that satisfies the password requirements.
+                        </li>
+                        <li>
+                            Click 'Create Account' button.
+                        </li>
+                    </ol>
+
+                    <br>
+                    <li>
+                        Login
+                    </li>
+                    <ol>
+                        <li>
+                            Open the SIMSAP login page.
+                        </li>
+                        <li>
+                            Enter the registered email address.
+                        </li>
+                        <li>
+                            Enter the account password.
+                        </li>
+                        <li>
+                            Click enter button.
+                        </li>
+                    </ol>
+                </ol>
+                <br>
+
+                <li>
+                    System Features: System Admin
+                </li>
+                <ol>
+                    <li>View the Dashboard</li>
+                    <ol>
+                        <li>
+                            Select Dashboard from the sidebar.
+                        </li>
+                        <li>
+                            View the request overview
+                        </li>
+                        <li>
+                            View the most recent requests submitted by Heads of Programme.
+                        </li>
+                        <li>
+                            Click a request row to view its complete details.
+                        </li>
+                    </ol>
+                    <br>
+                    <li>
+                        View User Profile
+                    </li>
+                    <ol>
+                        <li>
+                            Select User Profile from the sidebar.
+                        </li>
+                        <li>
+                            View personal account information.
+                        </li>
+                        <li>
+                            The Administrator's permanent Admin Code is displayed as part of the account information.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>View Notifications</li>
+                    <ol>
+                        <li>
+                            Click the notification icon in the page header.
+                        </li>
+                        <li>
+                            View notifications for new requests or changes requiring attention.
+                        </li>
+                        <li>
+                            Select a notification to review the request that need attention.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>
+                        Manage Head of Programme Requests
+                    </li>
+                    <ol>
+                        <li>
+                            Select Head of Programme Requests from the sidebar or click on the recent request on the
+                            dashboard.
+                        </li>
+                        <li>
+                            View requests submitted by Heads of Programme.
+                        </li>
+                        <li>
+                            Use the filter panel to search or filter requests by:
+                            <ul>
+                                <li>Request ID or title</li>
+                                <li>Priority</li>
+                                <li>Status</li>
+                                <li>Category</li>
+                                <li>Sort order</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Click a request to open the request details popup.
+                        </li>
+                        <li>
+                            Review its title, category, label, priority, description, attachment, status and submission
+                            information.
+                        </li>
+                        <li>
+                            Select Change Status to update the request to:
+                        </li>
+                        <ul>
+                            <li>Pending</li>
+                            <li>In Progress</li>
+                            <li>Completed</li>
+                            <li>Rejected</li>
+                        </ul>
+
+                        <li>
+                            Select Change Priority to assign:
+                        </li>
+                        <ul>
+                            <li>Low</li>
+                            <li>Medium</li>
+                            <li>High</li>
+                            <li>Urgent</li>
+                        </ul>
+
+                        <li>Click Give Feedback to provide feedback to the Head of Programme.</li>
+                    </ol>
+                    <br>
+
+                    <li>Manage Categories</li>
+                    <ol>
+                        <li>
+                            Select Database Management from the sidebar.
+                        </li>
+                        <li>
+                            View the list of existing request categories.
+                        </li>
+                        <li>
+                            Use the Add Category form to create a new category.
+                        </li>
+                        <li>
+                            Select Edit beside an existing category to modify its information.
+                        </li>
+                        <li>
+                            Save the changes.
+                        </li>
+                        <li>
+                            Use the delete option to remove a category when appropriate.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>Manage User Accounts</li>
+                    <ol>
+                        <li>
+                            Open Database Management page.
+                        </li>
+                        <li>
+                            View registered user accounts.
+                        </li>
+                        <li>
+                            Select Edit for the required account.
+                        </li>
+                        <li>
+                            Modify the user's name or email address.
+                        </li>
+                        <li>
+                            Save the change
+                        </li>
+                        <li>
+                            Use the delete function when an account needs to be removed.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>Generate an Administrator Registration Code</li>
+                    <ol>
+                        <li>
+                            Open Database Management page.
+                        </li>
+                        <li>
+                            Select Generate Admin Registration Code.
+                        </li>
+                        <li>
+                            The system generates a one-time code consisting of:
+                        </li>
+                        <ul>
+                            <li>Two uppercase letters</li>
+                            <li>Five numbers</li>
+                        </ul>
+                        <li>
+                            Provide this code to the person who is authorised to create a new Administrator account.
+                        </li>
+                        <li>
+                            Once the code is used successfully, it cannot be reused.
+                        </li>
+                    </ol>
+                    <br>
+                </ol>
+
+            </ol>
+        </section>
+        <hr>
+        <!-- =====================================================
+    Head Of Programme Guide
+    ====================================================== -->
+        <section id="hop_guides">
+            <ol>
+                <li>
+                    Head of Programme Guides
+                </li>
+                <ol>
+                    <li>
+                        Create a head of programme Account
+                    </li>
+                    <ol>
+                        <li>
+                            Open the SIMSAP login page.
+                        </li>
+                        <li>
+                            Select 'Create Account'.
+                        </li>
+                        <li>
+                            Enter your full name.
+                        </li>
+                        <li>
+                            Select head of programme as the role.
+                        </li>
+                        <li>
+                            Enter the staff id from the institution.
+                        </li>
+                        <li>
+                            Enter your email.
+                        </li>
+                        <li>
+                            Create a password that satisfies the password requirements.
+                        </li>
+                        <li>
+                            Click 'Create Account' button.
+                        </li>
+                    </ol>
+
+                    <br>
+                    <li>
+                        Login
+                    </li>
+                    <ol>
+                        <li>
+                            Open the SIMSAP login page.
+                        </li>
+                        <li>
+                            Enter the registered email address.
+                        </li>
+                        <li>
+                            Enter the account password.
+                        </li>
+                        <li>
+                            Click enter button.
+                        </li>
+                    </ol>
+                </ol>
+                <br>
+
+                <li>
+                    System Features: Head of Programme
+                </li>
+                <ol>
+                    <li>View the Dashboard</li>
+                    <ol>
+                        <li>
+                            Select Dashboard from the sidebar.
+                        </li>
+                        <li>
+                            Choose program course code to start continue using the rest of the system features.
+                        </li>
+                        <li>
+                            View the request overview
+                        </li>
+                        <li>
+                            View the most recent requests submitted by students from your programme.
+                        </li>
+                        <li>
+                            Click one of the request from the row table to view its complete details.
+                        </li>
+                    </ol>
+                    <br>
+                    <li>
+                        View User Profile
+                    </li>
+                    <ol>
+                        <li>
+                            Select User Profile from the sidebar.
+                        </li>
+                        <li>
+                            View personal account information.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>View Notifications</li>
+                    <ol>
+                        <li>
+                            Click the notification icon in the page header.
+                        </li>
+                        <li>
+                            View notifications for new student requests or updates made by the system admin.
+                        <li>
+                            Select a notification to review the request that need attention.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>
+                        Manage Student Requests
+                    </li>
+                    <ol>
+                        <li>
+                            Select student's Requests from the sidebar or click on the recent request on the dashboard.
+                        </li>
+                        <li>
+                            View requests submitted by students.
+                        </li>
+                        <li>
+                            Use the filter panel to search or filter requests by:
+                            <ul>
+                                <li>Request ID or title</li>
+                                <li>Priority</li>
+                                <li>Status</li>
+                                <li>Category</li>
+                                <li>Sort order</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Click a request to open the request details popup.
+                        </li>
+                        <li>
+                            View requests submitted by students in the same programme.
+                        </li>
+                        <li>Review information such as:</li>
+                        <ol>
+                            <li>Request Id</li>
+                            <li>Student Name</li>
+                            <li>Student's Id</li>
+                            <li>Semester</li>
+                            <li>Title</li>
+                            <li>Category</li>
+                            <li>Status</li>
+                            <li>Priority</li>
+                            <li>Date Submitted</li>
+                            <li>Date Resolved(if the request status is complete.)</li>
+                        </ol>
+                        <li>
+                            Select Change Status to update the request to:
+                        </li>
+                        <ul>
+                            <li>Pending</li>
+                            <li>In Progress</li>
+                            <li>Completed</li>
+                            <li>Rejected</li>
+                        </ul>
+
+                        <li>
+                            Select Change Priority to assign:
+                        </li>
+                        <ul>
+                            <li>Low</li>
+                            <li>Medium</li>
+                            <li>High</li>
+                            <li>Urgent</li>
+                        </ul>
+
+                        <li>Click Give Feedback to provide feedback to the student.</li>
+                        <li>The student will see the updated request.</li>
+                    </ol>
+                    <br>
+
+                    <li>Submit a Request to Administrator</li>
+                    <ol>
+                        <li>
+                            Select Submit Request to Admin.
+                        </li>
+                        <li>
+                            Fill the request form.
+                        </li>
+                        <li>
+                            Preview the request form before confirming it to send to the system admins.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>View Requests Submitted to Administrator</li>
+                    <ol>
+                        <li>
+                            Select My Requests on the sidebar or the My Requests button under the overview.
+                        </li>
+                        <li>
+                            View all requests previously submitted to the Administrator.
+                        </li>
+                        <li>
+                            Click a request to view its full details.
+                        </li>
+                        <li>
+                            View feedback provided by the Administrator.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>Edit a Request Submitted to Administrator</li>
+                    <ol>
+                        <li>
+                            Select My Requests on the sidebar or the My Requests button under the overview.
+                        </li>
+                        <li>
+                            Click the required request.
+                        </li>
+                        <li>
+                            Select Edit Form.
+                        </li>
+                        <li>
+                            Modify the required information.
+                        </li>
+                        <li>
+                            Submit the updated request.
+                        </li>
+                    </ol>
+                    <br>
+                    <li>Generate Administrative Report.</li>
+                    <ol>
+                        <li>
+                            Select Administrative Report.
+                        </li>
+                        <li>
+                            Review the displayed student's requests statistics and charts.
+                        </li>
+                        <li>
+                            Apply the available date range when needed.
+                        </li>
+                        <li>
+                            Use the report to review Student request activity.
+                        </li>
+                    </ol>
+
+                </ol>
+
+            </ol>
+        </section>
+        <hr>
+        <!-- =====================================================
+    Student Guide
+    ====================================================== -->
+        <section id="student_guides">
+            <ol>
+                <li>
+                    Student Guides
+                </li>
+                <ol>
+                    <li>
+                        Create a Student Account
+                    </li>
+                    <ol>
+                        <li>
+                            Open the SIMSAP login page.
+                        </li>
+                        <li>
+                            Select 'Create Account'.
+                        </li>
+                        <li>
+                            Enter your full name.
+                        </li>
+                        <li>
+                            Select student as the role.
+                        </li>
+                        <li>
+                            Enter the student id given from the institution.
+                        </li>
+                        <li>
+                            Enter your email.
+                        </li>
+                        <li>
+                            Create a password that satisfies the password requirements.
+                        </li>
+                        <li>
+                            Click 'Create Account' button.
+                        </li>
+                    </ol>
+
+                    <br>
+                    <li>
+                        Login
+                    </li>
+                    <ol>
+                        <li>
+                            Open the SIMSAP login page.
+                        </li>
+                        <li>
+                            Enter the registered email address.
+                        </li>
+                        <li>
+                            Enter the account password.
+                        </li>
+                        <li>
+                            Click enter button.
+                        </li>
+                    </ol>
+                </ol>
+                <br>
+
+                <li>
+                    System Features: Student
+                </li>
+                <ol>
+                    <li>View the Dashboard</li>
+                    <ol>
+                        <li>
+                            Select Dashboard from the sidebar.
+                        </li>
+                        <li>
+                            Choose program course code to start continue using the rest of the system features.
+                        </li>
+                        <li>
+                            View the request overview
+                        </li>
+                        <li>
+                            Review recent submitted requests and their current statuses.
+                        </li>
+                        <li>
+                            Click one of the request from the row table to view its complete details.
+                        </li>
+                    </ol>
+                    <br>
+                    <li>
+                        View User Profile
+                    </li>
+                    <ol>
+                        <li>
+                            Select User Profile from the sidebar.
+                        </li>
+                        <li>
+                            View personal account information.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>View Notifications</li>
+                    <ol>
+                        <li>
+                            Click the notification icon in the page header.
+                        </li>
+                        <li>
+                            Review notifications relating to changes to submitted requests.
+                        <li>
+                            Select a notification to review the request that need attention.
+                        </li>
+                    </ol>
+                    <br>
+                    <li>Submit a Request to Head of Programme</li>
+                    <ol>
+                        <li>
+                            Select Submit Request to Head of Programme.
+                        </li>
+                        <li>
+                            Fill the request form.
+                        </li>
+                        <li>
+                            Preview the request form before confirming it to send to the head of programmes for the
+                            student's
+                            programme.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>View Submitted Requests</li>
+                    <ol>
+                        <li>
+                            Select My Requests on the sidebar or click on View All on the table at the dashboard.
+                        </li>
+                        <li>
+                            View all requests previously submitted to the head of programme.
+                        </li>
+                        <li>
+                            Click a request to view its full details.
+                        </li>
+                        <li>
+                            View feedback provided by the Administrator.
+                        </li>
+                        <li>Use the filter panel to search, filter or sort requests.</li>
+                    </ol>
+                    <br>
+                    <li>View Head of Programme Feedback</li>
+                    <ol>
+                        <li>
+                            Open the required request from My Requests.
+                        </li>
+                        <li>
+                            Locate the Feedback section at the bottom of the request details.
+                        </li>
+                        <li>
+                            Read the latest feedback provided for the request.
+                        </li>
+                    </ol>
+                    <br>
+
+                    <li>Edit a Request Submitted to Head of Programme</li>
+                    <ol>
+                        <li>
+                            Select My Requests on the sidebar or the My Requests button under the overview.
+                        </li>
+                        <li>
+                            Click the required request.
+                        </li>
+                        <li>
+                            Select Edit Form.
+                        </li>
+                        <li>
+                            Modify the required information.
+                        </li>
+                        <li>
+                            Submit the updated request.
+                        </li>
+                    </ol>
+                </ol>
+
+            </ol>
+        </section>
+        <hr>
+        <footer>
+            <a href="index.php">Go back to sign up.</a>
+            <a href="faq.html">FAQ</a>
+        </footer>
+    </div>
+</body>
+
+</html>

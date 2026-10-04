@@ -174,9 +174,6 @@ $reqs =
             <nav>
                 <ul>
                     <li>
-                        <a href="../about.html">About</a>
-                    </li>
-                    <li>
                         <a href="student_dashboard.php">
                             Dashboard
                         </a>

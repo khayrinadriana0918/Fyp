@@ -269,9 +269,6 @@ $monthData =
         <nav>
             <ul>
                 <li>
-                    <a href="../about.html">About</a>
-                </li>
-                <li>
                     <a href="hop_Dashboard.php">Dashboard</a>
                 </li>
                 <li>

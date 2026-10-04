@@ -15,6 +15,9 @@ include('includes/database.php');
     :root {
         --border-radius: 25px;
         --box-shadow: 0 10px 40px rgba(0, 0, 0, 8);
+        --link-base: #161616;
+        --link-hover: #575e5f;
+        --link-visited: #161616;
     }
 
     * {
@@ -41,6 +44,19 @@ include('includes/database.php');
         box-shadow: var(--box-shadow);
     }
 
+    a:link {
+        color: var(--link-base);
+    }
+
+    a:visited {
+        color: var(--link-visited);
+    }
+
+    a:hover {
+        border: 1px dashed #aaaaaa;
+        color: var(--link-hover);
+    }
+
     #left-content {
         width: 50%;
         background: linear-gradient(135deg,
@@ -50,7 +66,7 @@ include('includes/database.php');
         border-radius: var(--border-radius);
     }
 
-    #left-content img{
+    #left-content img {
         width: 100%;
         height: 100%;
         min-height: 100vh;
@@ -184,8 +200,13 @@ include('includes/database.php');
                 <button type="submit">Create Account</button>
 
                 <p>
-                    Already have an account?
+                    Already have an account?<br>
                     <a href="#" onclick="showForm('login')">Login Here</a>
+                    <br>
+                <p>
+                    <a href="userManual.html">User Manual</a> ||
+                    <a href="faq.html">FAQ</a>
+                </p>
 
                 </p>
             </form>
@@ -205,8 +226,12 @@ include('includes/database.php');
 
                 <p>
                     Don't have an account?
-                    <a href="#" onclick="showForm('signup')">Create Account</a><br>
-                    Forgot password?<a href="reset.php">Change Password</a>
+                    <a href="#" onclick="showForm('signup')"> Create Account Here</a><br>
+                    Forgot password?<a href="reset.php"> Change Password</a>
+                </p><br>
+                <p>
+                    <a href="userManual.html">User Manual</a> ||
+                    <a href="faq.html">FAQ</a>
                 </p>
             </form>
         </div>

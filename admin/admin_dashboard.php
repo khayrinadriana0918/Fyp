@@ -230,9 +230,6 @@ $requestCounts =
                         </a>
                     </li>
                     <li>
-                        <a href="../about.html">About</a>
-                    </li>
-                    <li>
                         <a href="../userProfile.php">User Profile</a>
                     </li>
                     <li>
