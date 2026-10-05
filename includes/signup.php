@@ -9,15 +9,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $pwd = $_POST["pwd"];
 
-// min 8 characters, max 16 characters, at least 1 number and 1  capital letter
-    if (strlen($pwd)<8 || strlen($pwd)>16) {
+    // min 8 characters, max 16 characters, at least 1 number and 1  capital letter
+    if (strlen($pwd) < 8 || strlen($pwd) > 16) {
         exit("Password");
-    }elseif(!preg_match('/[A-Z]/', $pwd)){
+    } elseif (!preg_match('/[A-Z]/', $pwd)) {
         exit();
-    }elseif(!preg_match('/[0-9]/', $pwd)){
+    } elseif (!preg_match('/[0-9]/', $pwd)) {
         exit();
     }
-// hash password first
+    // hash password first
     $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
 
     try {
@@ -33,10 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //  ADMIN= SIGN UP WITH REGISTRATION CODE ONLY
         if ($role === "system_admin") {
 
-        if (!preg_match('/^[A-Z]{2}[0-9]{5}$/', $userIdentifier)) {
-            exit("Invalid admin registration code format.");
-        }
-            $codeStmt =$pdo->prepare("
+            if (!preg_match('/^[A-Z]{2}[0-9]{5}$/', $userIdentifier)) {
+                exit("Invalid admin registration code format.");
+            }
+            $codeStmt = $pdo->prepare("
             SELECT code_id
             FROM admin_registration_code
             WHERE registration_code = :registration_code
@@ -45,13 +45,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $codeStmt->execute([
                 ':registration_code' => $userIdentifier
             ]);
-            $validCode =$codeStmt->fetch(PDO::FETCH_ASSOC);
+            $validCode = $codeStmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$validCode) {
-                exit("Invalid or already used Admin registration cde.");
+                echo "
+                <script>
+                alert('Invalid or already used Admin registration code.');
+                window.history.back();
+                </script>";
+                exit();
             }
         }
-        
+
         $pdo->beginTransaction();
 
         $query = "INSERT INTO users (name,email,pwd,role) VALUES(:name, :email, :pwd, :role);";
@@ -70,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         if ($role === "system_admin") {
-            $adminCode= 'ADM'. $user;
+            $adminCode = 'ADM' . $user;
 
             $query = "INSERT INTO administrator(admin_code,user_id) VALUES(:admin_code,:user_id);";
 
@@ -89,8 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             WHERE code_id = :code_id");
 
             $useCodeStmt->execute([
-                ':user_id'=> $user,
-                ':code_id'=> $validCode['code_id']
+                ':user_id' => $user,
+                ':code_id' => $validCode['code_id']
             ]);
         } else if ($role === "head_of_programme") {
 
@@ -123,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         exit();
     } catch (PDOException $e) {
-        if($pdo->inTransaction()){
+        if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
         die("Query Failed: " . $e->getMessage());

@@ -20,8 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         $stmt = $pdo->prepare("UPDATE users SET pwd = :pwd WHERE email = :email");
 
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        $stmt= $pdo->prepare("
+        UPDATE users
+        SET pwd = :pwd
+        WHERE email = :email
+        ");
+        
         $stmt->execute([
-            ':pwd' => $newPassword,
+            ':pwd' => $hashedPassword,
             ':email' => $email
         ]);
 

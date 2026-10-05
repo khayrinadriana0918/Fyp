@@ -3,8 +3,8 @@ require_once 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = $_POST["email"];
-    $pwd = $_POST["pwd"];
+    $email = trim($_POST["email"]?? '');
+    $pwd = $_POST["pwd"]?? '';
 
     try {
         require_once __DIR__ . '/database.php';
@@ -37,30 +37,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Check if password is already hashed
-        $isHashed = password_get_info($user['pwd'])['algo'] !== 0;
+        // Check password
+        if (password_verify($pwd, $user['pwd'])) {
 
-        if ($isHashed) {
+            // Password is already hashed
 
-            // New account / already migrated account
-            if (!password_verify($pwd, $user['pwd'])) {
-                echo "<script>
-                        alert('Incorrect password.');
-                        window.history.back();
-                      </script>";
-                exit();
-            }
-        } else {
+        } elseif (hash_equals($user['pwd'], $pwd)) {
 
             // Existing account with old plaintext password
-            if (!hash_equals($user['pwd'], $pwd)) {
-                echo "<script>
-                        alert('Incorrect password.');
-                        window.history.back();
-                      </script>";
-                exit();
-            }
 
-            // Check old password requirements
             $passwordIsWeak =
                 strlen($pwd) < 8 ||
                 strlen($pwd) > 16 ||
@@ -80,55 +65,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $newHash = password_hash($pwd, PASSWORD_DEFAULT);
 
             $updatePassword = $pdo->prepare("
-                UPDATE users
-                SET pwd = :pwd
-                WHERE user_id = :user_id
-            ");
+        UPDATE users
+        SET pwd = :pwd
+        WHERE user_id = :user_id
+    ");
 
             $updatePassword->execute([
                 ':pwd' => $newHash,
                 ':user_id' => $user['user_id']
             ]);
-        }
+        } else {
 
+            echo "<script>
+            alert('Incorrect password.');
+            window.history.back();
+          </script>";
+            exit();
+        }
         // Successful login
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['role'] = $user['role'];
 
-        $pdo = null;
-        $stmt = null;
-
-        // Redirect dashboard based on user role
-        if ($user['role'] === "system_admin") {
-
+        if ($user['role']=== "system_admin") {
             header("Location: ../admin/admin_dashboard.php");
-        } elseif ($user['role'] === "head_of_programme") {
-
+        }elseif($user['role']=== "head_of_programme"){
             header("Location: ../hop/hop_dashboard.php");
-        } elseif ($user['role'] === "student") {
-
+        }elseif ($user['role']=== "student") {
             header("Location: ../student/student_dashboard.php");
-        } else {
-
-            echo "<script>
-                    alert('User role unrecognized.');
-                    window.history.back();
-                  </script>";
+        }else{
+            echo "
+            <script>
+            alert('User role unrecognized.');
+            window.history.back();
+            </script>";
             exit();
         }
-
         exit();
-    } catch (PDOException $e) {
-
-        echo "<script>
-                alert('Something went wrong. Please try again.');
-                window.history.back();
-              </script>";
+    }catch(PDOException $e){
+        echo"<script>
+        alert('Something went wrong. Please try again.');
+        window.history.back();
+        </script>";
         exit();
     }
-} else {
-
-    header("Location: ../index.php");
-    exit();
-}
+}else{
+        header("Location: ../index.php");
+        exit();
+    }
