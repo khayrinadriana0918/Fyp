@@ -67,6 +67,7 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Admin Dashboard | SIMSAP</title>
 
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="../CSS/database.css?v=<?= time(); ?>">
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     </script>
@@ -141,20 +142,27 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
             <section class="management-section">
                 <div class="section-heading">
 
-                    <form method="POST" action="../includes/generate-admin-code.php">
-                        <button type="submit">Generate Admin Registration Code</button>
+                    <form method="POST" action="../includes/gen-admin-code.php">
+                        <button type="submit" class="generate-code-button">Generate Admin Registration Code</button>
                     </form>
 
-                    <?php if(isset($_SESSION['gen_admin_code'])): ?>
-                    <div class="gen-code">
-                        <p>Generate Admin Registration Code: </p>
-                        <strong>
-                            <?= htmlspecialchars($_SESSION['gen_admin_code']); ?>
-                        </strong>
-                    </div>
-                    <?php unset($_SESSION['gen_admin_code']); ?>
-                    <?php endif; ?>
+                    <?php if (isset($_SESSION['generated_admin_code'])): ?>
 
+                        <div class="gen-code">
+                            <p>Generated Admin Registration Code</p>
+
+                            <strong>
+                                <?= htmlspecialchars($_SESSION['generated_admin_code']); ?>
+                            </strong>
+
+                            <small>
+                                Give this code to the new Administrator during registration.
+                            </small>
+                        </div>
+
+                        <?php unset($_SESSION['generated_admin_code']); ?>
+
+                    <?php endif; ?>
                     <div>
                         <h2>Category Management</h2>
 
@@ -237,7 +245,7 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                 </div>
-                <div class="table wrapper">
+                <div class="table-wrapper">
                     <table>
                         <thead>
                             <tr>

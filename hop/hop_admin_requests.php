@@ -15,7 +15,8 @@ $query = "
         users.user_id,
         users.name,
         users.created_at,
-        head_of_programme.staff_id AS role_id
+        head_of_programme.staff_id AS role_id,
+        head_of_programme.programme_id
     FROM users
     INNER JOIN head_of_programme
         ON users.user_id = head_of_programme.user_id
@@ -36,7 +37,7 @@ if (!$userInfo) {
 }
 
 if (empty($userInfo['programme_id'])) {
-    header("Locatien:hop_dashboard.php");
+    header("Location:hop_dashboard.php");
     exit();
 }
 

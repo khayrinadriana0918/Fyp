@@ -29,7 +29,7 @@ if (!$userInfo) {
 }
 
 if (empty($userInfo['programme_id'])) {
-    header("Locatien:hop_dashboard.php");
+    header("Location:hop_dashboard.php");
     exit();
 }
 
@@ -67,14 +67,18 @@ $params = [
 if ($search !== '') {
     $query .= "
     AND (
-    CAST(r.request_id AS CHAR) LIKE :search
-    OR r.title LIKE :search
-    OR u.name LIKE :search
-    OR s.student_id LIKE :search
+        CAST(r.request_id AS CHAR) LIKE :search_id
+        OR r.title LIKE :search_title
+        OR u.name LIKE :search_name
+        OR s.student_id LIKE :search_student_id
     )";
 
-    $params[':search'] =
-        '%' . $search . '%';
+    $searchValue = '%' . $search . '%';
+
+    $params[':search_id'] = $searchValue;
+    $params[':search_title'] = $searchValue;
+    $params[':search_name'] = $searchValue;
+    $params[':search_student_id'] = $searchValue;
 }
 //priority
 if ($priority !== '') {
@@ -286,6 +290,7 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </table>
                 </div>
             </section>
+        </main>
 
             <aside class="filter-sidebar">
                 <?php

@@ -11,7 +11,8 @@ $userId = $_SESSION['user_id'];
 
 $userStmt = $pdo->prepare("
 SELECT u.name,
-h.staff_id
+h.staff_id,
+h.programme_id
 FROM users u
 
 INNER JOIN head_of_programme h
@@ -27,7 +28,7 @@ if (!$userInfo) {
 }
 
 if (empty($userInfo['programme_id'])) {
-    header("Locatien:hop_dashboard.php");
+    header("Location:hop_dashboard.php");
     exit();
 }
 
@@ -194,10 +195,10 @@ $reqs =
                         <a href="hop_admin_requests.php">Submit Request to Admin</a>
                     </li>
                     <li>
-                        <a href="hop_requests.php">My Requests</a>
+                        <a href="hop_requests.php" class="active">My Requests</a>
                     </li>
                     <li>
-                        <a href="submittedStud.php" class="active">Students Requests</a>
+                        <a href="submittedStud.php">Students Requests</a>
                     </li>
                     <li>
                         <a href="hop_report.php">Administrative Report</a>

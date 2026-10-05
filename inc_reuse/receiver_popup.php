@@ -25,12 +25,6 @@
                     </div>
 
                     <div class="popup-meta">
-                        <div class="labels-section">
-                            <p>Labels:</p>
-                            <div class="label-box">
-                                <span id="receiver_labels"></span>
-                            </div>
-                        </div>
 
                         <div class="status-section">
                             <p>Status: <span id="receiver_status"></span></p>

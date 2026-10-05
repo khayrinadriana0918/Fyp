@@ -3,14 +3,23 @@
 require_once 'config.php';
 require_once __DIR__ . '/database.php';
 
+
+/* =========================================
+   LOGIN CHECK
+========================================= */
+
 if (!isset($_SESSION['user_id'])) {
+
     header("Location: ../index.php");
     exit();
 }
 
 $userId = $_SESSION['user_id'];
 
-/* Make sure logged-in user is Admin */
+
+/* =========================================
+   ONLY ADMIN CAN GENERATE CODE
+========================================= */
 
 $adminStmt = $pdo->prepare("
     SELECT admin_code
@@ -29,7 +38,21 @@ if (!$admin) {
 }
 
 
-/* Generate unique code */
+/* =========================================
+   ONLY POST REQUEST
+========================================= */
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
+    header("Location: ../admin/database_management.php");
+    exit();
+}
+
+
+/* =========================================
+   GENERATE UNIQUE CODE
+   2 CAPITAL LETTERS + 5 NUMBERS
+========================================= */
 
 do {
 
@@ -48,6 +71,9 @@ do {
     $registrationCode =
         $letters . $numbers;
 
+
+    /* Check whether code already exists */
+
     $checkStmt = $pdo->prepare("
         SELECT code_id
         FROM admin_registration_code
@@ -58,32 +84,45 @@ do {
         ':registration_code' => $registrationCode
     ]);
 
-    $codeExists =
-        $checkStmt->fetch(PDO::FETCH_ASSOC);
-
+    $codeExists = $checkStmt->fetch(PDO::FETCH_ASSOC);
 } while ($codeExists);
 
 
-/* Save code */
+/* =========================================
+   SAVE CODE
+========================================= */
 
-$stmt = $pdo->prepare("
-    INSERT INTO admin_registration_code (
-        registration_code,
-        created_by
-    )
-    VALUES (
-        :registration_code,
-        :created_by
-    )
-");
+try {
 
-$stmt->execute([
-    ':registration_code' => $registrationCode,
-    ':created_by' => $userId
-]);
+    $stmt = $pdo->prepare("
+        INSERT INTO admin_registration_code (
+            registration_code,
+            created_by
+        )
+        VALUES (
+            :registration_code,
+            :created_by
+        )
+    ");
 
-$_SESSION['generated_admin_code'] =
-    $registrationCode;
+    $stmt->execute([
+        ':registration_code' => $registrationCode,
+        ':created_by' => $userId
+    ]);
 
-header("Location: ../admin/database_management.php");
-exit();
+
+    /* Store generated code for display */
+
+    $_SESSION['generated_admin_code'] =
+        $registrationCode;
+
+
+    header(
+        "Location: ../admin/database_management.php"
+    );
+
+    exit();
+} catch (PDOException $e) {
+
+    die("Unable to generate registration code.");
+}

@@ -432,7 +432,7 @@ $requestCounts =
                         <table class="request-table">
                             <thead>
                                 <tr>
-                                    <th>Request</th>
+                                    <th>Request ID</th>
                                     <th>Semester</th>
                                     <th>Title</th>
                                     <th>Category</th>

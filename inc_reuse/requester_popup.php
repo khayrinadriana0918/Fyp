@@ -25,13 +25,6 @@
                     </div>
 
                     <div class="popup-meta">
-                        <div class="labels-section">
-                            <p>Labels:</p>
-                            <div class="label-box">
-                                <span id="popup_labels"></span>
-                            </div>
-                        </div>
-
                         <div class="status-section">
                             <p>Status: <span id="popup_status"></span></p>
                             <p>Date Submitted: <span id="popup_submit_date"></span></p>
