@@ -34,6 +34,12 @@ $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$userInfo) {
     die("User information not found.");
 }
+
+if (empty($userInfo['programme_id'])) {
+    header("Locatien:hop_dashboard.php");
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 

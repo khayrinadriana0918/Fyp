@@ -338,6 +338,7 @@ $requestCounts =
         <aside class="sidebar">
             <nav>
                 <ul>
+
                     <li>
                         <a href="hop_Dashboard.php" class="active">Dashboard</a>
                     </li>
@@ -345,16 +346,16 @@ $requestCounts =
                         <a href="../userProfile.php">User Profile</a>
                     </li>
                     <li>
-                        <a href="hop_admin_requests.php">Submit Request to Admin</a>
+                        <a href="hop_admin_requests.php" class="programme-required">Submit Request to Admin</a>
                     </li>
                     <li>
-                        <a href="hop_requests.php">My Requests</a>
+                        <a href="hop_requests.php" class="programme-required">My Requests</a>
                     </li>
                     <li>
-                        <a href="submittedStud.php">Students Requests</a>
+                        <a href="submittedStud.php" class="programme-required">Students Requests</a>
                     </li>
                     <li>
-                        <a href="hop_report.php">Administrative Report</a>
+                        <a href="hop_report.php" class="programme-required">Administrative Report</a>
                     </li>
                     <li>
                         <a href="../userManual.html">User Manual</a>
@@ -432,12 +433,14 @@ $requestCounts =
             <section class="quick-actions">
                 <button
                     type="button"
-                    onclick="document.location='hop_admin_requests.php'">
+                    class="programme-required"
+                    data-url="hop_admin_requests.php">
                     Submit Request to Admin
                 </button>
                 <button
                     type="button"
-                    onclick="document.location='hop_requests.php'">
+                    class="programme-required"
+                    data-url="hop_requests.php">
                     See My Requests
                 </button>
 
@@ -455,7 +458,7 @@ $requestCounts =
                         <p>Latest administrative requests submitted by students.</p>
                     </div>
 
-                    <a href="submittedStud.php" class="view-all">View All</a>
+                    <a href="submittedStud.php" class="view-all programme-required">View All</a>
 
                 </div>
 
@@ -625,6 +628,29 @@ $requestCounts =
         $('#notification_dropdown').on('click', function(event) {
             event.stopPropagation();
         });
+    </script>
+    <script>
+    $(document).ready(function(){
+        const programmeSelected=
+        <?= !empty($userInfo['programme_id'])
+        ?'true'
+        : 'false'; ?>;
+
+        $('.programme-required').on('click',function(event){
+            if(!programmeSelected){
+                event.preventDefault();
+                openForm();
+                return;
+            }
+
+            const destination=
+            $(this).data('url');
+
+            if (destination) {
+                window.location.href=destination;
+            }
+        });
+    });
     </script>
 </body>
 

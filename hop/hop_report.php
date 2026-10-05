@@ -38,6 +38,11 @@ $userStmt->execute([
 $userInfo =
     $userStmt->fetch(PDO::FETCH_ASSOC);
 
+if (empty($userInfo['programme_id'])) {
+    header("Locatien:hop_dashboard.php");
+    exit();
+}
+
 $startDate = $_GET['start_date'] ?? '';
 $endDate = $_GET['end_date'] ?? '';
 

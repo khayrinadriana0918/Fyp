@@ -28,6 +28,11 @@ if (!$userInfo) {
     die("User information not found.");
 }
 
+if (empty($userInfo['programme_id'])) {
+    header("Locatien:hop_dashboard.php");
+    exit();
+}
+
 $search = trim($_GET['search'] ?? '');
 $priority = $_GET['priority'] ?? '';
 $status = $_GET['status'] ?? '';
