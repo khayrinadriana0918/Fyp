@@ -71,7 +71,7 @@
 
 
 /* =========================
-   LABEL + STATUS
+   STATUS
 ========================= */
 
 .popup-meta {
@@ -81,26 +81,6 @@
     margin-bottom: 20px;
 }
 
-.labels-section {
-    width: 50%;
-}
-
-.labels-section p {
-    margin: 0 0 7px 0;
-}
-
-.label-box {
-    display: inline-block;
-
-    min-width: 120px;
-
-    padding: 8px 15px;
-
-    background: #eeeeee;
-
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-}
 
 .status-section {
     width: 40%;
