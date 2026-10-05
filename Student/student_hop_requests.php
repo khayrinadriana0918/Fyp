@@ -171,15 +171,7 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
                     </div>
                     <label for="title">Title:</label>
                     <input type="text" id="title" name="title" value="<?= $editMode ? htmlspecialchars($editRequest['title']) : ''; ?>" placeholder="Enter Title Here." required>
-                    <br><br>
-
-                    <div class=label-box>
-                        <label for="label" id="label_container">Labels:</label><br>
-                        <small>separates each label tags with space</small><br>
-                        <!-- the tag labels separate and in a sphere each-->
-                        <input type="text" id="label" name="label" value="<?= $editMode ? htmlspecialchars($editRequest['label']) : ''; ?>" placeholder="e.g: time-strict, bug_report">
-
-                    </div>
+                    <br>
                     <br>
 
                     <div class="category-box">
@@ -265,10 +257,6 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
                     <span id="preview_title"></span>
                 </p>
                 <p>
-                    <strong>Labels:</strong>
-                    <span id="preview_label"></span>
-                </p>
-                <p>
                     <strong>Category:</strong>
                     <span id="preview_category"></span>
                 </p>
@@ -325,7 +313,6 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
         // Get information from form
         const semester = $('#semRange').val();
         const title = $('#title').val();
-        const label = $('#label').val();
         const category =
             $('select[name="c_id"] option:selected').text();
 
@@ -346,9 +333,6 @@ if (isset($_GET['edit']) && $_GET['edit'] !== '') {
         // Put information into preview
         $('#preview_semester').text('Semester ' + semester);
         $('#preview_title').text(title);
-        $('#preview_label').text(
-            label || 'No labels'
-        );
         $('#preview_category').text(category);
         $('#preview_description').text(description);
 

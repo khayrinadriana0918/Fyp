@@ -239,7 +239,6 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     data-semester="<?= htmlspecialchars($request['semester']); ?>"
                                     data-title="<?= htmlspecialchars($request['title']); ?>"
                                     data-category="<?= htmlspecialchars($request['category_name']); ?>"
-                                    data-label="<?= htmlspecialchars($request['label'] ?? ''); ?>"
                                     data-priority="<?= htmlspecialchars($request['priority']); ?>"
                                     data-status="<?= htmlspecialchars($request['stats']); ?>"
                                     data-description="<?= htmlspecialchars($request['description']); ?>"

@@ -7,7 +7,6 @@ $('.request-row').on('click', function () {
     const semester = $(this).data('semester');
     const title = $(this).data('title');
     const category = $(this).data('category');
-    const label = $(this).data('label');
     const priority = $(this).data('priority');
     const status = $(this).data('status');
     const desc = $(this).data('description');
@@ -28,7 +27,6 @@ $('.request-row').on('click', function () {
     }
     $('#popup_title').text(title);
     $('#popup_category').text(category);
-    $('#popup_labels').text(label);
     $('#popup_priority').text(priority);
     $('#popup_status').text(status);
     $('#popup_desc').text(desc);

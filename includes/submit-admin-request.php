@@ -25,7 +25,6 @@ $user = $_SESSION['user_id'];
 
 //connect to name attributes
 $ar_title = trim($_POST['title'] ?? '');
-$ar_label = trim($_POST['label'] ?? '');
 $category_id = trim($_POST['c_id'] ?? '');
 $ar_priority = trim($_POST['priority'] ?? 'Low');
 $ar_description = trim($_POST['desc'] ?? '');
@@ -124,7 +123,6 @@ INSERT INTO admin_request(
 staff_id,
 category_id,
 ar_title,
-ar_label,
 ar_priority,
 ar_description,
 ar_request_file
@@ -133,7 +131,6 @@ ar_request_file
 :staff_id,
 :category_id,
 :ar_title,
-:ar_label,
 :ar_priority,
 :ar_description,
 :ar_request_file
@@ -143,7 +140,6 @@ ar_request_file
 $stmt->bindParam(":staff_id", $staff_id);
 $stmt->bindParam(":category_id", $category_id);
 $stmt->bindParam(":ar_title", $ar_title);
-$stmt->bindParam(":ar_label", $ar_label);
 $stmt->bindParam(":ar_priority", $ar_priority);
 $stmt->bindParam(":ar_description", $ar_description);
 $stmt->bindParam(":ar_request_file", $ar_request_file);

@@ -379,7 +379,6 @@ $requestCounts =
                                         data-semester=""
                                         data-title="<?= htmlspecialchars($request['ar_title']); ?>"
                                         data-category="<?= htmlspecialchars($request['category_name']); ?>"
-                                        data-label="<?= htmlspecialchars($request['ar_label'] ?? ''); ?>"
                                         data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
                                         data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
                                         data-description="<?= htmlspecialchars($request['ar_description'] ?? ''); ?>"

@@ -9,7 +9,6 @@ $('.receiver-request-row').on('click', function () {
     const semester = $(this).data('semester');
     const title = $(this).data('title');
     const category = $(this).data('category');
-    const label = $(this).data('label');
     const priority = $(this).data('priority');
     const status = $(this).data('status');
     const description = $(this).data('description');
@@ -31,7 +30,6 @@ $('.receiver-request-row').on('click', function () {
 
     $('#receiver_title').text(title);
     $('#receiver_category').text(category);
-    $('#receiver_labels').text(label || 'No labels');
     $('#receiver_priority').text(priority);
     $('#receiver_status').text(status);
     $('#receiver_desc').text(description);

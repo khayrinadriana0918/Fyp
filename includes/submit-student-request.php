@@ -26,7 +26,6 @@ $user = $_SESSION['user_id'];
 //connect to name attributes
 $semester = trim($_POST['semester'] ?? '');
 $title = trim($_POST['title'] ?? '');
-$label = trim($_POST['label'] ?? '');
 $category_id = trim($_POST['c_id'] ?? '');
 $priority = trim($_POST['priority'] ?? 'Low');
 $description = trim($_POST['desc'] ?? '');
@@ -147,7 +146,6 @@ student_id,
 semester,
 category_id,
 title,
-label,
 priority,
 description,
 request_file
@@ -157,7 +155,6 @@ request_file
 :semester,
 :category_id,
 :title,
-:label,
 :priority,
 :description,
 :request_file
@@ -168,7 +165,6 @@ $stmt->bindParam(":student_id", $student_id);
 $stmt->bindParam(":semester", $semester);
 $stmt->bindParam(":category_id", $category_id);
 $stmt->bindParam(":title", $title);
-$stmt->bindParam(":label", $label);
 $stmt->bindParam(":priority", $priority);
 $stmt->bindParam(":description", $description);
 $stmt->bindParam(":request_file", $request_file);

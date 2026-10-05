@@ -257,7 +257,6 @@ $reqs =
                                 data-title="<?= htmlspecialchars($request['title']); ?>"
                                 data-category="<?= htmlspecialchars($request['category_name']); ?>"
                                 data-category-id="<?= htmlspecialchars($request['category_id']); ?>"
-                                data-label="<?= htmlspecialchars($request['label']); ?>"
                                 data-priority="<?= htmlspecialchars($request['priority']); ?>"
                                 data-status="<?= htmlspecialchars($request['stats']); ?>"
                                 data-description="<?= htmlspecialchars($request['description']); ?>"

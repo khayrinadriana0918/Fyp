@@ -27,7 +27,6 @@ $userId = $_SESSION['user_id'];
 $requestId = $_POST['request_id'] ?? '';
 $semester = $_POST['semester'] ?? '';
 $title = trim($_POST['title'] ?? '');
-$label = trim($_POST['label'] ?? '');
 $categoryId = $_POST['c_id'] ?? '';
 $description = trim($_POST['desc'] ?? '');
 
@@ -51,7 +50,6 @@ $checkStmt = $pdo->prepare("
     r.request_id,
     r.semester,
     r.title,
-    r.label,
     r.category_id,
     r.description,
     r.request_file
@@ -179,15 +177,6 @@ if ($request['title'] !== $title) {
         '"';
 }
 
-if ($request['label'] !== $label) {
-    $changes[] =
-        'Label: "' .
-        $request['label'] .
-        '" → "' .
-        $label .
-        '"';
-}
-
 if ((string)$request['category_id'] !== (string)$categoryId) {
     $changes[] =
         'Category: ' .
@@ -211,7 +200,6 @@ $updateStmt = $pdo->prepare("
     SET
         semester = :semester,
         title = :title,
-        label = :label,
         category_id = :category_id,
         description = :description,
         request_file = :request_file
@@ -222,7 +210,6 @@ $updateStmt = $pdo->prepare("
 $updateStmt->execute([
     ':semester' => $semester,
     ':title' => $title,
-    ':label' => $label,
     ':category_id' => $categoryId,
     ':description' => $description,
     ':request_file' => $fileName,

@@ -127,15 +127,7 @@ if (empty($userInfo['programme_id'])) {
                     <legend>Request Form</legend>
                     <label for="title">Title:</label>
                     <input type="text" id="title" name="title" placeholder="Enter Title Here." required>
-                    <br><br>
-
-                    <div class=label-box>
-                        <label for="label" id="label_container">Labels:</label><br>
-                        <small>separates each label tags with space</small><br>
-                        <!-- the tag labels separate and in a sphere each-->
-                        <input type="text" id="label" name="label" placeholder="e.g: time-strict, bug_report">
-
-                    </div>
+                    <br>
                     <br>
 
                     <div class="category-box">
@@ -197,10 +189,6 @@ if (empty($userInfo['programme_id'])) {
                     <span id="preview_title"></span>
                 </p>
                 <p>
-                    <strong>Labels:</strong>
-                    <span id="preview_label"></span>
-                </p>
-                <p>
                     <strong>Category:</strong>
                     <span id="preview_category"></span>
                 </p>
@@ -248,7 +236,6 @@ if (empty($userInfo['programme_id'])) {
 
         // Get information from form
         const title = $('#title').val();
-        const label = $('#label').val();
         const category =
             $('select[name="c_id"] option:selected').text();
 
@@ -262,9 +249,6 @@ if (empty($userInfo['programme_id'])) {
 
         // Put information into preview
         $('#preview_title').text(title);
-        $('#preview_label').text(
-            label || 'No labels'
-        );
         $('#preview_category').text(category);
         $('#preview_priority').text(priority);
         $('#preview_description').text(description);
