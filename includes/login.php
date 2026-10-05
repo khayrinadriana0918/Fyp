@@ -1,72 +1,134 @@
 <?php
 require_once 'config.php';
 
-if($_SERVER["REQUEST_METHOD"]== "POST"){
-    $email= $_POST["email"];
-    $pwd= $_POST["pwd"];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $email = $_POST["email"];
+    $pwd = $_POST["pwd"];
 
     try {
         require_once __DIR__ . '/database.php';
 
         if (!$pdo || !is_object($pdo)) {
-            die("Database connection failed.");
+            echo "<script>
+                    alert('Database connection failed.');
+                    window.history.back();
+                  </script>";
+            exit();
         }
 
         $query = "SELECT * FROM users WHERE email = :email;";
         $stmt = $pdo->prepare($query);
 
-    
-    //named parameters
-        $stmt->bindParam(":email",$email);
+        // named parameters
+        $stmt->bindParam(":email", $email);
 
         $stmt->execute();
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if (!$user) {
-            die("email not found");
-        }
-        if ($pwd!=$user["pwd"]) {
-            die("incorrect password");
-        }
-        $passwordIsWeak=
-        strlen($user['pwd'])<8 ||
-        strlen($user['pwd'])>15 ||
-        !preg_match('/[A-Z]/', $user['pwd'])||
-        !preg_match('/[0-9]/', $user['pwd']);
-        
-        if ($passwordIsWeak) {
-            $_SESSION['user_id']=$user['user_id'];
-            $_SESSION['password_reset']=true;
 
-            header("Location:../reset.php");
+        // Email not found
+        if (!$user) {
+            echo "<script>
+                    alert('Email not found.');
+                    window.history.back();
+                  </script>";
             exit();
         }
-        //success login
-        $_SESSION['user_id']=$user['user_id'];
-        $_SESSION['name']= $user['name'];
-        $_SESSION['role']= $user['role'];
-        echo "<br>";
 
+        // Check if password is already hashed
+        $isHashed = password_get_info($user['pwd'])['algo'] !== 0;
+
+        if ($isHashed) {
+
+            // New account / already migrated account
+            if (!password_verify($pwd, $user['pwd'])) {
+                echo "<script>
+                        alert('Incorrect password.');
+                        window.history.back();
+                      </script>";
+                exit();
+            }
+        } else {
+
+            // Existing account with old plaintext password
+            if (!hash_equals($user['pwd'], $pwd)) {
+                echo "<script>
+                        alert('Incorrect password.');
+                        window.history.back();
+                      </script>";
+                exit();
+            }
+
+            // Check old password requirements
+            $passwordIsWeak =
+                strlen($pwd) < 8 ||
+                strlen($pwd) > 16 ||
+                !preg_match('/[A-Z]/', $pwd) ||
+                !preg_match('/[0-9]/', $pwd);
+
+            if ($passwordIsWeak) {
+
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['password_reset'] = true;
+
+                header("Location: ../reset.php");
+                exit();
+            }
+
+            // Convert old plaintext password into a hash
+            $newHash = password_hash($pwd, PASSWORD_DEFAULT);
+
+            $updatePassword = $pdo->prepare("
+                UPDATE users
+                SET pwd = :pwd
+                WHERE user_id = :user_id
+            ");
+
+            $updatePassword->execute([
+                ':pwd' => $newHash,
+                ':user_id' => $user['user_id']
+            ]);
+        }
+
+        // Successful login
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['name'] = $user['name'];
+        $_SESSION['role'] = $user['role'];
 
         $pdo = null;
         $stmt = null;
 
-        // redirect dashboard based on user role
-        if($user['role'] === "system_admin"){
+        // Redirect dashboard based on user role
+        if ($user['role'] === "system_admin") {
+
             header("Location: ../admin/admin_dashboard.php");
-        }elseif($user['role'] === "head_of_programme"){
+        } elseif ($user['role'] === "head_of_programme") {
+
             header("Location: ../hop/hop_dashboard.php");
-        }elseif($user['role'] === "student"){
+        } elseif ($user['role'] === "student") {
+
             header("Location: ../student/student_dashboard.php");
-        }else{
-            die("User Role Unrecognized");   
+        } else {
+
+            echo "<script>
+                    alert('User role unrecognized.');
+                    window.history.back();
+                  </script>";
+            exit();
         }
 
         exit();
     } catch (PDOException $e) {
-        die("Query Failed: ".$e->getMessage());
+
+        echo "<script>
+                alert('Something went wrong. Please try again.');
+                window.history.back();
+              </script>";
+        exit();
     }
-}else{
+} else {
+
     header("Location: ../index.php");
+    exit();
 }

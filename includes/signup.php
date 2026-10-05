@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }elseif(!preg_match('/[0-9]/', $pwd)){
         exit();
     }
+// hash password first
+    $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
 
     try {
         require_once __DIR__ . '/database.php';
@@ -59,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //named parameters
         $stmt->bindParam(":name", $name);
         $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":pwd", $pwd);
+        $stmt->bindParam(":pwd", $hashedPwd);
         $stmt->bindParam(":role", $role);
 
         $stmt->execute();
