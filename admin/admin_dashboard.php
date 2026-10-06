@@ -193,6 +193,7 @@ $requestCounts =
     <title>Admin Dashboard | SIMSAP</title>
 
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="../CSS/req-table.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="../CSS/popup.css?v=<?= time(); ?>">
 
     <script
@@ -405,117 +406,119 @@ $requestCounts =
                     <!-- =================================================
                      REQUEST TABLE
                 ================================================== -->
-                    <div class="table-container">
-                        <table class="request-table">
-                            <thead>
-                                <tr>
-                                    <th>Request ID</th>
-                                    <th>Name</th>
-                                    <th>Staff ID</th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                    <th>Last Updated</th>
-                                </tr>
-                            </thead>
+                    <div class="request-content">
 
-                            <tbody>
-                                <?php foreach ($recentRequests as $request): ?>
-                                    <?php
-                                    /*
+                        <div class="request-table-container">
+                            <table class="request-table">
+                                <thead>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <th>Name</th>
+                                        <th>Staff ID</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Last Updated</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php foreach ($recentRequests as $request): ?>
+                                        <?php
+                                        /*
                              * Convert status into CSS class.
                              */
-                                    $statusClass =
-                                        strtolower(
-                                            str_replace(
-                                                ' ',
-                                                '-',
-                                                $request['ar_stats']
-                                            )
-                                        );
-                                    ?>
-                                    <tr class="request-row receiver-request-row"
-
-                                        data-request-type="administrator"
-
-                                        data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
-
-                                        data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
-                                        data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
-                                        data-semester=""
-                                        data-title="<?= htmlspecialchars($request['ar_title']); ?>"
-                                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
-                                        data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
-                                        data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
-                                        data-description="<?= htmlspecialchars($request['ar_description'] ?? ''); ?>"
-                                        data-file="<?= htmlspecialchars($request['ar_request_file'] ?? ''); ?>"
-                                        data-feedback="<?= htmlspecialchars($request['ar_feedback'] ?? ''); ?>"
-                                        data-submitted-date="<?= htmlspecialchars($request['ar_submission_date']); ?>"
-                                        data-resolved-date="<?= htmlspecialchars($request['ar_resolved_date'] ?? ''); ?>">
-
-                                        <!-- REQUEST ID -->
-                                        <td class="request-id">
-                                            <?= htmlspecialchars(
-                                                $request['ar_request_id']
-                                            ); ?>
-                                        </td>
-
-                                        <!-- HOP NAME -->
-                                        <td>
-                                            <?= htmlspecialchars(
-                                                $request['requester_name']
-                                            ); ?>
-                                        </td>
-
-                                        <!-- STAFF ID -->
-                                        <td>
-                                            <?= htmlspecialchars($request['requester_id']); ?>
-                                        </td>
-
-                                        <!-- TITLE -->
-                                        <td class="request-title">
-                                            <?= htmlspecialchars($request['ar_title']); ?>
-                                        </td>
-
-                                        <!-- CATEGORY -->
-                                        <td>
-                                            <?= htmlspecialchars($request['category_name']); ?>
-                                        </td>
-
-                                        <!-- STATUS -->
-                                        <td>
-                                            <span class="status status-<?= htmlspecialchars($statusClass); ?>">
-                                                <?= htmlspecialchars($request['ar_stats']); ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- LAST UPDATED -->
-                                        <td>
-                                            <?php
-                                            echo htmlspecialchars(
-                                                date(
-                                                    'd M Y',
-                                                    strtotime(
-                                                        $request['ar_submission_date']
-                                                    )
+                                        $statusClass =
+                                            strtolower(
+                                                str_replace(
+                                                    ' ',
+                                                    '-',
+                                                    $request['ar_stats']
                                                 )
                                             );
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                        ?>
+                                        <tr class="request-row receiver-request-row"
+
+                                            data-request-type="administrator"
+
+                                            data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
+
+                                            data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
+                                            data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
+                                            data-semester=""
+                                            data-title="<?= htmlspecialchars($request['ar_title']); ?>"
+                                            data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                            data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
+                                            data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
+                                            data-description="<?= htmlspecialchars($request['ar_description'] ?? ''); ?>"
+                                            data-file="<?= htmlspecialchars($request['ar_request_file'] ?? ''); ?>"
+                                            data-feedback="<?= htmlspecialchars($request['ar_feedback'] ?? ''); ?>"
+                                            data-submitted-date="<?= htmlspecialchars($request['ar_submission_date']); ?>"
+                                            data-resolved-date="<?= htmlspecialchars($request['ar_resolved_date'] ?? ''); ?>">
+
+                                            <!-- REQUEST ID -->
+                                            <td class="request-id">
+                                                <?= htmlspecialchars(
+                                                    $request['ar_request_id']
+                                                ); ?>
+                                            </td>
+
+                                            <!-- HOP NAME -->
+                                            <td>
+                                                <?= htmlspecialchars(
+                                                    $request['requester_name']
+                                                ); ?>
+                                            </td>
+
+                                            <!-- STAFF ID -->
+                                            <td>
+                                                <?= htmlspecialchars($request['requester_id']); ?>
+                                            </td>
+
+                                            <!-- TITLE -->
+                                            <td class="request-title">
+                                                <?= htmlspecialchars($request['ar_title']); ?>
+                                            </td>
+
+                                            <!-- CATEGORY -->
+                                            <td>
+                                                <?= htmlspecialchars($request['category_name']); ?>
+                                            </td>
+
+                                            <!-- STATUS -->
+                                            <td>
+                                                <span class="status status-<?= htmlspecialchars($statusClass); ?>">
+                                                    <?= htmlspecialchars($request['ar_stats']); ?>
+                                                </span>
+                                            </td>
+
+                                            <!-- LAST UPDATED -->
+                                            <td>
+                                                <?php
+                                                echo htmlspecialchars(
+                                                    date(
+                                                        'd M Y',
+                                                        strtotime(
+                                                            $request['ar_submission_date']
+                                                        )
+                                                    )
+                                                );
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <aside class="dashboard-filter">
+                            <?php
+                            include __DIR__ .
+                                '/../inc_reuse/filter.php';
+                            ?>
+                        </aside>
+
                     </div>
-                    <!-- =====================================================
-                       RIGHT FILTER
-                    ====================================================== -->
-                    <aside class="dashboard-filter">
-                        <?php
-                        include __DIR__ .
-                            '/../inc_reuse/filter.php';
-                        ?>
-                    </aside>
                 <?php endif; ?>
             </section>
         </main>

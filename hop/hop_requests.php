@@ -213,115 +213,116 @@ $reqs =
                 </ul>
             </nav>
         </aside>
-        <!-- =====================================================
+        <main class="middle-content">
+            <!-- =====================================================
          TABLE REQUESTS
     ====================================================== -->
-        <section class="request-section">
-            <div class="section-header">
-                <h2>My Requests</h2>
-            </div>
-            <div class="request-content">
-                <div class="request-table-container">
-                    <table class="request-table">
-
-                        <thead>
-                            <tr>
-                                <th>Request ID</th>
-                                <th>Title</th>
-                                <th>Category</th>
-                                <th>Description</th>
-                                <th>Status</th>
-                                <th>Date Submitted</th>
-                                <th>Date Resolved</th>
-                                <th>Priority</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            <?php foreach ($reqs as $request): ?>
-                                <?php
-
-                                //  Convert status into CSS class.
-
-                                $statusClass =
-                                    strtolower(
-                                        str_replace(
-                                            ' ',
-                                            '-',
-                                            $request['ar_stats']
-                                        )
-                                    );
-                                ?>
-
-                                <tr
-                                    class="request-row"
-                                    data-request-type="administrator"
-
-                                    data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
-                                    data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
-                                    data-requester-id="<?= htmlspecialchars($userInfo['staff_id']); ?>"
-                                    data-semester=""
-                                    data-title="<?= htmlspecialchars($request['ar_title']); ?>"
-                                    data-category="<?= htmlspecialchars($request['category_name']); ?>"
-                                    data-category-id="<?= htmlspecialchars($request['category_id']); ?>"
-                                    data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
-                                    data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
-                                    data-description="<?= htmlspecialchars($request['ar_description']); ?>"
-                                    data-file="<?= htmlspecialchars($request['ar_request_file']); ?>"
-                                    data-feedback="<?= htmlspecialchars($request['ar_feedback'] ?? ''); ?>"
-                                    data-submitted-date="<?= htmlspecialchars($request['ar_submission_date']); ?>"
-                                    data-resolved-date="<?= htmlspecialchars($request['ar_resolved_date']); ?>">
-
-                                    <td>
-                                        <?= htmlspecialchars($request['ar_request_id']); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($request['ar_title']); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($request['category_name']); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($request['ar_description']); ?>
-                                    </td>
-
-                                    <td>
-                                        <span class="status status-<?= htmlspecialchars($statusClass); ?>">
-                                            <?= htmlspecialchars($request['ar_stats']); ?>
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($request['ar_submission_date']); ?>
-                                    </td>
-                                    <td>
-                                        <?= htmlspecialchars($request['ar_resolved_date']); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars($request['ar_priority']); ?>
-                                    </td>
-
-                                </tr>
-
-                            <?php endforeach; ?>
-
-                        </tbody>
-
-                    </table>
+            <section class="request-section">
+                <div class="section-header">
+                    <h2>My Requests</h2>
                 </div>
-                <aside class="dashboard-filter">
-                    <?php
-                    include __DIR__ . '/../inc_reuse/filter.php';
-                    ?>
-                </aside>
-            </div>
-        </section>
+                <div class="request-content">
+                    <div class="request-table-container">
+                        <table class="request-table">
 
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Date Submitted</th>
+                                    <th>Date Resolved</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <?php foreach ($reqs as $request): ?>
+                                    <?php
+
+                                    //  Convert status into CSS class.
+
+                                    $statusClass =
+                                        strtolower(
+                                            str_replace(
+                                                ' ',
+                                                '-',
+                                                $request['ar_stats']
+                                            )
+                                        );
+                                    ?>
+
+                                    <tr
+                                        class="request-row"
+                                        data-request-type="administrator"
+
+                                        data-request-id="<?= htmlspecialchars($request['ar_request_id']); ?>"
+                                        data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
+                                        data-requester-id="<?= htmlspecialchars($userInfo['staff_id']); ?>"
+                                        data-semester=""
+                                        data-title="<?= htmlspecialchars($request['ar_title']); ?>"
+                                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                        data-category-id="<?= htmlspecialchars($request['category_id']); ?>"
+                                        data-priority="<?= htmlspecialchars($request['ar_priority']); ?>"
+                                        data-status="<?= htmlspecialchars($request['ar_stats']); ?>"
+                                        data-description="<?= htmlspecialchars($request['ar_description']); ?>"
+                                        data-file="<?= htmlspecialchars($request['ar_request_file']); ?>"
+                                        data-feedback="<?= htmlspecialchars($request['ar_feedback'] ?? ''); ?>"
+                                        data-submitted-date="<?= htmlspecialchars($request['ar_submission_date']); ?>"
+                                        data-resolved-date="<?= htmlspecialchars($request['ar_resolved_date']); ?>">
+
+                                        <td>
+                                            <?= htmlspecialchars($request['ar_request_id']); ?>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars($request['ar_title']); ?>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars($request['category_name']); ?>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars($request['ar_description']); ?>
+                                        </td>
+
+                                        <td>
+                                            <span class="status status-<?= htmlspecialchars($statusClass); ?>">
+                                                <?= htmlspecialchars($request['ar_stats']); ?>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars($request['ar_submission_date']); ?>
+                                        </td>
+                                        <td>
+                                            <?= htmlspecialchars($request['ar_resolved_date']); ?>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars($request['ar_priority']); ?>
+                                        </td>
+
+                                    </tr>
+
+                                <?php endforeach; ?>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <aside class="dashboard-filter">
+                        <?php
+                        include __DIR__ . '/../inc_reuse/filter.php';
+                        ?>
+                    </aside>
+                </div>
+            </section>
+        </main>
         <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
 
 
