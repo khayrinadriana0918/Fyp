@@ -100,7 +100,7 @@ if ($search !== '') {
 
 if ($priority !== '') {
     $requestQuery .= "AND r.priority = :priority";
-    $requestParams[':priority'] =$priority;
+    $requestParams[':priority'] = $priority;
 }
 
 /* =========================
@@ -108,7 +108,7 @@ if ($priority !== '') {
 ========================= */
 if ($status !== '') {
     $requestQuery .= "AND r.stats = :status";
-    $requestParams[':status'] =$status;
+    $requestParams[':status'] = $status;
 }
 /* =========================
    CATEGORY
@@ -136,7 +136,8 @@ switch ($sort) {
         break;
     case 'newest':
     default:
-        $requestQuery .= " ORDER BY r.submission_date DESC ";break;
+        $requestQuery .= " ORDER BY r.submission_date DESC ";
+        break;
 }
 
 
@@ -207,6 +208,7 @@ $requestCounts =
     <title>Student Dashboard | SIMSAP</title>
 
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="../CSS/req-table.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="../CSS/popup.css">
 
     <script
@@ -296,7 +298,7 @@ $requestCounts =
                     <li>
                         <a href="student_dashboard.php" class="active">Dashboard</a>
                     </li>
-                    
+
                     <li>
                         <a href="../userProfile.php">User Profile</a>
                     </li>
@@ -428,100 +430,112 @@ $requestCounts =
                     <!-- =================================================
                      REQUEST TABLE
                 ================================================== -->
-                    <div class="table-container">
-                        <table class="request-table">
-                            <thead>
-                                <tr>
-                                    <th>Request ID</th>
-                                    <th>Semester</th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                    <th>Priority</th>
-                                    <th>Last Updated</th>
-                                </tr>
-                            </thead>
+                    <div class="request-content">
+                        <div class="request-table-container">
+                            <table class="request-table">
+                                <thead>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <th>Semester</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Priority</th>
+                                        <th>Last Updated</th>
+                                    </tr>
+                                </thead>
 
-                            <tbody>
-                                <?php foreach ($recentRequests as $request): ?>
-                                    <?php
-                                    /*
+                                <tbody>
+                                    <?php foreach ($recentRequests as $request): ?>
+                                        <?php
+                                        /*
                              * Convert status into CSS class.
                              */
-                                    $statusClass =
-                                        strtolower(
-                                            str_replace(
-                                                ' ',
-                                                '-',
-                                                $request['stats']
-                                            )
-                                        );
-                                    ?>
-                                    <tr class="request-row"
-                                        data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
-                                        data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
-                                        data-requester-id="<?= htmlspecialchars($request['student_id']); ?>"
-                                        data-semester="<?= htmlspecialchars($request['semester']); ?>"
-                                        data-title="<?= htmlspecialchars($request['title']); ?>"
-                                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
-                                        data-priority="<?= htmlspecialchars($request['priority']); ?>"
-                                        data-status="<?= htmlspecialchars($request['stats']); ?>"
-                                        data-description="<?= htmlspecialchars($request['description']); ?>"
-                                        data-feedback="<?= htmlspecialchars($request['feedback'] ?? ''); ?>"
-                                        data-file="<?= htmlspecialchars($request['request_file']); ?>"
-                                        data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
-                                        data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
-
-                                        <!-- REQUEST ID -->
-                                        <td class="request-id">
-                                            <?= htmlspecialchars(
-                                                $request['request_id']
-                                            ); ?>
-                                        </td>
-
-                                        <!-- SEMESTER -->
-                                        <td class="request-semester">
-                                            <?= htmlspecialchars($request['semester']); ?>
-                                        </td>
-
-                                        <!-- TITLE -->
-                                        <td class="request-title">
-                                            <?= htmlspecialchars($request['title']); ?>
-                                        </td>
-
-                                        <!-- CATEGORY -->
-                                        <td>
-                                            <?= htmlspecialchars($request['category_name']); ?>
-                                        </td>
-
-                                        <!-- STATUS -->
-                                        <td>
-                                            <span class="status status-<?= htmlspecialchars($statusClass); ?>">
-                                                <?= htmlspecialchars($request['stats']); ?>
-                                            </span>
-                                        </td>
-                                        <!-- PRIORITY -->
-                                        <td>
-                                            <?= htmlspecialchars($request['priority']); ?>
-                                        </td>
-
-                                        <!-- LAST UPDATED -->
-                                        <td>
-                                            <?php
-                                            echo htmlspecialchars(
-                                                date(
-                                                    'd M Y',
-                                                    strtotime(
-                                                        $request['submission_date']
-                                                    )
+                                        $statusClass =
+                                            strtolower(
+                                                str_replace(
+                                                    ' ',
+                                                    '-',
+                                                    $request['stats']
                                                 )
                                             );
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                        ?>
+                                        <tr class="request-row"
+                                            data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
+                                            data-requester-name="<?= htmlspecialchars($userInfo['name']); ?>"
+                                            data-requester-id="<?= htmlspecialchars($request['student_id']); ?>"
+                                            data-semester="<?= htmlspecialchars($request['semester']); ?>"
+                                            data-title="<?= htmlspecialchars($request['title']); ?>"
+                                            data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                            data-priority="<?= htmlspecialchars($request['priority']); ?>"
+                                            data-status="<?= htmlspecialchars($request['stats']); ?>"
+                                            data-description="<?= htmlspecialchars($request['description']); ?>"
+                                            data-feedback="<?= htmlspecialchars($request['feedback'] ?? ''); ?>"
+                                            data-file="<?= htmlspecialchars($request['request_file']); ?>"
+                                            data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
+                                            data-resolved-date="<?= htmlspecialchars($request['resolved_date']); ?>">
+
+                                            <!-- REQUEST ID -->
+                                            <td class="request-id">
+                                                <?= htmlspecialchars(
+                                                    $request['request_id']
+                                                ); ?>
+                                            </td>
+
+                                            <!-- SEMESTER -->
+                                            <td class="request-semester">
+                                                <?= htmlspecialchars($request['semester']); ?>
+                                            </td>
+
+                                            <!-- TITLE -->
+                                            <td class="request-title">
+                                                <?= htmlspecialchars($request['title']); ?>
+                                            </td>
+
+                                            <!-- CATEGORY -->
+                                            <td>
+                                                <?= htmlspecialchars($request['category_name']); ?>
+                                            </td>
+
+                                            <!-- STATUS -->
+                                            <td>
+                                                <span class="status status-<?= htmlspecialchars($statusClass); ?>">
+                                                    <?= htmlspecialchars($request['stats']); ?>
+                                                </span>
+                                            </td>
+                                            <!-- PRIORITY -->
+                                            <td>
+                                                <?= htmlspecialchars($request['priority']); ?>
+                                            </td>
+
+                                            <!-- LAST UPDATED -->
+                                            <td>
+                                                <?php
+                                                echo htmlspecialchars(
+                                                    date(
+                                                        'd M Y',
+                                                        strtotime(
+                                                            $request['submission_date']
+                                                        )
+                                                    )
+                                                );
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+    <!-- =====================================================
+         RIGHT FILTER
+    ====================================================== -->
+                        <aside class="dashboard-filter">
+                            <?php
+                            include __DIR__ .
+                                '/../inc_reuse/filter.php';
+                            ?>
+                        </aside>
+
                     </div>
                 <?php endif; ?>
             </section>
@@ -532,15 +546,7 @@ $requestCounts =
         <?php if (empty($userInfo['programme_id'])): ?>
             <?php include __DIR__ . '/../inc_reuse/programme.php'; ?><br>
         <?php endif ?>
-        <!-- =====================================================
-         RIGHT FILTER
-    ====================================================== -->
-        <aside class="filter-sidebar">
-            <?php
-            include __DIR__ .
-                '/../inc_reuse/filter.php';
-            ?>
-        </aside>
+
         <?php include __DIR__ . '/../inc_reuse/requester_popup.php'; ?>
     </div>
 

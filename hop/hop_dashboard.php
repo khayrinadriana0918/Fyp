@@ -240,6 +240,7 @@ $requestCounts =
         content="width=device-width, initial-scale=1.0">
     <title>HoP Dashboard | SIMSAP</title>
     <link rel="stylesheet" href="../CSS/dashboard.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="../CSS/req-table.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="../CSS/popup.css">
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
@@ -474,119 +475,132 @@ $requestCounts =
                     <!-- =================================================
                      REQUEST TABLE
                 ================================================== -->
-                    <div class="table-container">
-                        <table class="request-table">
-                            <thead>
-                                <tr>
-                                    <th>Request ID</th>
-                                    <th>Name</th>
-                                    <th>Student ID</th>
-                                    <th>Semester</th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                    <th>Feedback</th>
-                                    <th>Last Updated</th>
-                                </tr>
-                            </thead>
+                    <div class="request-content">
+                        <div class="request-table-container">
+                            <table class="request-table">
+                                <thead>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <th>Name</th>
+                                        <th>Student ID</th>
+                                        <th>Semester</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Feedback</th>
+                                        <th>Last Updated</th>
+                                    </tr>
+                                </thead>
 
-                            <tbody>
-                                <?php foreach ($recentRequests as $request): ?>
-                                    <?php
-                                    /*
+                                <tbody>
+                                    <?php foreach ($recentRequests as $request): ?>
+                                        <?php
+                                        /*
                              * Convert status into CSS class.
                              */
-                                    $statusClass =
-                                        strtolower(
-                                            str_replace(
-                                                ' ',
-                                                '-',
-                                                $request['stats']
-                                            )
-                                        );
-                                    ?>
-                                    <tr class="request-row receiver-request-row"
-                                        data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
-                                        data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
-                                        data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
-                                        data-semester="<?= htmlspecialchars($request['semester']); ?>"
-                                        data-title="<?= htmlspecialchars($request['title']); ?>"
-                                        data-category="<?= htmlspecialchars($request['category_name']); ?>"
-                                        data-priority="<?= htmlspecialchars($request['priority']); ?>"
-                                        data-status="<?= htmlspecialchars($request['stats']); ?>"
-                                        data-description="<?= htmlspecialchars($request['description']); ?>"
-                                        data-file="<?= htmlspecialchars($request['request_file'] ?? ''); ?>"
-                                        data-feedback="<?= htmlspecialchars($request['feedback'] ?? '') ?>"
-                                        data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
-                                        data-resolved-date="<?= htmlspecialchars($request['resolved_date'] ?? ''); ?>">
-
-                                        <!-- REQUEST ID -->
-                                        <td class="request-id">
-                                            <?= htmlspecialchars(
-                                                $request['request_id']
-                                            ); ?>
-                                        </td>
-
-                                        <!-- STUDENT NAME -->
-                                        <td>
-                                            <?= htmlspecialchars(
-                                                $request['requester_name']
-                                            ); ?>
-                                        </td>
-
-                                        <!-- STUDENT ID -->
-                                        <td>
-                                            <?= htmlspecialchars($request['requester_id']); ?>
-                                        </td>
-
-                                        <!-- semester -->
-                                        <td class="request-semester">
-                                            <?= htmlspecialchars($request['semester']); ?>
-                                        </td>
-
-                                        <!-- TITLE -->
-                                        <td class="request-title">
-                                            <?= htmlspecialchars($request['title']); ?>
-                                        </td>
-
-                                        <!-- CATEGORY -->
-                                        <td>
-                                            <?= htmlspecialchars($request['category_name']); ?>
-                                        </td>
-
-                                        <!-- STATUS -->
-                                        <td>
-                                            <span class="status status-<?= htmlspecialchars($statusClass); ?>">
-                                                <?= htmlspecialchars($request['stats']); ?>
-                                            </span>
-                                        </td>
-
-                                        <!-- FEEDBACK -->
-                                        <td class="request-feedback">
-                                            <?php if (!empty($request['feedback'])): ?>
-                                                <?= htmlspecialchars($request['feedback']); ?>
-                                            <?php else: ?>
-                                                No feedback provided yet.
-                                            <?php endif; ?>
-                                        </td>
-
-                                        <!-- LAST UPDATED -->
-                                        <td>
-                                            <?php
-                                            echo htmlspecialchars(
-                                                date(
-                                                    'd M Y',
-                                                    strtotime(
-                                                        $request['submission_date']
-                                                    )
+                                        $statusClass =
+                                            strtolower(
+                                                str_replace(
+                                                    ' ',
+                                                    '-',
+                                                    $request['stats']
                                                 )
                                             );
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                                        ?>
+                                        <tr class="request-row receiver-request-row"
+                                            data-request-id="<?= htmlspecialchars($request['request_id']); ?>"
+                                            data-requester-name="<?= htmlspecialchars($request['requester_name']); ?>"
+                                            data-requester-id="<?= htmlspecialchars($request['requester_id']); ?>"
+                                            data-semester="<?= htmlspecialchars($request['semester']); ?>"
+                                            data-title="<?= htmlspecialchars($request['title']); ?>"
+                                            data-category="<?= htmlspecialchars($request['category_name']); ?>"
+                                            data-priority="<?= htmlspecialchars($request['priority']); ?>"
+                                            data-status="<?= htmlspecialchars($request['stats']); ?>"
+                                            data-description="<?= htmlspecialchars($request['description']); ?>"
+                                            data-file="<?= htmlspecialchars($request['request_file'] ?? ''); ?>"
+                                            data-feedback="<?= htmlspecialchars($request['feedback'] ?? '') ?>"
+                                            data-submitted-date="<?= htmlspecialchars($request['submission_date']); ?>"
+                                            data-resolved-date="<?= htmlspecialchars($request['resolved_date'] ?? ''); ?>">
+
+                                            <!-- REQUEST ID -->
+                                            <td class="request-id">
+                                                <?= htmlspecialchars(
+                                                    $request['request_id']
+                                                ); ?>
+                                            </td>
+
+                                            <!-- STUDENT NAME -->
+                                            <td>
+                                                <?= htmlspecialchars(
+                                                    $request['requester_name']
+                                                ); ?>
+                                            </td>
+
+                                            <!-- STUDENT ID -->
+                                            <td>
+                                                <?= htmlspecialchars($request['requester_id']); ?>
+                                            </td>
+
+                                            <!-- semester -->
+                                            <td class="request-semester">
+                                                <?= htmlspecialchars($request['semester']); ?>
+                                            </td>
+
+                                            <!-- TITLE -->
+                                            <td class="request-title">
+                                                <?= htmlspecialchars($request['title']); ?>
+                                            </td>
+
+                                            <!-- CATEGORY -->
+                                            <td>
+                                                <?= htmlspecialchars($request['category_name']); ?>
+                                            </td>
+
+                                            <!-- STATUS -->
+                                            <td>
+                                                <span class="status status-<?= htmlspecialchars($statusClass); ?>">
+                                                    <?= htmlspecialchars($request['stats']); ?>
+                                                </span>
+                                            </td>
+
+                                            <!-- FEEDBACK -->
+                                            <td class="request-feedback">
+                                                <?php if (!empty($request['feedback'])): ?>
+                                                    <?= htmlspecialchars($request['feedback']); ?>
+                                                <?php else: ?>
+                                                    No feedback provided yet.
+                                                <?php endif; ?>
+                                            </td>
+
+                                            <!-- LAST UPDATED -->
+                                            <td>
+                                                <?php
+                                                echo htmlspecialchars(
+                                                    date(
+                                                        'd M Y',
+                                                        strtotime(
+                                                            $request['submission_date']
+                                                        )
+                                                    )
+                                                );
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+    <!-- =====================================================
+         RIGHT FILTER
+    ====================================================== -->
+                        <aside class="dashboard-filter">
+                            <?php
+                            include __DIR__ .
+                                '/../inc_reuse/filter.php';
+                            ?>
+                        </aside>
+
+
                     </div>
                 <?php endif; ?>
             </section>
@@ -597,15 +611,7 @@ $requestCounts =
         <?php if (empty($userInfo['programme_id'])): ?>
             <?php include __DIR__ . '/../inc_reuse/programme.php'; ?><br>
         <?php endif ?>
-        <!-- =====================================================
-         RIGHT FILTER
-    ====================================================== -->
-        <aside class="filter-sidebar">
-            <?php
-            include __DIR__ .
-                '/../inc_reuse/filter.php';
-            ?>
-        </aside>
+
         <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
     </div>
     <script src="../JS/receiverPopup.js"></script>
@@ -629,27 +635,27 @@ $requestCounts =
         });
     </script>
     <script>
-    $(document).ready(function(){
-        const programmeSelected=
-        <?= !empty($userInfo['programme_id'])
-        ?'true'
-        : 'false'; ?>;
+        $(document).ready(function() {
+            const programmeSelected =
+                <?= !empty($userInfo['programme_id'])
+                    ? 'true'
+                    : 'false'; ?>;
 
-        $('.programme-required').on('click',function(event){
-            if(!programmeSelected){
-                event.preventDefault();
-                openForm();
-                return;
-            }
+            $('.programme-required').on('click', function(event) {
+                if (!programmeSelected) {
+                    event.preventDefault();
+                    openForm();
+                    return;
+                }
 
-            const destination=
-            $(this).data('url');
+                const destination =
+                    $(this).data('url');
 
-            if (destination) {
-                window.location.href=destination;
-            }
+                if (destination) {
+                    window.location.href = destination;
+                }
+            });
         });
-    });
     </script>
 </body>
 

@@ -484,19 +484,6 @@ header {
 }
 
 
-/* =========================================
-   RIGHT FILTER
-========================================= */
-/*
-.filter-sidebar {
-    grid-area: filter;
-    background: #ffffff;
-    border-left: 1px solid #cccccc;
-    padding: 150px 15px 20px;
-    overflow-y: auto;
-}
-*/
-
 /* Remove default fieldset appearance */
 
 .filters fieldset {
@@ -812,19 +799,11 @@ header {
             160px minmax(0, 1fr);
 
         grid-template-rows:
-            auto auto 1fr;
+            auto 1fr;
 
         grid-template-areas:
             "sidebar header"
-            "sidebar filter"
             "sidebar main";
-    }
-
-    .filter-sidebar {
-        padding: 20px 25px;
-
-        border-left: none;
-        border-bottom: 1px solid #cccccc;
     }
 
 }
@@ -843,8 +822,7 @@ header {
 
     .sidebar,
     header,
-    .middle-content,
-    .filter-sidebar {
+    .middle-content,{
         width: 100%;
     }
 
@@ -876,18 +854,4 @@ header {
             repeat(2, 1fr);
     }
 
-    .filter-sidebar {
-        padding: 20px 15px;
-    }
-
-}
-
-@media (max-width: 900px) {
-    .request-content {
-        grid-template-columns: 1fr;
-    }
-
-    .dashboard-filter {
-        position: static;
-    }
 }
