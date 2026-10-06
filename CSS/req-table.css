@@ -1,0 +1,226 @@
+/* =========================================
+   REQUEST PAGE
+========================================= */
+
+.request-section {
+    width: 100%;
+    min-width: 0;
+}
+
+.request-section .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.request-section .section-header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.request-section .section-header p {
+    margin: 5px 0 0;
+    color: #777777;
+    font-size: 13px;
+}
+
+
+/* =========================================
+   REQUEST TABLE + FILTER
+========================================= */
+
+.request-content {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 20px;
+
+    align-items: start;
+}
+
+
+/* =========================================
+   REQUEST TABLE CONTAINER
+========================================= */
+
+.request-table-container {
+    width: 100%;
+    min-width: 0;
+
+    overflow-x: auto;
+
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+
+/* =========================================
+   REQUEST TABLE
+========================================= */
+
+.request-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: auto;
+}
+
+
+/* TABLE HEADER */
+
+.request-table thead th {
+    padding: 12px 10px;
+
+    background: #f5f5f5;
+
+    border-bottom: 1px solid #cccccc;
+
+    text-align: left;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* TABLE BODY */
+
+.request-table tbody td {
+    padding: 11px 10px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    font-size: 13px;
+
+    vertical-align: middle;
+}
+
+
+/* LAST ROW */
+
+.request-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* HOVER */
+
+.request-table tbody tr:hover {
+    background: #fafafa;
+}
+
+
+/* CLICKABLE REQUEST ROW */
+
+.request-row {
+    cursor: pointer;
+}
+
+
+/* =========================================
+   REQUEST ID
+========================================= */
+
+.request-table .request-id {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   REQUEST TITLE
+========================================= */
+
+.request-table .request-title {
+    max-width: 250px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.request-table .status {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 4px;
+
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   FILTER BESIDE TABLE
+========================================= */
+
+.request-content .dashboard-filter {
+    width: 100%;
+
+    padding: 18px 15px;
+
+    background: #ffffff;
+
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+
+    box-sizing: border-box;
+
+    align-self: start;
+}
+
+
+/* =========================================
+   EMPTY REQUEST
+========================================= */
+
+.empty-message {
+    padding: 40px 20px;
+
+    text-align: center;
+
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+
+    color: #777777;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .request-content {
+        grid-template-columns: minmax(0, 1fr) 200px;
+        gap: 15px;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .request-content {
+        grid-template-columns: 1fr;
+    }
+
+    .request-content .dashboard-filter {
+        width: 100%;
+    }
+
+}

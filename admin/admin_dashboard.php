@@ -127,7 +127,7 @@ switch ($sort) {
         break;
 
     case 'newest':
-        $requestQuery .="
+        $requestQuery .= "
         ORDER BY r.ar_submission_date DESC
         ";
         break;
@@ -135,11 +135,11 @@ switch ($sort) {
 
 $requestQuery .= " LIMIT 5";
 
-$requestStmt= $pdo->prepare($requestQuery);
+$requestStmt = $pdo->prepare($requestQuery);
 $requestStmt->execute($params);
 
-$recentRequests=
-$requestStmt->fetchAll(PDO::FETCH_ASSOC);
+$recentRequests =
+    $requestStmt->fetchAll(PDO::FETCH_ASSOC);
 /* =========================================================
    GET DASHBOARD REQUEST OVERVIEW
 ========================================================= */
@@ -507,18 +507,18 @@ $requestCounts =
                             </tbody>
                         </table>
                     </div>
+                    <!-- =====================================================
+                       RIGHT FILTER
+                    ====================================================== -->
+                    <aside class="dashboard-filter">
+                        <?php
+                        include __DIR__ .
+                            '/../inc_reuse/filter.php';
+                        ?>
+                    </aside>
                 <?php endif; ?>
             </section>
         </main>
-        <!-- =====================================================
-         RIGHT FILTER
-    ====================================================== -->
-        <aside class="filter-sidebar">
-            <?php
-            include __DIR__ .
-                '/../inc_reuse/filter.php';
-            ?>
-        </aside>
         <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
     </div>
     <script>

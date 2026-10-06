@@ -25,12 +25,12 @@ HEADER
     min-height: 100vh;
     display: grid;
     grid-template-columns:
-        180px minmax(0, 1fr) 220px;
+        180px minmax(0, 1fr);
     grid-template-rows:
         105px 1fr;
     grid-template-areas:
-        "header header header"
-        "sidebar main filter";
+        "header header"
+        "sidebar main";
 }
 
 
@@ -395,6 +395,34 @@ header {
     border-right: none;
 }
 
+/* =========================================
+   REQUEST TABLE + FILTER
+========================================= */
+
+.request-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 20px;
+    align-items: start;
+}
+
+.request-content .table-container {
+    min-width: 0;
+}
+
+.dashboard-filter {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 20px 15px;
+
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+
+    position: sticky;
+    top: 20px;
+}
 
 /* Clickable request */
 
@@ -459,7 +487,7 @@ header {
 /* =========================================
    RIGHT FILTER
 ========================================= */
-
+/*
 .filter-sidebar {
     grid-area: filter;
     background: #ffffff;
@@ -467,7 +495,7 @@ header {
     padding: 150px 15px 20px;
     overflow-y: auto;
 }
-
+*/
 
 /* Remove default fieldset appearance */
 
@@ -855,8 +883,11 @@ header {
 }
 
 @media (max-width: 900px) {
-
-    .report-charts {
+    .request-content {
         grid-template-columns: 1fr;
+    }
+
+    .dashboard-filter {
+        position: static;
     }
 }

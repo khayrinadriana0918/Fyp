@@ -18,16 +18,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif (!preg_match('/[0-9]/', $newPassword)) {
         $message = "Password must contain AT LEAST 1 number.";
     } else {
-        $stmt = $pdo->prepare("UPDATE users SET pwd = :pwd WHERE email = :email");
 
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-        $stmt= $pdo->prepare("
+        $stmt = $pdo->prepare("
         UPDATE users
         SET pwd = :pwd
         WHERE email = :email
         ");
-        
+
         $stmt->execute([
             ':pwd' => $hashedPassword,
             ':email' => $email
@@ -58,73 +57,96 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <style>
     :root {
         --border-radius: 25px;
-        --box-shadow: 0 10px 40px rgba(0, 0, 0, 8);
     }
 
     * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-
     }
 
     body {
         min-height: 100vh;
-        display: flex;
-        align-items: center;
-        font-family: Georgia, 'Times New Roman', Times, serif
+        font-family: Georgia, 'Times New Roman', Times, serif;
     }
 
+    /* Main page */
     .container {
         width: 100%;
         min-height: 100vh;
+
         display: flex;
+        justify-content: center;
+        align-items: center;
+
         background-color: #ffffff;
-        flex-direction: row;
-        gap: 5px;
     }
 
+    /* Reset form */
+    .container .form-box {
+        width: 400px;
+        padding: 30px;
+
+        border-radius: 10px;
+        background-color: #ffffff;
+
+        box-shadow: 0 0 10px 5px #c7d4ff inset;
+    }
+
+    /* Inputs */
     .form-box input {
         width: 100%;
         height: 50px;
+
         border: none;
         border-bottom: 1px solid #aaa;
+
         outline: none;
         padding: 5px 2px;
+
         background: transparent;
     }
 
-    .container .form-box {
-        padding: 20px;
-        margin: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px 5px #c7d4ff inset;
-    }
-
+    /* Password requirements */
     .password_tip {
-        margin: 5px 0;
+        margin: 10px 0;
     }
 
     .valid {
         color: green;
     }
 
+    a:link {
+        color: var(--link-base);
+    }
+
+    a:visited {
+        color: var(--link-visited);
+    }
+
+    a:hover {
+        border: 1px dashed #aaaaaa;
+        color: var(--link-hover);
+    }
+
+
     .invalid {
         color: red;
     }
 
+    /* Button */
     button {
         border-radius: var(--border-radius);
-        padding: 5px;
+        padding: 8px 20px;
+        cursor: pointer;
     }
 
+    /* Mobile */
     @media (max-width: 800px) {
-
-        .container {
-            width: 95%;
-            min-height: auto;
-            flex-direction: column;
-            padding: 15px;
+        .container .form-box {
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
         }
     }
 </style>

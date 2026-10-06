@@ -17,14 +17,34 @@
 
 .section-heading {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
 
     margin-bottom: 20px;
     padding-bottom: 15px;
 
     border-bottom: 1px solid #dddddd;
+}
+
+.section-heading>form {
+    margin: 0;
+}
+
+.gen-code {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 100%;
+    max-width: 350px;
+
+    padding: 12px 15px;
+
+    border: 1px dashed #aaaaaa;
+    border-radius: 5px;
+
+    background: #f8f8f8;
 }
 
 .section-heading h2 {
