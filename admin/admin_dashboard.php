@@ -45,6 +45,13 @@ if (!$userInfo) {
 }
 
 $roleIdLabel = 'Admin Code';
+
+$search = trim($_GET['search'] ?? '');
+$priority = $_GET['priority'] ?? '';
+$status = $_GET['status'] ?? '';
+$category = $_GET['category'] ?? '';
+$sort = $_GET['sort'] ?? 'newest';
+
 $requestQuery = "
     SELECT
         r.*,
@@ -63,17 +70,76 @@ $requestQuery = "
     INNER JOIN category c
         ON r.category_id = c.category_id
 
-    ORDER BY r.ar_submission_date DESC
+    WHERE 1=1
 
-    LIMIT 5
 ";
 
+$params = [];
 
-$requestStmt = $pdo->prepare($requestQuery);
-$requestStmt->execute();
-$recentRequests =
-    $requestStmt->fetchAll(PDO::FETCH_ASSOC);
+//SEARCH//
+if ($search !== '') {
+    $requestQuery .= "
+    AND (
+    CAST(r.ar_request_id AS CHAR) LIKE ?
+    OR r.ar_title LIKE ?
+    OR u.name LIKE ?
+    OR h.staff_id LIKE ?
+    )";
 
+    $searchValue = '%' . $search . '%';
+
+    $params[] = $searchValue;
+    $params[] = $searchValue;
+    $params[] = $searchValue;
+    $params[] = $searchValue;
+}
+
+if ($priority !== '') {
+    $requestQuery .= "
+    AND r.ar_priority = ?";
+
+    $params[] = $priority;
+}
+if ($status !== '') {
+    $requestQuery .= "
+    AND r.ar_stats = ?";
+
+    $params[] = $status;
+}
+if ($category !== '') {
+    $requestQuery .= "
+    AND r.category_id = ?";
+
+    $params[] = $category;
+}
+
+switch ($sort) {
+    case 'oldest':
+        $requestQuery .= "
+        ORDER BY r.ar_submission_date ASC
+        ";
+        break;
+
+    case 'title':
+        $requestQuery .= "
+        ORDER BY r.ar_title ASC
+        ";
+        break;
+
+    case 'newest':
+        $requestQuery .="
+        ORDER BY r.ar_submission_date DESC
+        ";
+        break;
+}
+
+$requestQuery .= " LIMIT 5";
+
+$requestStmt= $pdo->prepare($requestQuery);
+$requestStmt->execute($params);
+
+$recentRequests=
+$requestStmt->fetchAll(PDO::FETCH_ASSOC);
 /* =========================================================
    GET DASHBOARD REQUEST OVERVIEW
 ========================================================= */

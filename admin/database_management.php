@@ -163,7 +163,7 @@ $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php unset($_SESSION['generated_admin_code']); ?>
 
                     <?php endif; ?>
-                    <div>
+                    <div><br>
                         <h2>Category Management</h2>
 
                         <p>Manage request categories used in SIMSAP.</p>

@@ -41,77 +41,104 @@ $sort = $_GET['sort'] ?? 'newest';
 
 $query = "
 SELECT
-r.*,
-s.student_id AS requester_id,
-u.name AS requester_name,
-c.category_name
+    r.*,
+    s.student_id AS requester_id,
+    u.name AS requester_name,
+    c.category_name
+
 FROM request r
 
 INNER JOIN student s
-ON r.student_id = s.student_id
+    ON r.student_id = s.student_id
 
 INNER JOIN users u
-ON s.user_id = u.user_id
+    ON s.user_id = u.user_id
 
 INNER JOIN category c
-ON r.category_id= c.category_id
+    ON r.category_id = c.category_id
 
-WHERE s.programme_id= :programme_id
+WHERE s.programme_id = ?
 ";
 
 $params = [
-    ':programme_id' => $userInfo['programme_id']
+    $userInfo['programme_id']
 ];
 
-// search
+
+/* SEARCH */
 if ($search !== '') {
+
     $query .= "
-    AND (
-        CAST(r.request_id AS CHAR) LIKE :search_id
-        OR r.title LIKE :search_title
-        OR u.name LIKE :search_name
-        OR s.student_id LIKE :search_student_id
-    )";
+        AND (
+            CAST(r.request_id AS CHAR) LIKE ?
+            OR r.title LIKE ?
+            OR u.name LIKE ?
+            OR s.student_id LIKE ?
+        )
+    ";
 
     $searchValue = '%' . $search . '%';
 
-    $params[':search_id'] = $searchValue;
-    $params[':search_title'] = $searchValue;
-    $params[':search_name'] = $searchValue;
-    $params[':search_student_id'] = $searchValue;
+    $params[] = $searchValue;
+    $params[] = $searchValue;
+    $params[] = $searchValue;
+    $params[] = $searchValue;
 }
-//priority
+
+
+/* PRIORITY */
 if ($priority !== '') {
-    $query .= "
-    AND r.priority = :priority";
 
-    $params[':priority'] = $priority;
+    $query .= "
+        AND r.priority = ?
+    ";
+
+    $params[] = $priority;
 }
-//status
+
+
+/* STATUS */
 if ($status !== '') {
-    $query .= "
-    AND r.stats = :status";
 
-    $params[':status'] = $status;
+    $query .= "
+        AND r.stats = ?
+    ";
+
+    $params[] = $status;
 }
+
+
+/* CATEGORY */
 if ($category !== '') {
-    $query .= "
-    AND r.category_id = :category_id";
 
-    $params[':category_id'] = $category;
+    $query .= "
+        AND r.category_id = ?
+    ";
+
+    $params[] = $category;
 }
-// sort
+
+
+/* SORT */
 switch ($sort) {
 
     case 'oldest':
-        $query .= "ORDER BY r.submission_date ASC";
+        $query .= "
+            ORDER BY r.submission_date ASC
+        ";
         break;
+
     case 'title':
-        $query .= "ORDER BY r.title ASC";
+        $query .= "
+            ORDER BY r.title ASC
+        ";
         break;
+
     case 'newest':
     default:
-        $query .= "ORDER BY r.submission_date DESC";
+        $query .= "
+            ORDER BY r.submission_date DESC
+        ";
         break;
 }
 
@@ -120,6 +147,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 
 $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 
@@ -292,13 +320,13 @@ $reqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </section>
         </main>
 
-            <aside class="filter-sidebar">
-                <?php
-                include __DIR__ . '/../inc_reuse/filter.php';
-                ?>
-            </aside>
+        <aside class="filter-sidebar">
+            <?php
+            include __DIR__ . '/../inc_reuse/filter.php';
+            ?>
+        </aside>
 
-            <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
+        <?php include __DIR__ . '/../inc_reuse/receiver_popup.php'; ?>
 
     </div>
     <script src="../JS/receiverPopup.js"></script>
